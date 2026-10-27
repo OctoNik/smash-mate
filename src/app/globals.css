@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080e1b;
+  --foreground: #dde2f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-plus-jakarta);
+  --font-display: var(--font-syne);
+  --font-mono: var(--font-manrope);
+  --color-navy-950: #080e1b;
+  --color-navy-900: #0d1320;
+  --color-navy-800: #161b29;
+  --color-navy-700: #242a38;
+  --color-lime: #d2f824;
+  --color-lime-dark: #b8e619;
+  --color-burgundy: #7a1522;
+  --color-ivory: #f9f8f5;
+  --color-ivory-soft: #f2efe9;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-plus-jakarta), sans-serif;
+}
+
+button,
+a,
+select {
+  transition-duration: 180ms;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+.court-grid {
+  background-image:
+    linear-gradient(to right, rgb(210 248 36 / 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(210 248 36 / 0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.court-lines::after {
+  position: absolute;
+  inset: 10%;
+  content: "";
+  border: 1px solid rgb(210 248 36 / 0.17);
+  background:
+    linear-gradient(to right, transparent 49.8%, rgb(210 248 36 / 0.17) 50%, transparent 50.2%),
+    linear-gradient(to bottom, transparent 49.8%, rgb(210 248 36 / 0.17) 50%, transparent 50.2%);
+  transform: rotate(-5deg) scale(1.15);
+}
+
+.eyebrow {
+  margin-bottom: 0.5rem;
+  color: #d2f824;
+  font-family: var(--font-manrope), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
 }

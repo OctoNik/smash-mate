@@ -1,0 +1,17 @@
+{
+  "projectId": "3724463890417827817",
+  "projectTitle": "SmashMate Badminton Landing Page",
+  "designSystem": "assets/3c985176ecc4408e875c069deeb9b439",
+  "screens": [
+    {
+      "id": "93c580dcb4804d0ca46462022ab031c8",
+      "name": "projects/3724463890417827817/screens/93c580dcb4804d0ca46462022ab031c8",
+      "title": "SmashMate — Editorial Badminton Community Platform",
+      "deviceType": "DESKTOP",
+      "width": 2560,
+      "height": 14236,
+      "html": "designs/smashmate-editorial.html",
+      "screenshot": "designs/smashmate-editorial.png"
+    }
+  ]
+}

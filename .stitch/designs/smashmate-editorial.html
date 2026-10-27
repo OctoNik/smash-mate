@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmashMate — Platform Komunitas &amp; Sparring Badminton Indonesia</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Syne:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #090E17;
+        color: #E2E8F0;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+      }
+    }
+    ::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0D1424;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E293B;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .court-grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(210, 248, 36, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(210, 248, 36, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .font-editorial {
+      font-family: 'Syne', sans-serif;
+    }
+    .font-mono-sport {
+      font-family: 'Manrope', sans-serif;
+      font-feature-settings: 'tnum' on, 'zero' on;
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            midnight: "#090E17",
+            "midnight-surface": "#0D1424",
+            "midnight-card": "#121B2F",
+            "midnight-border": "#1E2A44",
+            "court-ivory": "#FAF8F5",
+            "court-ivory-soft": "#F3EFEA",
+            "court-ivory-card": "#FFFFFF",
+            "court-ivory-border": "#E5DFD7",
+            "shuttle-neon": "#D2F824",
+            "shuttle-neon-hover": "#BEF010",
+            "shuttle-neon-dim": "rgba(210, 248, 36, 0.12)",
+            "heritage-burgundy": "#8F1725",
+            "heritage-burgundy-light": "#FFDAD8",
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            editorial: ['Syne', 'sans-serif'],
+            mono: ['Manrope', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-midnight text-slate-100 antialiased selection:bg-shuttle-neon selection:text-midnight">
+<!-- TOP ATHLETIC TICKER -->
+<aside aria-label="Status Berjalan" class="bg-midnight-surface border-b border-midnight-border py-2 px-6 overflow-hidden hidden md:block">
+<div class="max-w-7xl mx-auto flex items-center justify-between text-xs font-mono font-medium text-slate-400">
+<div class="flex items-center gap-6">
+<span class="inline-flex items-center gap-2 text-shuttle-neon">
+<span class="w-2 h-2 rounded-full bg-shuttle-neon animate-pulse"></span>
+          24 GOR JABODETABEK LIVE
+        </span>
+<span class="text-slate-500">|</span>
+<span>KOK RESMI: VICTOR MASTER NO. 1 &amp; SAMPOERNA GOLD</span>
+<span class="text-slate-500">|</span>
+<span class="text-slate-300">RATA-RATA MATCH TERBENTUK: 12 MENIT</span>
+</div>
+<div class="flex items-center gap-4 text-slate-300">
+<span class="inline-flex items-center gap-1.5 bg-heritage-burgundy/40 text-red-300 border border-heritage-burgundy/60 px-2 py-0.5 rounded text-[11px] font-bold tracking-wider">
+          PBSI VERIFIED PROTOCOL
+        </span>
+<span>IDR (Rp) • Waktu Indonesia Barat</span>
+</div>
+</div>
+</aside>
+<!-- NAVIGATION HEADER -->
+<header class="sticky top-0 z-50 bg-midnight/90 backdrop-blur-xl border-b border-midnight-border">
+<div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-6">
+<!-- Brand Logo -->
+<a class="flex items-center gap-3 shrink-0 group" href="#">
+<div class="w-10 h-10 rounded-xl bg-shuttle-neon text-midnight flex items-center justify-center font-editorial font-extrabold text-xl group-hover:scale-105 transition-transform shadow-[0_0_20px_rgba(210,248,36,0.3)]">
+          SM
+        </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-editorial text-2xl font-extrabold tracking-tight text-white leading-none">SmashMate</span>
+<span class="w-1.5 h-1.5 rounded-full bg-shuttle-neon"></span>
+</div>
+<span class="text-[10px] font-mono tracking-widest text-slate-400 uppercase mt-0.5">Badminton Arena &amp; Matchmaker</span>
+</div>
+</a>
+<!-- Desktop Nav -->
+<nav class="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wide">
+<a class="text-white hover:text-shuttle-neon transition-colors py-2 flex items-center gap-1.5" href="#quick-search">
+<span>Cari Mabar</span>
+<span class="text-[10px] px-1.5 py-0.2 bg-shuttle-neon/15 text-shuttle-neon rounded-full font-mono font-bold">14 BARU</span>
+</a>
+<a class="text-slate-300 hover:text-shuttle-neon transition-colors py-2" href="#live-tickets">Tiket Pertandingan</a>
+<a class="text-slate-300 hover:text-shuttle-neon transition-colors py-2" href="#cara-kerja">Cara Kerja</a>
+<a class="text-slate-300 hover:text-shuttle-neon transition-colors py-2" href="#gor-pilihan">GOR Mitra</a>
+<a class="text-slate-300 hover:text-shuttle-neon transition-colors py-2" href="#komunitas">Komunitas</a>
+</nav>
+<!-- Right CTAs -->
+<div class="flex items-center gap-4 shrink-0">
+<a class="hidden sm:inline-flex text-sm font-bold text-slate-300 hover:text-white px-3 py-2 transition-colors" href="#">
+          Masuk
+        </a>
+<a class="inline-flex items-center gap-2 bg-shuttle-neon hover:bg-shuttle-neon-hover text-midnight font-editorial font-bold text-sm tracking-wide px-5 py-2.5 rounded-xl shadow-[0_0_25px_rgba(210,248,36,0.25)] hover:shadow-[0_0_30px_rgba(210,248,36,0.4)] transition-all" href="#quick-search">
+<span>Gabung Main</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<main class="w-full relative court-grid-pattern overflow-hidden">
+<!-- EDITORIAL ASYMMETRIC HERO -->
+<section class="relative pt-10 pb-20 px-6 lg:px-12 max-w-7xl mx-auto w-full">
+<!-- Background Net Ambient SVG Line -->
+<div class="absolute -top-10 right-0 w-2/3 h-96 opacity-15 pointer-events-none select-none overflow-hidden">
+<svg class="w-full h-full text-shuttle-neon" fill="none" stroke="currentColor" stroke-width="1.2" viewbox="0 0 700 350">
+<line x1="50" x2="650" y1="40" y2="40"></line>
+<line x1="50" x2="650" y1="310" y2="310"></line>
+<line stroke-width="2.5" x1="350" x2="350" y1="40" y2="310"></line>
+<line x1="50" x2="650" y1="175" y2="175"></line>
+<line x1="160" x2="160" y1="40" y2="310"></line>
+<line x1="540" x2="540" y1="40" y2="310"></line>
+</svg>
+</div>
+<!-- Top Headline Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
+<div class="lg:col-span-8 space-y-6">
+<!-- Live Meta Tag -->
+<div class="inline-flex items-center gap-3 bg-midnight-card border border-midnight-border px-3.5 py-1.5 rounded-full text-xs font-mono">
+<span class="flex h-2.5 w-2.5 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-shuttle-neon opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-shuttle-neon"></span>
+</span>
+<span class="text-shuttle-neon font-bold tracking-wider">KOMUNITAS LIVE</span>
+<span class="text-slate-500">•</span>
+<span class="text-slate-300">Jakarta Selatan, Barat, Pusat &amp; BSD</span>
+</div>
+<!-- Asymmetric Huge Editorial Header -->
+<h1 class="font-editorial text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.04] tracking-tight">
+            Main badminton <br/>
+            jadi <span class="text-shuttle-neon inline-block relative underline decoration-heritage-burgundy decoration-4 underline-offset-8">lebih gampang.</span>
+</h1>
+<p class="font-sans text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+            Platform kurasi sparring dan matchmaking ganda pertama di Indonesia. Temukan partner selevel, split-bill otomatis, dan sewa lapangan tanpa ribet grup chat yang berantakan.
+          </p>
+<!-- Quick Action Buttons -->
+<div class="flex flex-wrap items-center gap-4 pt-2">
+<a class="inline-flex items-center justify-center gap-2.5 bg-shuttle-neon hover:bg-shuttle-neon-hover text-midnight px-7 py-4 rounded-xl font-editorial font-bold text-base transition-all shadow-[0_0_30px_rgba(210,248,36,0.3)] hover:-translate-y-0.5" href="#live-tickets">
+<span>Cari Partner Mabar</span>
+<span class="material-symbols-outlined text-xl">sports_tennis</span>
+</a>
+<a class="inline-flex items-center justify-center gap-2 bg-midnight-card hover:bg-midnight-border border border-midnight-border text-white px-6 py-4 rounded-xl font-sans font-bold text-sm transition-all hover:border-slate-500" href="#cara-kerja">
+<span class="material-symbols-outlined text-shuttle-neon text-lg">add_circle</span>
+<span>Buka Slot Pertandingan</span>
+</a>
+</div>
+</div>
+<!-- Right Side: Trust & Stats Badge Board -->
+<div class="lg:col-span-4 flex flex-col gap-4">
+<div class="bg-midnight-card border border-midnight-border p-6 rounded-2xl relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 text-shuttle-neon/5 text-8xl font-editorial font-extrabold select-none pointer-events-none">BWF</div>
+<div class="flex items-center justify-between mb-4">
+<span class="text-xs font-mono text-slate-400 uppercase tracking-widest">Match Satisfaction</span>
+<span class="inline-flex items-center gap-1 text-shuttle-neon font-mono font-bold text-sm bg-shuttle-neon/10 px-2 py-0.5 rounded">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span> 4.95 / 5.0
+              </span>
+</div>
+<div class="flex -space-x-3 mb-4">
+<img alt="Pemain SmashMate" class="w-10 h-10 rounded-full border-2 border-midnight object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-z10XmAQIPSeGQ6FkgjE69XZKAVJJUf17L71nMj4GvJZJGPaD4HbmbujfUhLOaFtKHIQ59ToR5jfPJzYltiQyKnG6r73D8cMF6CTZ_1fbM1XnomjQEjOUmakQVQnqyXlTEKLAr-yWwIOuJqrWii50pgDaENJRuaUB-_TEoc6pnLtiQ3pO6BmbMXoImAOx2b_MCpyhdTtbZSTvYwVtYSdaHRMxhbQC5Q2T6cOeaSBetGniBiEVHDBa"/>
+<img alt="Pemain SmashMate" class="w-10 h-10 rounded-full border-2 border-midnight object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuJpDcqKzPtpm4oRPC_gcSNY9ptw9LGfQzZUl0iOGNtyD995JVorNyMkVCMJpvhX_RjEDA_tvQIuQ1-Y3MEwIp4M5iSPEGYCEQa6GJu_axBtYfct4oYZAEH5GqRTX9A5OD65dFu9cZzUvc5RrfzZG3Ah6sz-T-CMr0tcJCAUt2ryDfYjUk6nEXlXAXSy-wo7CxmH-CLpVPhO6MsreFdpw-BTgcFAAfxokKX42PEhr-AH4P_4zms59t"/>
+<img alt="Pemain SmashMate" class="w-10 h-10 rounded-full border-2 border-midnight object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiza5DaY0mRq0RmjTa-7Hl02Xy9v81L6QPn09hTRm19BVwGeNe9OPVXTn2iHbcFNvjXDsQbVn-RqJFgPqOcZass1QDFQvXzSblIKNb8PdJs_kQm-nNV_07MSzWZJH7xjto3ur2cOEZwTKr0eDztFY5KWXZXnVdzK4zcOpO9D62OBw510W2IwDMmdAk0WLGGKI2vlu1-XzbQ_pB9QxJLh0eeYufAdS0O2ZqbsdpKfl-i32G8RTACZ_Q"/>
+<div class="w-10 h-10 rounded-full border-2 border-midnight bg-heritage-burgundy text-white flex items-center justify-center font-mono text-xs font-bold">
+                +1.2k
+              </div>
+</div>
+<p class="text-xs text-slate-400">1.200+ mabar sukses terselenggara bulan ini di 30 GOR mitra se-Jabodetabek.</p>
+</div>
+<!-- Shuttlecock standard badge -->
+<div class="bg-midnight-surface border border-midnight-border p-4 rounded-xl flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-shuttle-neon/15 text-shuttle-neon flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl">sports_tennis</span>
+</div>
+<div class="text-xs">
+<span class="font-bold text-white block">Kok Standar Turnamen</span>
+<span class="text-slate-400">Victor Master No.1 / JP Gold dijamin oleh host</span>
+</div>
+</div>
+</div>
+</div>
+<!-- EDITORIAL LAYERED HERO COMPOSITION -->
+<div class="relative rounded-3xl overflow-hidden border border-midnight-border shadow-2xl bg-midnight-surface">
+<div class="grid grid-cols-1 lg:grid-cols-12">
+<!-- Large Visual Frame -->
+<div class="lg:col-span-8 relative min-h-[380px] lg:min-h-[460px] overflow-hidden">
+<img alt="Pertandingan Ganda Bulutangkis Lapangan Hijau di Jakarta" class="w-full h-full object-cover object-center filter saturate-[1.1] brightness-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9LifXKCKkWtELUZZE5q0Z1qnogh4hzptvuYIrsE5RZEP6KySUa2Cg--6E8nQTqO-cOOtGEvi3RW9N0Lzi-OANCqmfvj5h-CpZGWmubzi0qAIw1OjsdRgrfP5LUs1jmlDgPaByWwsY_b3yhRlm1_QC0Uy_fGQkY0J9JLhrNFa7vpGLswLzd_5HjdK99pmmnTw9d9ahnW178kmhX6RK_3_PT6J-gWuexSMz55tC5YkP_3_DoeG_bWpt"/>
+<div class="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/30 to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-midnight/90 hidden lg:block"></div>
+<!-- Live Match Tactical Chip Over Image -->
+<div class="absolute top-6 left-6 bg-midnight/90 backdrop-blur-md border border-midnight-border/80 px-4 py-2 rounded-xl flex items-center gap-3 shadow-xl">
+<div class="w-2.5 h-2.5 rounded-full bg-shuttle-neon animate-ping"></div>
+<div>
+<span class="text-[10px] font-mono tracking-wider text-slate-400 uppercase block">GOR Champion Kuningan</span>
+<span class="text-xs font-bold text-white">Ganda Putra Sparring • Game 3 Match Point</span>
+</div>
+</div>
+<!-- ELO Badge floating bottom-left -->
+<div class="absolute bottom-6 left-6 bg-midnight/95 backdrop-blur-md border border-shuttle-neon/30 p-3.5 rounded-2xl flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-shuttle-neon text-midnight font-editorial font-extrabold flex items-center justify-center text-sm">
+                A+
+              </div>
+<div class="text-xs">
+<span class="text-slate-300 font-bold block">Smart Matchmaking Score</span>
+<span class="text-shuttle-neon font-mono">Tingkat Keselarasan: 98.4%</span>
+</div>
+</div>
+</div>
+<!-- Tactical Spec Sidebar on the Right -->
+<div class="lg:col-span-4 p-8 flex flex-col justify-between bg-midnight-surface/90 border-t lg:border-t-0 lg:border-l border-midnight-border">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-mono text-xs uppercase tracking-wider text-shuttle-neon">Court Spec Insight</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-heritage-burgundy text-white">STANDAR PBSI</span>
+</div>
+<h3 class="font-editorial text-2xl font-bold text-white mb-2">Kenapa Mabar di SmashMate?</h3>
+<p class="text-xs text-slate-400 leading-relaxed mb-6">
+                Tidak ada lagi situasi datang tapi lawan tidak seimbang atau lapangan licin semen. Semua game dikurasi dengan profil verified dan spek GOR transparan.
+              </p>
+<!-- Quick List Specs -->
+<div class="space-y-3 font-mono text-xs text-slate-300">
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-midnight-card border border-midnight-border">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-shuttle-neon text-base">verified</span>
+                    Algoritma Posisi
+                  </span>
+<span class="text-white font-bold">Depan &amp; Smasher</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-midnight-card border border-midnight-border">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-shuttle-neon text-base">payments</span>
+                    Sistem Iuran
+                  </span>
+<span class="text-shuttle-neon font-bold">Auto-Split QRIS</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-midnight-card border border-midnight-border">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-shuttle-neon text-base">inventory_2</span>
+                    Sewa Raket
+                  </span>
+<span class="text-white font-bold">Tersedia di GOR</span>
+</div>
+</div>
+</div>
+<!-- Host Quote Pill -->
+<div class="mt-6 pt-4 border-t border-midnight-border flex items-center gap-3">
+<img alt="Host" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALOyWscpaSzAERWa_ilMcYF0CtfsQh6H-CiacRXkvqf9Ry44l9E4CzOOUf354fgg63gv50tk4v2F10Kaeh-hFOUqy-y64vcL_calybK-kmn08BKhMP36IWOfrZfnWO6eWlWxMNj2HsJcYbP_psS3dFH1so418XpIiNppxwkY_iRD8j55hwMF_a6KZbAUhCkkCk-pogh3fxgw4XH6YhbO7uKPY8bTBiOpdPyLb6hiiCOt7NR0bu5qU7"/>
+<p class="text-[11px] text-slate-400 italic">"Slot mabar selalu terisi penuh tanpa repot nagih uang kas di WA."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- FLOATING MATCH FINDER CONSOLE (Anchored across Hero bottom) -->
+<div class="mt-8 bg-midnight-card/95 backdrop-blur-xl border-2 border-midnight-border p-6 rounded-3xl shadow-[0_15px_40px_rgba(0,0,0,0.5)]" id="quick-search">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5 pb-4 border-b border-midnight-border">
+<div class="flex items-center gap-2.5">
+<span class="w-3 h-3 rounded-full bg-shuttle-neon"></span>
+<span class="font-editorial font-bold text-white text-lg">Cari Sesi Mabar Terdekat</span>
+<span class="text-xs font-mono text-slate-400 hidden sm:inline">— Cek jadwal aktif hari ini &amp; akhir pekan</span>
+</div>
+<span class="text-xs font-mono text-shuttle-neon bg-shuttle-neon/10 px-3 py-1 rounded-full border border-shuttle-neon/20">
+            PILIH JADWAL &amp; LEVEL ANDA
+          </span>
+</div>
+<form class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" onsubmit="event.preventDefault();">
+<!-- Lokasi Selector -->
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-shuttle-neon">location_on</span> Wilayah GOR
+            </label>
+<div class="relative">
+<select class="w-full h-12 px-3.5 rounded-xl bg-midnight-surface border border-midnight-border text-white text-sm focus:outline-none focus:border-shuttle-neon appearance-none cursor-pointer">
+<option value="jaksel">Jakarta Selatan (Bulungan, Kuningan, Tebet)</option>
+<option value="jakbar">Jakarta Barat (Kebon Jeruk, Tomang)</option>
+<option value="tangsel">Tangerang Selatan (BSD, Bintaro)</option>
+<option value="jakut">Jakarta Utara (Kelapa Gading, PIK)</option>
+<option value="jakpus">Jakarta Pusat (Cempaka Putih, Senayan)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3.5 text-slate-400 pointer-events-none text-sm">expand_more</span>
+</div>
+</div>
+<!-- Waktu Picker -->
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-shuttle-neon">schedule</span> Waktu Main
+            </label>
+<div class="relative">
+<select class="w-full h-12 px-3.5 rounded-xl bg-midnight-surface border border-midnight-border text-white text-sm focus:outline-none focus:border-shuttle-neon appearance-none cursor-pointer">
+<option value="tonight">Malam Ini (19:00 - 22:00 WIB)</option>
+<option value="tomorrow">Besok Pagi / Malam</option>
+<option value="weekend">Sabtu - Minggu Ini</option>
+<option value="all">Semua Waktu</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3.5 text-slate-400 pointer-events-none text-sm">expand_more</span>
+</div>
+</div>
+<!-- Skill Level Picker -->
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-mono text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-shuttle-neon">bolt</span> Level Kemampuan
+            </label>
+<div class="relative">
+<select class="w-full h-12 px-3.5 rounded-xl bg-midnight-surface border border-midnight-border text-white text-sm focus:outline-none focus:border-shuttle-neon appearance-none cursor-pointer">
+<option value="all">Semua Kategori Level</option>
+<option value="pemula">Pemula (Rally Santai &amp; Fun)</option>
+<option value="intermediate">Menengah (Rally Cepat &amp; Smash)</option>
+<option value="mahir">Mahir (Eks-Porda / Klub)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3.5 text-slate-400 pointer-events-none text-sm">expand_more</span>
+</div>
+</div>
+<!-- Submit CTA -->
+<div class="flex flex-col justify-end">
+<button class="h-12 w-full bg-shuttle-neon hover:bg-shuttle-neon-hover text-midnight font-editorial font-bold text-sm tracking-wide rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(210,248,36,0.3)] transition-all hover:scale-[0.99] active:scale-95" type="submit">
+<span class="material-symbols-outlined text-xl">search</span>
+<span>Cari Pertandingan</span>
+</button>
+</div>
+</form>
+</div>
+</section>
+<!-- METRICS STRIP: ATHLETIC BENCHMARKS -->
+<section class="border-y border-midnight-border bg-midnight-surface/80 py-10 px-6 lg:px-12">
+<div class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="p-4 border-l-2 border-shuttle-neon">
+<span class="font-editorial text-3xl sm:text-5xl font-extrabold text-white block">2.500+</span>
+<span class="font-mono text-xs uppercase tracking-wider text-shuttle-neon mt-1 block font-bold">Pemain Terverifikasi</span>
+<p class="text-xs text-slate-400 mt-1">Siap sparring di Jakarta &amp; sekitarnya</p>
+</div>
+<div class="p-4 border-l-2 border-slate-600">
+<span class="font-editorial text-3xl sm:text-5xl font-extrabold text-white block">450+</span>
+<span class="font-mono text-xs uppercase tracking-wider text-slate-300 mt-1 block font-bold">Match Tiap Minggu</span>
+<p class="text-xs text-slate-400 mt-1">Terisi otomatis tanpa chat berbelit</p>
+</div>
+<div class="p-4 border-l-2 border-heritage-burgundy">
+<span class="font-editorial text-3xl sm:text-5xl font-extrabold text-white block">30+</span>
+<span class="font-mono text-xs uppercase tracking-wider text-red-300 mt-1 block font-bold">GOR Mitra Resmi</span>
+<p class="text-xs text-slate-400 mt-1">Karpet BWF Vinyl &amp; pencahayaan turnamen</p>
+</div>
+<div class="p-4 border-l-2 border-shuttle-neon">
+<div class="flex items-center gap-2">
+<span class="font-editorial text-3xl sm:text-5xl font-extrabold text-shuttle-neon">4.9</span>
+<span class="material-symbols-outlined text-amber-400 text-3xl" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-mono text-xs uppercase tracking-wider text-white mt-1 block font-bold">Indeks Sportifitas</span>
+<p class="text-xs text-slate-400 mt-1">Komunitas suportif dan anti-toxic</p>
+</div>
+</div>
+</section>
+<!-- SECTION: LIVE MATCH TICKETS RAIL -->
+<section class="py-20 px-6 lg:px-12 max-w-7xl mx-auto w-full" id="live-tickets">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+<div>
+<div class="inline-flex items-center gap-2 text-shuttle-neon font-mono text-xs uppercase tracking-widest mb-1">
+<span class="w-2 h-2 rounded-full bg-shuttle-neon"></span>
+            LIVE COURT DISPATCH
+          </div>
+<h2 class="font-editorial text-3xl sm:text-4xl font-extrabold text-white">Pertandingan di Dekatmu</h2>
+<p class="text-slate-400 text-sm mt-1">Format tiket pertandingan taktis: cek peta formasi pemain &amp; klaim slot langsung.</p>
+</div>
+<!-- Filter tabs -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none font-mono text-xs">
+<button class="bg-shuttle-neon text-midnight font-bold px-4 py-2 rounded-xl whitespace-nowrap shadow-sm">Semua Match</button>
+<button class="bg-midnight-card border border-midnight-border hover:border-slate-500 text-slate-300 px-4 py-2 rounded-xl whitespace-nowrap transition-colors">Hari Ini</button>
+<button class="bg-midnight-card border border-midnight-border hover:border-slate-500 text-slate-300 px-4 py-2 rounded-xl whitespace-nowrap transition-colors">Besok</button>
+<button class="bg-midnight-card border border-midnight-border hover:border-slate-500 text-slate-300 px-4 py-2 rounded-xl whitespace-nowrap transition-colors">Ganda Campuran</button>
+<button class="bg-midnight-card border border-midnight-border hover:border-slate-500 text-slate-300 px-4 py-2 rounded-xl whitespace-nowrap transition-colors">Ganda Putra</button>
+</div>
+</div>
+<!-- THE TICKETS GRID (Distinctive Tactical Badminton Match Cards) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- TICKET 01 -->
+<article class="bg-midnight-card border-2 border-midnight-border hover:border-shuttle-neon/60 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between group shadow-xl">
+<!-- Top Ticket Header -->
+<div class="p-6 pb-4 border-b border-dashed border-midnight-border bg-midnight-surface/80 relative">
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase tracking-wider bg-shuttle-neon/15 text-shuttle-neon px-2.5 py-1 rounded-md">
+                Ganda Campuran (Santai)
+              </span>
+<span class="font-mono text-xs text-red-400 bg-red-950/70 border border-red-850 px-2 py-0.5 rounded-full font-bold">
+                2 slot tersisa
+              </span>
+</div>
+<h3 class="font-editorial text-xl font-bold text-white group-hover:text-shuttle-neon transition-colors">
+              Main Bareng Ganda Santai
+            </h3>
+<p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-shuttle-neon">pin_drop</span>
+              GOR Candra Wijaya Serpong (2.1 km)
+            </p>
+</div>
+<!-- Mid Section: Miniature Doubles Court Tactician View -->
+<div class="p-6 space-y-4">
+<!-- Mini Badminton Court Diagram -->
+<div class="bg-midnight-surface border border-midnight-border rounded-2xl p-3 relative overflow-hidden">
+<div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-2">
+<span>FORMASI LAPANGAN (DOUBLES)</span>
+<span class="text-shuttle-neon font-bold">98% Match Rate</span>
+</div>
+<!-- Court Outline Diagram -->
+<div class="relative w-full h-24 bg-[#0a1f18] border border-emerald-600/40 rounded-lg flex flex-col justify-between p-2">
+<div class="absolute inset-x-0 top-1/2 h-px bg-white/40 border-t border-dashed"></div>
+<div class="absolute inset-y-0 left-1/2 w-px bg-white/30"></div>
+<!-- Court Positions Visual -->
+<div class="flex justify-around items-center z-10">
+<div class="flex items-center gap-1 bg-midnight/90 border border-emerald-400/60 px-2 py-0.5 rounded text-[10px] text-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Reza (Net)
+                  </div>
+<div class="flex items-center gap-1 bg-midnight/90 border border-emerald-400/60 px-2 py-0.5 rounded text-[10px] text-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Putri (Back)
+                  </div>
+</div>
+<div class="flex justify-around items-center z-10">
+<div class="flex items-center gap-1 bg-shuttle-neon text-midnight font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">
+<span>?</span> Slot Kosong
+                  </div>
+<div class="flex items-center gap-1 bg-shuttle-neon text-midnight font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">
+<span>?</span> Slot Kosong
+                  </div>
+</div>
+</div>
+</div>
+<!-- Match Specs -->
+<div class="space-y-2 text-xs font-mono text-slate-300">
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">calendar_today</span> Jadwal
+                </span>
+<span>Hari ini • 19:00 - 21:00 WIB</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">sports_tennis</span> Shuttlecock
+                </span>
+<span class="text-white">Victor Master No. 1</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">check_circle</span> Fasilitas
+                </span>
+<span class="text-emerald-400">Sewa Raket Ready</span>
+</div>
+</div>
+<!-- Host info pill -->
+<div class="flex items-center gap-3 bg-midnight-surface p-2.5 rounded-xl border border-midnight-border">
+<img alt="Reza" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALOyWscpaSzAERWa_ilMcYF0CtfsQh6H-CiacRXkvqf9Ry44l9E4CzOOUf354fgg63gv50tk4v2F10Kaeh-hFOUqy-y64vcL_calybK-kmn08BKhMP36IWOfrZfnWO6eWlWxMNj2HsJcYbP_psS3dFH1so418XpIiNppxwkY_iRD8j55hwMF_a6KZbAUhCkkCk-pogh3fxgw4XH6YhbO7uKPY8bTBiOpdPyLb6hiiCOt7NR0bu5qU7"/>
+<div class="text-xs">
+<span class="text-white font-bold block">Reza Aditya (Host)</span>
+<span class="text-slate-400 text-[11px]">★ 4.9 • 38 match hosted</span>
+</div>
+</div>
+</div>
+<!-- Bottom Ticket Stub / CTA -->
+<div class="p-6 pt-4 border-t border-midnight-border bg-midnight-surface flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Iuran Match</span>
+<div class="font-editorial text-2xl font-bold text-white">
+                Rp 45.000<span class="text-xs font-normal text-slate-400">/org</span>
+</div>
+</div>
+<button class="bg-shuttle-neon hover:bg-shuttle-neon-hover text-midnight font-editorial font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all shadow-md hover:scale-105">
+              Ambil Slot
+            </button>
+</div>
+</article>
+<!-- TICKET 02 -->
+<article class="bg-midnight-card border-2 border-midnight-border hover:border-shuttle-neon/60 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between group shadow-xl">
+<!-- Top Ticket Header -->
+<div class="p-6 pb-4 border-b border-dashed border-midnight-border bg-midnight-surface/80 relative">
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase tracking-wider bg-heritage-burgundy/30 text-red-300 border border-heritage-burgundy/60 px-2.5 py-1 rounded-md">
+                Ganda Putra (Rally Cepat)
+              </span>
+<span class="font-mono text-xs text-red-400 bg-red-950/70 border border-red-850 px-2 py-0.5 rounded-full font-bold animate-pulse">
+                1 slot tersisa!
+              </span>
+</div>
+<h3 class="font-editorial text-xl font-bold text-white group-hover:text-shuttle-neon transition-colors">
+              Sparring Ganda Putra Serius
+            </h3>
+<p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-shuttle-neon">pin_drop</span>
+              Champion Badminton Kuningan (3.5 km)
+            </p>
+</div>
+<!-- Mid Section: Court Tactician View -->
+<div class="p-6 space-y-4">
+<div class="bg-midnight-surface border border-midnight-border rounded-2xl p-3 relative overflow-hidden">
+<div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-2">
+<span>FORMASI LAPANGAN (DOUBLES)</span>
+<span class="text-shuttle-neon font-bold">99.1% High Synergy</span>
+</div>
+<div class="relative w-full h-24 bg-[#0a1f18] border border-emerald-600/40 rounded-lg flex flex-col justify-between p-2">
+<div class="absolute inset-x-0 top-1/2 h-px bg-white/40 border-t border-dashed"></div>
+<div class="absolute inset-y-0 left-1/2 w-px bg-white/30"></div>
+<div class="flex justify-around items-center z-10">
+<div class="flex items-center gap-1 bg-midnight/90 border border-emerald-400/60 px-2 py-0.5 rounded text-[10px] text-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Fajar (Smasher)
+                  </div>
+<div class="flex items-center gap-1 bg-midnight/90 border border-emerald-400/60 px-2 py-0.5 rounded text-[10px] text-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Budi (Net Play)
+                  </div>
+</div>
+<div class="flex justify-around items-center z-10">
+<div class="flex items-center gap-1 bg-midnight/90 border border-emerald-400/60 px-2 py-0.5 rounded text-[10px] text-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Dimas (Playmaker)
+                  </div>
+<div class="flex items-center gap-1 bg-shuttle-neon text-midnight font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">
+<span>?</span> Cari Backcourt
+                  </div>
+</div>
+</div>
+</div>
+<!-- Specs -->
+<div class="space-y-2 text-xs font-mono text-slate-300">
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">calendar_today</span> Jadwal
+                </span>
+<span>Besok • 20:00 - 22:00 WIB</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">sports_tennis</span> Shuttlecock
+                </span>
+<span class="text-white">Sampoerna Gold Speed 77</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">check_circle</span> Karpet
+                </span>
+<span class="text-emerald-400">Vinyl Enlio BWF Certified</span>
+</div>
+</div>
+<!-- Host info -->
+<div class="flex items-center gap-3 bg-midnight-surface p-2.5 rounded-xl border border-midnight-border">
+<img alt="Host" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-Awow3ldr3tDWgJMaWedieOtCxpm4r1PuNLpSLJerEoVebWEaXwk_3gHP6A6MH047Ipahhst9DP9_SaH31UjeUdVrC3pN7gz7lbNZgRzll1vtTw1OPNvAI1U1XpNLYwaKvHr004kg9SEQ5akZpyMGOuGWC97a9uGnXQS65WvLipEUATer5EPGBXkQ2t_lfcrUIqnvxOO1EEuBi6QilaKQoww-fA749qp0s8eo2yKgm9o7DNnaWV1l"/>
+<div class="text-xs">
+<span class="text-white font-bold block">Kevin Sanjaya Fans Club</span>
+<span class="text-slate-400 text-[11px]">★ 5.0 • Klub Terverifikasi</span>
+</div>
+</div>
+</div>
+<!-- Bottom Stub -->
+<div class="p-6 pt-4 border-t border-midnight-border bg-midnight-surface flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Iuran Match</span>
+<div class="font-editorial text-2xl font-bold text-white">
+                Rp 65.000<span class="text-xs font-normal text-slate-400">/org</span>
+</div>
+</div>
+<button class="bg-shuttle-neon hover:bg-shuttle-neon-hover text-midnight font-editorial font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all shadow-md hover:scale-105">
+              Ambil Slot
+            </button>
+</div>
+</article>
+<!-- TICKET 03 -->
+<article class="bg-midnight-card border-2 border-midnight-border hover:border-shuttle-neon/60 rounded-3xl overflow-hidden transition-all duration-300 flex flex-col justify-between group shadow-xl">
+<!-- Top Ticket Header -->
+<div class="p-6 pb-4 border-b border-dashed border-midnight-border bg-midnight-surface/80 relative">
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1 font-mono text-[11px] font-bold uppercase tracking-wider bg-slate-800 text-slate-200 border border-slate-700 px-2.5 py-1 rounded-md">
+                Semua Level (Coaching &amp; Game)
+              </span>
+<span class="font-mono text-xs text-amber-300 bg-amber-950/70 border border-amber-800 px-2 py-0.5 rounded-full font-bold">
+                2 slot tersisa
+              </span>
+</div>
+<h3 class="font-editorial text-xl font-bold text-white group-hover:text-shuttle-neon transition-colors">
+              Drills &amp; Match Play Coach Dimas
+            </h3>
+<p class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-shuttle-neon">pin_drop</span>
+              GOR Bulungan Blok M (1.2 km)
+            </p>
+</div>
+<!-- Mid Section: Court Tactician View -->
+<div class="p-6 space-y-4">
+<div class="bg-midnight-surface border border-midnight-border rounded-2xl p-3 relative overflow-hidden">
+<div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-2">
+<span>SESI DRILL &amp; ROTASI MATCH</span>
+<span class="text-shuttle-neon font-bold">PBSI Certified Coach</span>
+</div>
+<div class="relative w-full h-24 bg-[#0a1f18] border border-emerald-600/40 rounded-lg flex flex-col justify-between p-2">
+<div class="absolute inset-x-0 top-1/2 h-px bg-white/40 border-t border-dashed"></div>
+<div class="absolute inset-y-0 left-1/2 w-px bg-white/30"></div>
+<div class="flex justify-around items-center z-10">
+<div class="flex items-center gap-1 bg-midnight/90 border border-amber-400/60 px-2 py-0.5 rounded text-[10px] text-amber-300">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Coach Dimas
+                  </div>
+<div class="flex items-center gap-1 bg-midnight/90 border border-emerald-400/60 px-2 py-0.5 rounded text-[10px] text-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Member 1
+                  </div>
+</div>
+<div class="flex justify-around items-center z-10">
+<div class="flex items-center gap-1 bg-shuttle-neon text-midnight font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">
+<span>?</span> Slot Bebas
+                  </div>
+<div class="flex items-center gap-1 bg-shuttle-neon text-midnight font-bold px-2 py-0.5 rounded text-[10px] animate-pulse">
+<span>?</span> Slot Bebas
+                  </div>
+</div>
+</div>
+</div>
+<!-- Specs -->
+<div class="space-y-2 text-xs font-mono text-slate-300">
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">calendar_today</span> Jadwal
+                </span>
+<span>Sabtu • 08:00 - 10:00 WIB</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">fitness_center</span> Materi
+                </span>
+<span class="text-white">Footwork + Netting Drills</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-slate-400">check_circle</span> Raket Demo
+                </span>
+<span class="text-emerald-400">Yonex Nanoflare Siap Tes</span>
+</div>
+</div>
+<!-- Host info -->
+<div class="flex items-center gap-3 bg-midnight-surface p-2.5 rounded-xl border border-midnight-border">
+<img alt="Coach" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIZl-L48D8PcpuJO-68yi-3yiRma6B9IflI-KhVLz-Pw1TQ0FP7tx_aBUtnHlF_R4smKNOroy-fxaNEnyumzs82o1H0YIOeEQI1RXNo7EZ9YR_DvVuMbbrbLpy0TPuHTmf23XCGu5kyKZwJXRzcYN2BsssSDZLmShByqQ2HKb5TiY6BlxAOUNelxGoC4z7bjlXPHNxPFuzTQTzvmhtMs1dc6nVtQDIauw8oRbi4xVzpBF1JGovPwd3"/>
+<div class="text-xs">
+<span class="text-white font-bold block">Dimas Prakoso (Pelatih)</span>
+<span class="text-slate-400 text-[11px]">★ 4.95 • Lisensi PBSI</span>
+</div>
+</div>
+</div>
+<!-- Bottom Stub -->
+<div class="p-6 pt-4 border-t border-midnight-border bg-midnight-surface flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Iuran Sesi</span>
+<div class="font-editorial text-2xl font-bold text-white">
+                Rp 75.000<span class="text-xs font-normal text-slate-400">/org</span>
+</div>
+</div>
+<button class="bg-shuttle-neon hover:bg-shuttle-neon-hover text-midnight font-editorial font-bold text-xs uppercase tracking-wider px-5 py-3 rounded-xl transition-all shadow-md hover:scale-105">
+              Ambil Slot
+            </button>
+</div>
+</article>
+</div>
+<div class="text-center mt-12">
+<a class="inline-flex items-center gap-2 text-shuttle-neon hover:text-white font-mono text-sm uppercase tracking-wider group transition-colors" href="#quick-search">
+<span>Buka 28+ Jadwal Pertandingan Lainnya di Jabodetabek</span>
+<span class="material-symbols-outlined text-base group-hover:translate-x-1.5 transition-transform">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- SECTION: TACTICAL EDITORIAL PROCESS (COURT-INSPIRED TIMELINE) -->
+<section class="py-24 bg-midnight-surface border-y border-midnight-border relative" id="cara-kerja">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16">
+<div class="max-w-xl">
+<span class="text-xs font-mono uppercase tracking-widest text-shuttle-neon">ALUR SISTEM PERTANDINGAN</span>
+<h2 class="font-editorial text-3xl sm:text-5xl font-extrabold text-white mt-1 leading-tight">
+              Dari cari kawan sampai smash di lapangan.
+            </h2>
+</div>
+<p class="text-slate-400 text-sm max-w-md">
+            Mabar bulutangkis tanpa drama cancel dadakan, uang kas kurang, atau partner yang skill-nya jomplang.
+          </p>
+</div>
+<!-- The 3 Court Timeline Columns -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+<!-- Step 01 -->
+<div class="bg-midnight-card border border-midnight-border p-8 rounded-3xl relative flex flex-col justify-between hover:border-shuttle-neon/50 transition-colors">
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<span class="font-editorial text-4xl font-extrabold text-shuttle-neon">01</span>
+<span class="w-12 h-12 rounded-2xl bg-midnight-surface border border-midnight-border text-shuttle-neon flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">compare_arrows</span>
+</span>
+</div>
+<h3 class="font-editorial text-2xl font-bold text-white">Algoritma Posisi &amp; Level</h3>
+<p class="text-sm text-slate-300 leading-relaxed">
+                Pilih peranmu di lapangan (Net play yang lincah atau Smasher backcourt bertenaga). Sistem menyelaraskan level pemain secara akurat demi rally yang kompetitif.
+              </p>
+</div>
+<div class="mt-8 pt-4 border-t border-midnight-border font-mono text-xs text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-shuttle-neon text-sm">tune</span>
+              Filter ELO Rating &amp; Jarak GOR
+            </div>
+</div>
+<!-- Step 02 -->
+<div class="bg-midnight-card border border-midnight-border p-8 rounded-3xl relative flex flex-col justify-between hover:border-shuttle-neon/50 transition-colors">
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<span class="font-editorial text-4xl font-extrabold text-shuttle-neon">02</span>
+<span class="w-12 h-12 rounded-2xl bg-midnight-surface border border-midnight-border text-shuttle-neon flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">point_of_sale</span>
+</span>
+</div>
+<h3 class="font-editorial text-2xl font-bold text-white">Auto-Split &amp; Garansi Slot</h3>
+<p class="text-sm text-slate-300 leading-relaxed">
+                Slot terkunci instan setelah pembayaran QRIS/e-wallet. Biaya lapangan dan shuttlecock terbagi rata secara otomatis tanpa beban nagih ke host.
+              </p>
+</div>
+<div class="mt-8 pt-4 border-t border-midnight-border font-mono text-xs text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-shuttle-neon text-sm">lock</span>
+              Anti-Ghosting &amp; Refund Otomatis
+            </div>
+</div>
+<!-- Step 03 -->
+<div class="bg-midnight-card border border-midnight-border p-8 rounded-3xl relative flex flex-col justify-between hover:border-shuttle-neon/50 transition-colors">
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<span class="font-editorial text-4xl font-extrabold text-shuttle-neon">03</span>
+<span class="w-12 h-12 rounded-2xl bg-midnight-surface border border-midnight-border text-shuttle-neon flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">military_tech</span>
+</span>
+</div>
+<h3 class="font-editorial text-2xl font-bold text-white">Reputasi ELO &amp; Badge</h3>
+<p class="text-sm text-slate-300 leading-relaxed">
+                Seusai game, beri rating sportifitas ke lawan dan kawan. Raih badge pencapaian seperti "Raja Smash" atau "Sportif Star" untuk naik tier profil.
+              </p>
+</div>
+<div class="mt-8 pt-4 border-t border-midnight-border font-mono text-xs text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-shuttle-neon text-sm">verified_user</span>
+              100% Review Komunitas Nyata
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ARCHITECTURAL WARM IVORY TRANSITION SECTION: GOR MITRA STANDAR BWF -->
+<section class="bg-court-ivory text-midnight py-24 px-6 lg:px-12 relative" id="gor-pilihan">
+<div class="max-w-7xl mx-auto">
+<!-- Section Header on Ivory -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16">
+<div>
+<span class="text-xs font-mono font-bold tracking-widest text-heritage-burgundy uppercase">STANDARISASI TEMPAT MAIN</span>
+<h2 class="font-editorial text-3xl sm:text-5xl font-extrabold text-midnight mt-1">
+              GOR Lapangan Badminton Pilihan
+            </h2>
+<p class="text-slate-600 text-sm mt-2 max-w-xl">
+              Setiap arena yang bekerja sama dengan SmashMate melalui inspeksi fisik ketat: jenis karpet vinyl, pencahayaan non-glare, dan sirkulasi udara optimal.
+            </p>
+</div>
+<a class="inline-flex items-center gap-2 font-mono text-xs font-bold text-heritage-burgundy hover:text-midnight uppercase tracking-wider group" href="#">
+<span>Lihat Semua 30+ GOR Mitra</span>
+<span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<!-- Stacked Architectural Venue Showcase -->
+<div class="space-y-8">
+<!-- VENUE 01: Bulungan Arena -->
+<div class="bg-white border border-court-ivory-border rounded-3xl p-6 lg:p-8 shadow-sm hover:shadow-xl transition-all grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-5 relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-100">
+<img alt="GOR Bulungan Arena Jakarta Selatan" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIZRfxDCrFvbbYKAVMtSI1Dhr7Q5g4V-a9t6MUKniU-EiLLA99xmyIzDU-duPO1mMGGpHLK_35mBJua5JyMnWfUX3J1F0QCDWO5AN153_crAansjsrmNCIqH6SigeGzbihd4lAD_XMBetyUQ9_12WftszIennzplpRcNY0L7EScBk_VFxn8Dk-5Om1kshpzTKGhg9CJ6FDhJe4skXCS-GaqVLU6PKJyKy0up_GjIxt6EpxthqZuZQy"/>
+<div class="absolute top-3 left-3 bg-midnight/90 text-white font-mono text-[10px] font-bold px-2.5 py-1 rounded-md">
+                6 LAPANGAN VINYL
+              </div>
+<div class="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold font-mono text-midnight flex items-center gap-1 shadow">
+<span class="material-symbols-outlined text-amber-500 text-sm" style="font-variation-settings: 'FILL' 1;">star</span> 4.9 (180+ ulasan)
+              </div>
+</div>
+<div class="lg:col-span-7 flex flex-col justify-between h-full space-y-6">
+<div>
+<div class="flex items-center justify-between gap-4 mb-2">
+<h3 class="font-editorial text-2xl font-bold text-midnight">GOR Bulungan Arena</h3>
+<span class="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">1.4 km dari Senayan</span>
+</div>
+<p class="text-xs text-slate-500 font-mono mb-4">Kebayoran Baru, Jakarta Selatan • Dekat MRT Blok M</p>
+<!-- Technical Specs Chips -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono mb-6">
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">LANTAI</span>
+<strong class="text-midnight">Karpet Vinyl 4.5mm</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">PENCAHAYAAN</span>
+<strong class="text-midnight">500 Lux Anti-Glare</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">SIRKULASI</span>
+<strong class="text-midnight">Exhaust Turbo &amp; AC</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">RENTAL</span>
+<strong class="text-emerald-700">Raket &amp; Sepatu</strong>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-court-ivory-border flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-500 block uppercase">Tarif Booking</span>
+<div class="font-editorial text-2xl font-bold text-midnight">
+                    Rp 85.000<span class="text-xs font-normal text-slate-500">/jam</span>
+</div>
+</div>
+<button class="bg-midnight hover:bg-slate-800 text-white font-editorial font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-md">
+                  Lihat Jadwal Slot
+                </button>
+</div>
+</div>
+</div>
+<!-- VENUE 02: Candra Wijaya Center -->
+<div class="bg-white border border-court-ivory-border rounded-3xl p-6 lg:p-8 shadow-sm hover:shadow-xl transition-all grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-5 relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-100">
+<img alt="Candra Wijaya Badminton Center BSD" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgyFA78tJIO_Z-AL5HuYU4x6TYdtEzn_9OVi93P57cjYeZt4Qt7dGxxkTIA6lJcnU47lghGhzmfg-Xezf6srNnrosuZIPJnN3kf0PXrQh2k-cxdi3IFsYsPKBDzFcfPjbxrZWUXBdnU-FrEGn4nlCMFdGXTHrj1de_cgQnRyBw5CElRuCKTag7GKxDnl6a5nJq5Ux6nZnNmx1ThUMnPYJTG1AzUMSEVetELsd7sE8j0NFkZKVycGh8"/>
+<div class="absolute top-3 left-3 bg-heritage-burgundy text-white font-mono text-[10px] font-bold px-2.5 py-1 rounded-md">
+                12 LAPANGAN BWF STANDARD
+              </div>
+<div class="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold font-mono text-midnight flex items-center gap-1 shadow">
+<span class="material-symbols-outlined text-amber-500 text-sm" style="font-variation-settings: 'FILL' 1;">star</span> 5.0 (320+ ulasan)
+              </div>
+</div>
+<div class="lg:col-span-7 flex flex-col justify-between h-full space-y-6">
+<div>
+<div class="flex items-center justify-between gap-4 mb-2">
+<h3 class="font-editorial text-2xl font-bold text-midnight">Candra Wijaya Badminton Center</h3>
+<span class="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">4.2 km dari BSD Plaza</span>
+</div>
+<p class="text-xs text-slate-500 font-mono mb-4">Serpong, Tangerang Selatan • Parkir 100+ Mobil</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono mb-6">
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">LANTAI</span>
+<strong class="text-midnight">BWF Approved Vinyl</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">FASILITAS</span>
+<strong class="text-midnight">Loker &amp; Air Panas</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">PRO SHOP</span>
+<strong class="text-midnight">Tarik Senar Digital</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">KANTIN</span>
+<strong class="text-emerald-700">Minuman Dingin</strong>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-court-ivory-border flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-500 block uppercase">Tarif Booking</span>
+<div class="font-editorial text-2xl font-bold text-midnight">
+                    Rp 110.000<span class="text-xs font-normal text-slate-500">/jam</span>
+</div>
+</div>
+<button class="bg-midnight hover:bg-slate-800 text-white font-editorial font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-md">
+                  Lihat Jadwal Slot
+                </button>
+</div>
+</div>
+</div>
+<!-- VENUE 03: Champion Kuningan -->
+<div class="bg-white border border-court-ivory-border rounded-3xl p-6 lg:p-8 shadow-sm hover:shadow-xl transition-all grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-5 relative rounded-2xl overflow-hidden aspect-[16/10] bg-slate-100">
+<img alt="Champion Arena Kuningan Jakarta" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDd_XG5B_s7dAJ_DeU35S6DtQ3pGMZmJDjtD7Hojm0uHiFr5fgs8Wqy4H0SC6tcZR7X5jTA9kYPAkWBC0j0qUpnt3b_vSf1SiFcGoOYiOMhAVFD4aBGNx5wNtrJnOgBM4nxhGPGmew_DfNMb_HS9EhaYour-h29Bv-SnCsnP_ERrcKGaOdrYjeBJElaegyinyaT4Lorbxa5udikeB5UCwecvIFtGT-vrarF7aiDloaA6JtpRZbXtA21"/>
+<div class="absolute top-3 left-3 bg-midnight/90 text-white font-mono text-[10px] font-bold px-2.5 py-1 rounded-md">
+                8 LAPANGAN MATRAS BARU
+              </div>
+<div class="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold font-mono text-midnight flex items-center gap-1 shadow">
+<span class="material-symbols-outlined text-amber-500 text-sm" style="font-variation-settings: 'FILL' 1;">star</span> 4.8 (145+ ulasan)
+              </div>
+</div>
+<div class="lg:col-span-7 flex flex-col justify-between h-full space-y-6">
+<div>
+<div class="flex items-center justify-between gap-4 mb-2">
+<h3 class="font-editorial text-2xl font-bold text-midnight">Champion Arena Kuningan</h3>
+<span class="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">2.8 km dari Rasuna Said</span>
+</div>
+<p class="text-xs text-slate-500 font-mono mb-4">Setiabudi, Jakarta Selatan • 5 Menit dari Stasiun LRT</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono mb-6">
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">LANTAI</span>
+<strong class="text-midnight">Matras Hijau Yonex</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">PENCAHAYAAN</span>
+<strong class="text-midnight">High Bay Sports LED</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">LOKASI</span>
+<strong class="text-midnight">Pusat Perkantoran</strong>
+</div>
+<div class="bg-court-ivory p-3 rounded-xl border border-court-ivory-border">
+<span class="text-slate-400 block text-[10px]">SHUTTLECOCK</span>
+<strong class="text-emerald-700">Official Store</strong>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-court-ivory-border flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-500 block uppercase">Tarif Booking</span>
+<div class="font-editorial text-2xl font-bold text-midnight">
+                    Rp 95.000<span class="text-xs font-normal text-slate-500">/jam</span>
+</div>
+</div>
+<button class="bg-midnight hover:bg-slate-800 text-white font-editorial font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-md">
+                  Lihat Jadwal Slot
+                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: ORGANIC EDITORIAL TESTIMONIALS -->
+<section class="py-24 px-6 lg:px-12 max-w-7xl mx-auto w-full" id="komunitas">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<span class="text-xs font-mono uppercase tracking-widest text-shuttle-neon">CERITA KOMUNITAS SMASHMATE</span>
+<h2 class="font-editorial text-3xl sm:text-5xl font-extrabold text-white mt-1">
+          Lebih dari sekadar cari lawan main.
+        </h2>
+<p class="text-slate-400 text-sm mt-3">
+          Dari yang awalnya canggung main bareng orang asing, sekarang rutin mabar tiap pekan dengan circle yang sportif.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Story 1 -->
+<div class="bg-midnight-card border border-midnight-border p-8 rounded-3xl flex flex-col justify-between relative hover:border-shuttle-neon/40 transition-colors">
+<div>
+<div class="flex items-center gap-1 text-shuttle-neon mb-6">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<blockquote class="text-sm text-slate-200 leading-relaxed italic mb-6">
+              “Dulu minder mau main badminton karena ga punya teman selevel. Di SmashMate ketemu grup cewek yang suportif banget dan seru tiap Rabu malam! Ga ada yang ngejudge kalau masih belajar netting.”
+            </blockquote>
+</div>
+<div class="pt-6 border-t border-midnight-border flex items-center gap-4">
+<img alt="Putri Andini" class="w-12 h-12 rounded-full object-cover border-2 border-shuttle-neon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5eUuVz-ytTV8nKVdDVQ-lmDn_MjcmdackasVKvDQjXyKOmqr2PCMieHarqneHRBNsGhrthubUsTuHNuFtnphxYaxACW5LRsmYW2bXzjHN0WCVxSTdcwG3fk2dHSxRjbt8V0BWbRoJzLYdpJe10-K3jVrnhUAKZ5LJXFOoLEyt7XJ2XjrexB_CxrtU2Yd26oLjJL7cwxXSOTkls3dGg-hhwaFw7xmdkAYBt7lBegRWzXIhk0DxXX4s"/>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-white text-sm">Putri Andini</span>
+<span class="text-[10px] font-mono bg-shuttle-neon/15 text-shuttle-neon px-1.5 py-0.5 rounded">PEMULA</span>
+</div>
+<span class="text-xs text-slate-400 font-mono block mt-0.5">Jakarta Barat • 18 Match Aktif</span>
+</div>
+</div>
+</div>
+<!-- Story 2 -->
+<div class="bg-midnight-card border border-midnight-border p-8 rounded-3xl flex flex-col justify-between relative hover:border-shuttle-neon/40 transition-colors">
+<div>
+<div class="flex items-center gap-1 text-shuttle-neon mb-6">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<blockquote class="text-sm text-slate-200 leading-relaxed italic mb-6">
+              “Ga pernah lagi pusing cari lawan seimbang. Tiap akhir pekan tinggal buka aplikasi, langsung dapat partner ganda yang ritmenya klop. Fitur filter level intermediate-nya beneran akurat dan ga zonk.”
+            </blockquote>
+</div>
+<div class="pt-6 border-t border-midnight-border flex items-center gap-4">
+<img alt="Fajar Ramadhan" class="w-12 h-12 rounded-full object-cover border-2 border-shuttle-neon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5d3GaKUG7VhpBVXZJIA_Cned3SkyW4leWum_dI_9rtjM1gknm01CjHiDzbg5yFJorSQ5fqt0Y-ay-4oV2N7khBmqGeYGjSrSYRG6sLhlT7kCyFQgl2NRxGdzhjzPuNDSSl_po6ntsblyS4WKaf0lu45xgmrXGWEnSopMzrINL0wgXU5DmARUSbkRK0nTLtn8c7VK_YBtXgzCOQ4Y_UwerYRKucM-aE8ZgVKqYGr3GKukzaoJ8LN_g"/>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-white text-sm">Fajar Ramadhan</span>
+<span class="text-[10px] font-mono bg-heritage-burgundy/40 text-red-300 px-1.5 py-0.5 rounded">MENENGAH</span>
+</div>
+<span class="text-xs text-slate-400 font-mono block mt-0.5">Jakarta Selatan • Smasher Backcourt</span>
+</div>
+</div>
+</div>
+<!-- Story 3 -->
+<div class="bg-midnight-card border border-midnight-border p-8 rounded-3xl flex flex-col justify-between relative hover:border-shuttle-neon/40 transition-colors">
+<div>
+<div class="flex items-center gap-1 text-shuttle-neon mb-6">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<blockquote class="text-sm text-slate-200 leading-relaxed italic mb-6">
+              “Sebagai pengurus mabar, dulu paling stres kalau ada yang cancel dadakan 1 jam sebelum main. Lewat SmashMate, slot kosong 2 orang langsung terisi dalam 15 menit. Penyelamat uang kas komunitas!”
+            </blockquote>
+</div>
+<div class="pt-6 border-t border-midnight-border flex items-center gap-4">
+<img alt="Budi Santoso" class="w-12 h-12 rounded-full object-cover border-2 border-shuttle-neon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8U1Y6domIdR4OEl9GPgYMT_Mdkux_fquT-AsvD19dLpXUUqXwLTKIWh-F8pBzvmFVrPcdTgOpW6t7165BRhLGR3-yM_tLoKgfPD0btgJAIBmg4L-AYB1tWSgig810tEXvw1I8VC5MOSEk37EAXUS3jBYLpczceVKTh_swmPHTg14xN_1ae0NYIjw2_1f0Sf6fZPgb7G3m2hKL1XwEg196GUVHlQMNqJD8MbFJieWYcQhIJTE5_U40"/>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-white text-sm">Budi Santoso</span>
+<span class="text-[10px] font-mono bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded">HOST RESMI</span>
+</div>
+<span class="text-xs text-slate-400 font-mono block mt-0.5">Tangerang • Komunitas Smash BSD</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- FINAL CTA: MIDNIGHT NAVY & NEON COURT-LINE BANNER -->
+<section class="px-6 lg:px-12 py-12 max-w-7xl mx-auto w-full mb-16">
+<div class="relative bg-midnight-card border-2 border-midnight-border rounded-3xl p-10 lg:p-16 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+<!-- Large Badminton Court Boundary Graphics -->
+<div class="absolute inset-0 opacity-15 pointer-events-none select-none">
+<svg class="w-full h-full text-shuttle-neon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 1000 500">
+<rect height="400" width="900" x="50" y="50"></rect>
+<line stroke-dasharray="10 5" stroke-width="4" x1="500" x2="500" y1="50" y2="450"></line>
+<line x1="50" x2="950" y1="250" y2="250"></line>
+<line x1="220" x2="220" y1="50" y2="450"></line>
+<line x1="780" x2="780" y1="50" y2="450"></line>
+<rect height="340" stroke-width="1" width="800" x="100" y="80"></rect>
+</svg>
+</div>
+<div class="relative z-10 max-w-2xl space-y-6">
+<div class="inline-flex items-center gap-2 bg-shuttle-neon/15 border border-shuttle-neon/30 px-3.5 py-1.5 rounded-full text-shuttle-neon text-xs font-mono font-bold tracking-wider uppercase">
+<span class="w-2 h-2 rounded-full bg-shuttle-neon animate-pulse"></span>
+            KOMUNITAS TERBUKA JABODETABEK
+          </div>
+<h2 class="font-editorial text-4xl sm:text-6xl font-extrabold text-white leading-tight tracking-tight">
+            Siap cari teman main berikutnya?
+          </h2>
+<p class="text-base text-slate-300 leading-relaxed">
+            Gabung bersama 2.500+ pemain bulutangkis aktif di Jabodetabek. Tanpa biaya pendaftaran bulanan, langsung pilih jadwal mabar dan turun ke lapangan hari ini.
+          </p>
+<div class="flex flex-wrap items-center gap-4 pt-4">
+<a class="inline-flex items-center justify-center gap-2.5 bg-shuttle-neon hover:bg-shuttle-neon-hover text-midnight font-editorial font-bold text-base px-8 py-4 rounded-xl shadow-[0_0_30px_rgba(210,248,36,0.35)] transition-all hover:scale-105" href="#quick-search">
+<span>Daftar Gratis Sekarang</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+<a class="inline-flex items-center justify-center gap-2 bg-midnight-surface hover:bg-slate-800 text-white font-mono text-sm px-6 py-4 rounded-xl border border-midnight-border transition-colors" href="#live-tickets">
+<span class="material-symbols-outlined text-shuttle-neon text-base">calendar_month</span>
+<span>Jelajahi Jadwal Main</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- EDITORIAL FOOTER -->
+<footer class="w-full bg-midnight border-t border-midnight-border pt-16 pb-12">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-16 border-b border-midnight-border">
+<!-- Brand Summary -->
+<div class="lg:col-span-2 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-shuttle-neon text-midnight flex items-center justify-center font-editorial font-extrabold text-lg">
+              SM
+            </div>
+<span class="font-editorial text-2xl font-extrabold text-white">SmashMate</span>
+</div>
+<p class="text-xs text-slate-400 max-w-sm leading-relaxed">
+            Platform kurasi matchmaking, sparring, dan reservasi lapangan badminton nomor #1 di Indonesia. Menghubungkan pecinta bulutangkis dari tingkat pemula hingga eks-atlet.
+          </p>
+<div class="flex items-center gap-3 pt-2 text-slate-400">
+<a aria-label="Badminton" class="w-9 h-9 rounded-xl bg-midnight-card border border-midnight-border flex items-center justify-center hover:text-shuttle-neon hover:border-shuttle-neon transition-colors" href="#"><span class="material-symbols-outlined text-base">sports_tennis</span></a>
+<a aria-label="Komunitas" class="w-9 h-9 rounded-xl bg-midnight-card border border-midnight-border flex items-center justify-center hover:text-shuttle-neon hover:border-shuttle-neon transition-colors" href="#"><span class="material-symbols-outlined text-base">group</span></a>
+<a aria-label="Chat" class="w-9 h-9 rounded-xl bg-midnight-card border border-midnight-border flex items-center justify-center hover:text-shuttle-neon hover:border-shuttle-neon transition-colors" href="#"><span class="material-symbols-outlined text-base">chat</span></a>
+<a aria-label="Mail" class="w-9 h-9 rounded-xl bg-midnight-card border border-midnight-border flex items-center justify-center hover:text-shuttle-neon hover:border-shuttle-neon transition-colors" href="#"><span class="material-symbols-outlined text-base">mail</span></a>
+</div>
+</div>
+<!-- Kolom 1: Produk -->
+<div class="space-y-3 font-mono text-xs">
+<h3 class="text-white font-bold uppercase tracking-wider text-sm font-sans mb-3">Produk</h3>
+<ul class="space-y-2 text-slate-400">
+<li><a class="hover:text-shuttle-neon transition-colors" href="#quick-search">Cari Mabar</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#gor-pilihan">Booking Lapangan</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#cara-kerja">Buat Komunitas</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Sewa &amp; Uji Raket</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Kalkulator ELO Bulutangkis</a></li>
+</ul>
+</div>
+<!-- Kolom 2: Komunitas -->
+<div class="space-y-3 font-mono text-xs">
+<h3 class="text-white font-bold uppercase tracking-wider text-sm font-sans mb-3">Komunitas</h3>
+<ul class="space-y-2 text-slate-400">
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Leaderboard Bulanan</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Event &amp; Turnamen Terbuka</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Tips &amp; Rotasi Ganda</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Grup WhatsApp / Discord Regional</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Direktori Pelatih PBSI</a></li>
+</ul>
+</div>
+<!-- Kolom 3: Bantuan & Legal -->
+<div class="space-y-3 font-mono text-xs">
+<h3 class="text-white font-bold uppercase tracking-wider text-sm font-sans mb-3">Bantuan</h3>
+<ul class="space-y-2 text-slate-400">
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Hubungi Tim SmashMate</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Panduan Etika Lapangan</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Pusat Bantuan &amp; FAQ</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Syarat &amp; Ketentuan Mabar</a></li>
+<li><a class="hover:text-shuttle-neon transition-colors" href="#">Kebijakan Privasi</a></li>
+</ul>
+</div>
+</div>
+<!-- Bottom Bar -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-slate-500">
+<p>© 2025 SmashMate Indonesia. Hak cipta dilindungi undang-undang.</p>
+<div class="flex items-center gap-6">
+<span class="inline-flex items-center gap-1.5 text-emerald-400">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Server Status: Normal
+          </span>
+<a class="hover:text-slate-300 transition-colors" href="#">Privasi</a>
+<a class="hover:text-slate-300 transition-colors" href="#">Ketentuan Layanan</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
