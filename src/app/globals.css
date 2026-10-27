@@ -9,7 +9,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-plus-jakarta);
-  --font-display: var(--font-syne);
+  --font-display: var(--font-manrope);
   --font-mono: var(--font-manrope);
   --color-navy-950: #080e1b;
   --color-navy-900: #0d1320;
@@ -77,9 +77,9 @@ select {
 }
 
 .section-title {
-  font-family: var(--font-syne), sans-serif;
+  font-family: var(--font-manrope), sans-serif;
   font-size: clamp(2rem, 5vw, 3.25rem);
   font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.08;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
