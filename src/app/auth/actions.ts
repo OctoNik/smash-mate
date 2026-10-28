@@ -23,21 +23,16 @@ export async function login(formData: FormData) {
     redirect(authMessage("/login", "error", "Email atau kata sandi tidak sesuai."));
   }
 
-  redirect(authMessage("/", "message", "Berhasil masuk ke SmashMate."));
+  redirect("/dashboard");
 }
 
 export async function register(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
-  const role = String(formData.get("role") ?? "player");
 
   if (!name || !email || password.length < 8) {
     redirect(authMessage("/register", "error", "Isi nama, email, dan kata sandi minimal 8 karakter."));
-  }
-
-  if (role !== "player" && role !== "coach") {
-    redirect(authMessage("/register", "error", "Tipe akun tidak valid."));
   }
 
   const requestHeaders = await headers();
@@ -47,7 +42,7 @@ export async function register(formData: FormData) {
     email,
     password,
     options: {
-      data: { full_name: name, role },
+      data: { full_name: name, role: "player" },
       ...(origin ? { emailRedirectTo: `${origin}/auth/callback` } : {}),
     },
   });
@@ -60,5 +55,11 @@ export async function register(formData: FormData) {
     redirect(authMessage("/register", "message", "Akun dibuat. Periksa email Anda untuk melakukan verifikasi."));
   }
 
-  redirect(authMessage("/", "message", "Akun berhasil dibuat dan Anda sudah masuk."));
+  redirect("/dashboard");
+}
+
+export async function logout() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
 }

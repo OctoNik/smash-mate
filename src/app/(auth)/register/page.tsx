@@ -14,7 +14,7 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
     <>
       <p className="eyebrow">Buat akun baru</p>
       <h1 className="font-display text-4xl font-extrabold text-white">Mulai di SmashMate.</h1>
-      <p className="mt-3 leading-7 text-slate-400">Pilih peran awal. Profil dan level bermain dapat dilengkapi setelah akun dibuat.</p>
+      <p className="mt-3 leading-7 text-slate-400">Buat akun pemain terlebih dahulu. Level, profil, komunitas, dan pengajuan coach dapat dilengkapi setelah masuk.</p>
 
       {error && <p role="alert" className="mt-6 border border-rose-400/30 bg-rose-400/10 p-4 text-sm text-rose-200">{error}</p>}
       {message && <p className="mt-6 border border-lime/30 bg-lime/10 p-4 text-sm text-lime">{message}</p>}
@@ -23,19 +23,7 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
         <label className="block text-sm font-bold text-slate-200">Nama lengkap
           <input name="name" type="text" autoComplete="name" required placeholder="Nama Anda" className="mt-2 h-13 w-full border border-white/15 bg-navy-900 px-4 font-normal text-white outline-none placeholder:text-slate-600 focus:border-lime" />
         </label>
-        <fieldset>
-          <legend className="text-sm font-bold text-slate-200">Saya ingin bergabung sebagai</legend>
-          <div className="mt-2 grid grid-cols-2 gap-3">
-            <label className="cursor-pointer border border-white/15 bg-navy-900 p-4 has-[:checked]:border-lime has-[:checked]:bg-lime/10">
-              <input type="radio" name="role" value="player" defaultChecked className="accent-lime" />
-              <strong className="ml-2 text-sm">Player</strong><span className="mt-2 block text-xs leading-5 text-slate-500">Cari mabar, coach, dan event.</span>
-            </label>
-            <label className="cursor-pointer border border-white/15 bg-navy-900 p-4 has-[:checked]:border-lime has-[:checked]:bg-lime/10">
-              <input type="radio" name="role" value="coach" className="accent-lime" />
-              <strong className="ml-2 text-sm">Coach</strong><span className="mt-2 block text-xs leading-5 text-slate-500">Buka sesi latihan untuk pemain.</span>
-            </label>
-          </div>
-        </fieldset>
+        <div className="border border-lime/25 bg-lime/5 p-4"><p className="text-xs font-extrabold uppercase tracking-[.14em] text-lime">Akun Player</p><p className="mt-2 text-sm leading-6 text-slate-400">Semua pengguna mulai sebagai Player. Anda tetap dapat membuat mabar, komunitas, dan mengajukan verifikasi Coach dari profil.</p></div>
         <label className="block text-sm font-bold text-slate-200">Email
           <input name="email" type="email" autoComplete="email" required placeholder="nama@email.com" className="mt-2 h-13 w-full border border-white/15 bg-navy-900 px-4 font-normal text-white outline-none placeholder:text-slate-600 focus:border-lime" />
         </label>
