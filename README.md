@@ -28,6 +28,8 @@ Penghapusan akun memakai Supabase Edge Function `delete-account` yang sudah dite
 
 ## Validasi
 
+Versi dependensi dikunci di `package.json` dan `package-lock.json`; gunakan `npm ci` untuk instalasi yang konsisten dengan deployment. ESLint tetap pada 9.39.5 karena plugin React, import, dan aksesibilitas bawaan `eslint-config-next` 16.4.3 belum mendukung ESLint 10. Peringatan deprecated ESLint saat instalasi masih dapat muncul sampai plugin tersebut mendukung versi baru.
+
 ```bash
 npm run lint
 npm run build
