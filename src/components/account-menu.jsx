@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { logout } from "@/app/auth/actions";
+import SubmitButton from "@/components/submit-button";
 
 export default function AccountMenu({ name, email, avatarUrl }) {
   const [open, setOpen] = useState(false);
@@ -41,13 +42,13 @@ export default function AccountMenu({ name, email, avatarUrl }) {
       {open && (
         <div className="account-menu-panel" role="menu" aria-label="Menu akun">
           <div className="account-menu-identity"><strong>{name}</strong><span>{email}</span></div>
-          <Link href="/activities" role="menuitem" onClick={() => setOpen(false)}>Aktivitas</Link>
-          <Link href="/equipment" role="menuitem" onClick={() => setOpen(false)}>Perlengkapan</Link>
-          <Link href="/ratings" role="menuitem" onClick={() => setOpen(false)}>Rating pemain</Link>
-          <Link href="/profile" role="menuitem" onClick={() => setOpen(false)}>Profil saya</Link>
-          <Link href="/settings" role="menuitem" onClick={() => setOpen(false)}>Pengaturan</Link>
-          <Link href="/feedback" role="menuitem" onClick={() => setOpen(false)}>Kirim feedback</Link>
-          <form action={logout}><button type="submit" role="menuitem">Keluar dari akun</button></form>
+          <Link href="/activities" role="menuitem">Aktivitas</Link>
+          <Link href="/equipment" role="menuitem">Perlengkapan</Link>
+          <Link href="/ratings" role="menuitem">Rating pemain</Link>
+          <Link href="/profile" role="menuitem">Profil saya</Link>
+          <Link href="/settings" role="menuitem">Pengaturan</Link>
+          <Link href="/feedback" role="menuitem">Kirim feedback</Link>
+          <form action={logout}><SubmitButton role="menuitem" pendingText="Sedang keluar...">Keluar dari akun</SubmitButton></form>
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import BrandLogo from "@/components/brand-logo";
 import BadmintonHeroMotion from "@/components/badminton-hero-motion";
 import UtilityLoop from "@/components/utility-loop";

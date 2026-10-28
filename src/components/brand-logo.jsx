@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 
 export default function BrandLogo({ href = "/" }) {
   return (

@@ -144,6 +144,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .profile-message{margin-top:1.2rem;border-radius:.65rem;padding:.8rem 1rem;font-size:.82rem}
 .profile-message.success{background:#e5f0e9;color:#24563c}.profile-message.error{background:#f8e5e8;color:#7d1832}
 .submit-spinner{width:1rem;height:1rem;flex:none;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+.submit-button{display:inline-flex;align-items:center;justify-content:center;gap:.5rem}
+.loading-link{position:relative}
+.navigation-pending{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:rgb(255 255 255/.92);color:#56061d;cursor:progress}
+.loading-link:has(.navigation-pending){pointer-events:none;cursor:progress}
 button[aria-busy="true"]{cursor:progress;opacity:.85}
 .loading-panel{width:min(100%,24rem);border:1px solid rgb(2 46 74/.1);border-radius:1.25rem;background:#fff;padding:2.5rem;text-align:center;box-shadow:0 20px 50px rgb(2 46 74/.08)}
 .loading-shuttle{display:inline-grid;width:3.5rem;height:3.5rem;place-items:center;border-radius:1rem;background:#e2d8cb;font-size:1.6rem;animation:loadingPulse 1.4s ease-in-out infinite}

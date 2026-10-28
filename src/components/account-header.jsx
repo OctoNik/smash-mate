@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import BrandLogo from "@/components/brand-logo";
 import AccountMenu from "@/components/account-menu";
 import { createClient } from "@/lib/supabase/server";

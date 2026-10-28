@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { register } from "@/app/auth/actions";
 import SubmitButton from "@/components/submit-button";
 
