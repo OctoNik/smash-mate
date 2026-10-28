@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>SmashMate</title>
+  <rect width="64" height="64" rx="16" fill="#56061D"/>
+  <g transform="rotate(35 32 32)">
+    <path d="M16 13h32L38 39H26L16 13Z" fill="#F8F5EF"/>
+    <path d="m24 13 6 26m10-26-6 26m-2-26v26" stroke="#56061D" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M25 41h14v5a7 7 0 0 1-14 0v-5Z" fill="#C9F31D"/>
+    <path d="M25 39h14" stroke="#56061D" stroke-width="3"/>
+  </g>
+  <path d="m12 43 7-4m-3 13 7-4" stroke="#C9F31D" stroke-width="3" stroke-linecap="round"/>
+</svg>
