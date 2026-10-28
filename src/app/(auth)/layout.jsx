@@ -1,7 +1,6 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
 
-export default function AuthLayout({ children }: { children: ReactNode }) {
+export default function AuthLayout({ children }) {
   return (
     <main className="min-h-screen bg-navy-950 text-slate-100">
       <div className="grid min-h-screen lg:grid-cols-[minmax(0,1fr)_minmax(520px,0.8fr)]">

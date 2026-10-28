@@ -4,11 +4,11 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-function authMessage(path: string, type: "error" | "message", message: string) {
+function authMessage(path, type, message) {
   return `${path}?${type}=${encodeURIComponent(message)}`;
 }
 
-export async function login(formData: FormData) {
+export async function login(formData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
@@ -26,7 +26,7 @@ export async function login(formData: FormData) {
   redirect("/dashboard");
 }
 
-export async function register(formData: FormData) {
+export async function register(formData) {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");

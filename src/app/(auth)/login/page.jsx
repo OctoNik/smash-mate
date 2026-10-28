@@ -3,11 +3,7 @@ import { login } from "@/app/auth/actions";
 
 export const instant = false;
 
-type LoginPageProps = {
-  searchParams: Promise<{ error?: string; message?: string }>;
-};
-
-export default async function LoginPage({ searchParams }: LoginPageProps) {
+export default async function LoginPage({ searchParams }) {
   const { error, message } = await searchParams;
 
   return (

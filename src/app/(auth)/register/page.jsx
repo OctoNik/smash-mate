@@ -3,11 +3,7 @@ import { register } from "@/app/auth/actions";
 
 export const instant = false;
 
-type RegisterPageProps = {
-  searchParams: Promise<{ error?: string; message?: string }>;
-};
-
-export default async function RegisterPage({ searchParams }: RegisterPageProps) {
+export default async function RegisterPage({ searchParams }) {
   const { error, message } = await searchParams;
 
   return (

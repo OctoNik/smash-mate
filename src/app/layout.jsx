@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -12,13 +11,13 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "SmashMate — Temukan Partner Badminton",
   description:
     "Temukan partner selevel, isi slot pertandingan, dan booking lapangan badminton dalam satu platform.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }) {
   return (
     <html
       lang="id"
