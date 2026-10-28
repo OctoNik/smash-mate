@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmashMate — Platform Komunitas &amp; Matchmaking Badminton Indonesia</title>
+<!-- Google Fonts: Plus Jakarta Sans & Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Plus Jakarta Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with forms & container-queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed-dim": "#add52f",
+            "on-primary-fixed-variant": "#8c1523",
+            "surface-bright": "#fcf9f8",
+            "inverse-primary": "#ffb3b2",
+            "tertiary": "#660e1a",
+            "on-primary": "#ffffff",
+            "surface-container-highest": "#e5e2e1",
+            "surface-tint": "#ad2f38",
+            "surface-container-lowest": "#ffffff",
+            "on-surface": "#1c1b1b",
+            "primary-container": "#8f1725",
+            "on-primary-fixed": "#410008",
+            "error-container": "#ffdad6",
+            "outline-variant": "#e0bfbe",
+            "on-tertiary-fixed-variant": "#82242c",
+            "background": "#fcf9f8",
+            "tertiary-container": "#85262e",
+            "on-secondary-fixed": "#161f00",
+            "secondary-fixed": "#c9f24c",
+            "on-tertiary": "#ffffff",
+            "surface-container-high": "#eae7e7",
+            "on-tertiary-fixed": "#400009",
+            "tertiary-fixed-dim": "#ffb3b3",
+            "surface-variant": "#e5e2e1",
+            "surface-container-low": "#f6f3f2",
+            "primary-fixed": "#ffdad8",
+            "outline": "#8c7070",
+            "on-secondary-fixed-variant": "#3c4d00",
+            "tertiary-fixed": "#ffdad9",
+            "primary-fixed-dim": "#ffb3b2",
+            "on-error-container": "#93000a",
+            "surface-container": "#f0eded",
+            "on-primary-container": "#ff9d9c",
+            "secondary": "#506600",
+            "on-secondary": "#ffffff",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#ff9d9e",
+            "on-secondary-container": "#546b00",
+            "surface-dim": "#dcd9d9",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#f3f0ef",
+            "surface": "#fcf9f8",
+            "on-surface-variant": "#584140",
+            "primary": "#6b0014",
+            "secondary-container": "#c6ef49",
+            "inverse-surface": "#313030",
+            "on-background": "#1c1b1b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "margin": "2rem",
+            "margin-mobile": "1rem",
+            "gutter-mobile": "1rem",
+            "space-xl": "2rem",
+            "space-2xl": "3rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Plus Jakarta Sans"],
+            "display-hero-mobile": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "body-md": ["Manrope"],
+            "label-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Manrope"],
+            "label-sport-tag": ["Plus Jakarta Sans"],
+            "body-lg": ["Manrope"],
+            "headline-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-sm": [
+              "18px",
+              {
+                "lineHeight": "26px",
+                "letterSpacing": "0em",
+                "fontWeight": "600"
+              }
+            ],
+            "display-hero-mobile": [
+              "36px",
+              {
+                "lineHeight": "44px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "800"
+              }
+            ],
+            "headline-md": [
+              "22px",
+              {
+                "lineHeight": "30px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-lg-mobile": [
+              "26px",
+              {
+                "lineHeight": "34px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "700"
+              }
+            ],
+            "display-hero": [
+              "48px",
+              {
+                "lineHeight": "56px",
+                "letterSpacing": "-0.03em",
+                "fontWeight": "800"
+              }
+            ],
+            "label-lg": [
+              "14px",
+              {
+                "lineHeight": "20px",
+                "letterSpacing": "0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "22px",
+                "letterSpacing": "0em",
+                "fontWeight": "400"
+              }
+            ],
+            "label-md": [
+              "12px",
+              {
+                "lineHeight": "16px",
+                "letterSpacing": "0.03em",
+                "fontWeight": "700"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "18px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "500"
+              }
+            ],
+            "label-sport-tag": [
+              "11px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.06em",
+                "fontWeight": "800"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "26px",
+                "letterSpacing": "0em",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-lg": [
+              "32px",
+              {
+                "lineHeight": "40px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .court-grid-pattern {
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary">
+<!-- ==================== 1. STICKY TOPNAVBAR (Shared Component) ==================== -->
+<header class="docked full-width top-0 sticky z-50 bg-surface/90 dark:bg-inverse-surface/90 backdrop-blur-md shadow-sm border-b border-outline-variant/30 dark:border-outline/20">
+<div class="max-w-7xl mx-auto px-6 md:px-8 h-20 flex items-center justify-between w-full">
+<!-- Brand Logo Wordmark -->
+<a class="flex items-center gap-2 group" href="#">
+<span class="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-sm group-hover:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-[20px]" data-icon="sports_tennis">sports_tennis</span>
+</span>
+<span class="text-headline-md font-headline-md tracking-tight font-extrabold text-primary dark:text-inverse-primary">SmashMate</span>
+</a>
+<!-- Desktop Nav Links -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant dark:text-surface-variant font-medium hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors text-label-lg font-label-lg" href="#cara-kerja">Cara Kerja</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-medium hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors text-label-lg font-label-lg" href="#fitur">Fitur</a>
+<a class="text-on-surface-variant dark:text-surface-variant font-medium hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors text-label-lg font-label-lg" href="#level-pemain">Level Pemain</a>
+</nav>
+<!-- Trailing Action Buttons -->
+<div class="flex items-center gap-3">
+<a class="text-label-lg font-label-lg text-on-surface-variant hover:text-primary transition-colors px-3 py-2 rounded-xl" href="#masuk">Masuk</a>
+<a class="bg-primary-container hover:bg-tertiary text-on-primary text-label-lg font-label-lg px-5 py-2.5 rounded-2xl shadow-sm transition-all duration-150 active:scale-95 flex items-center gap-1.5" href="#mulai">
+<span>Mulai Bermain</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<!-- ==================== 2. HERO SECTION ==================== -->
+<section class="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+<!-- Left Column: Copy & Actions -->
+<div class="lg:col-span-7 flex flex-col items-start pr-0 lg:pr-6">
+<!-- Category Chip -->
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sport-tag text-label-sport-tag tracking-wider uppercase mb-6 border border-secondary-container/60 shadow-sm">
+<span>🏸 Platform Badminton Komunitas &amp; Matchmaking</span>
+</div>
+<!-- Main Hero Headline -->
+<h1 class="text-display-hero-mobile md:text-display-hero font-display-hero text-on-surface tracking-tight leading-tight mb-6">
+            Temukan teman main. <span class="text-primary-container">Naikkan levelmu.</span>
+</h1>
+<!-- Body Description -->
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-xl mb-8 leading-relaxed">
+            SmashMate menghubungkan pemain bulutangkis di seluruh Indonesia untuk sparring seimbang, latihan terarah bersama pelatih, hingga kompetisi komunitas yang transparan dan terpercaya.
+          </p>
+<!-- CTAs -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+<a class="h-12 px-7 rounded-2xl bg-primary-container hover:bg-tertiary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-sm transition-all duration-150 active:scale-95" href="#cari-teman">
+<span>Cari Teman Mabar</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+</a>
+<a class="h-12 px-7 rounded-2xl bg-surface-container-lowest border border-surface-container-highest text-on-surface font-label-lg text-label-lg hover:border-outline transition-all duration-150 flex items-center justify-center gap-2" href="#cara-kerja">
+<span>Lihat Cara Kerja</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="expand_more">expand_more</span>
+</a>
+</div>
+<!-- Subtle Micro Quality Tags -->
+<div class="mt-10 pt-8 border-t border-surface-container-high w-full flex flex-wrap items-center gap-6 text-on-surface-variant text-body-sm font-body-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary-container" data-icon="check_circle">check_circle</span>
+<span>Terverifikasi sportivitas</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary-container" data-icon="shield">shield</span>
+<span>Sistem peringkat terbuka</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary-container" data-icon="group">group</span>
+<span>Klub &amp; komunitas guyub</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Visual Badminton Composition + Floating Match Card -->
+<div class="lg:col-span-5 relative">
+<div class="relative rounded-3xl overflow-hidden shadow-lg border border-surface-container-highest bg-surface-container-low aspect-[4/5] max-h-[560px] w-full">
+<img class="w-full h-full object-cover" data-alt="An Indonesian competitive badminton player standing on a clean green vinyl indoor badminton court, holding a high-end graphite racket and preparing a precise service. The modern indoor hall has crisp white boundary lines, high vaulted sports arena ceiling with soft diffuse lighting, and an athletic, focused ambiance matching a burgundy and lime minimalist visual aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAywhHOSj__UFZHJPB0dVJLEEEPBiDGG9MrecYk8DD0LicY39KXInq2SD2BS2N5T4giaMyMo3OSCjKaAPj8gK9O_gnr3hIYGJ7uoUb_hTskczhx5WM0OgQZN-_b8KIqv8uRYs2TdUf5vchr269awuYcQvJ6bBeXMxLGY_tQiseParHXvoBsTcB6zgh_DJztjWroFkZIWAfCUBLeHaye7Gmi9HDegfnHfRfeTPMQNR8jtwCRfIj5LJr0yRBWMXaI0HMl6mLQl9UG3Cw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<!-- Overlaid Single Compact Floating Match Card -->
+<div class="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-surface-container-lowest/95 backdrop-blur-md border border-surface-container-highest shadow-xl">
+<div class="flex items-start justify-between gap-3 mb-2.5">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span>
+<span class="text-label-md font-label-md text-on-surface">Mabar Ganda Putra</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant text-body-sm font-body-sm">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span>Sabtu, 19:00 - 21:00 WIB</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sport-tag text-label-sport-tag whitespace-nowrap">
+                  1 slot tersisa
+                </span>
+</div>
+<div class="pt-2.5 border-t border-surface-container-high flex items-center justify-between">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-surface-container text-on-surface-variant font-label-sport-tag text-label-sport-tag uppercase">
+                  Intermediate (Menengah)
+                </span>
+<span class="text-primary-container font-label-md text-label-md flex items-center gap-1">
+                  Detail Match
+                  <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 3. TRUST / UTILITY STRIP ==================== -->
+<section class="border-y border-surface-container-highest bg-surface-container-lowest py-8 md:py-10">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+<!-- Pillar 1 -->
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-low border border-surface-container-high flex items-center justify-center shrink-0 text-primary-container">
+<span class="material-symbols-outlined text-[24px]" data-icon="balance">balance</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-1">Partner sesuai level</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+              Pencocokan skill yang seimbang agar reli tetap kompetitif dan menyenangkan.
+            </p>
+</div>
+</div>
+<!-- Pillar 2 -->
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-low border border-surface-container-high flex items-center justify-center shrink-0 text-primary-container">
+<span class="material-symbols-outlined text-[24px]" data-icon="sports_and_outdoors">sports_and_outdoors</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-1">Match, coaching, dan event</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+              Dari sparring santai hingga sesi drill teknik bersama pelatih berlisensi.
+            </p>
+</div>
+</div>
+<!-- Pillar 3 -->
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-low border border-surface-container-high flex items-center justify-center shrink-0 text-primary-container">
+<span class="material-symbols-outlined text-[24px]" data-icon="thumb_up">thumb_up</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-1">Rating setelah bermain</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+              Feedback dan penilaian dua arah untuk komunitas yang sportif dan saling respek.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 4. ONBOARDING / CARA KERJA ==================== -->
+<section class="py-20 md:py-28" id="cara-kerja">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<!-- Section Header -->
+<div class="max-w-2xl mb-14">
+<span class="text-primary-container font-label-sport-tag text-label-sport-tag uppercase tracking-wider block mb-2">Cara Kerja</span>
+<h2 class="text-headline-lg font-headline-lg text-on-surface tracking-tight mb-3">
+          Langkah mudah mulai bermain di lapangan.
+        </h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">
+          Tanpa proses rumit, temukan teman tanding selevel dan konfirmasi kehadiran dalam hitungan detik.
+        </p>
+</div>
+<!-- 3-Step Horizontal Progression Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+<!-- Step 01 -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm relative group hover:border-outline transition-colors duration-200">
+<div class="flex items-center justify-between mb-8">
+<span class="text-display-hero-mobile font-display-hero-mobile text-primary-fixed-dim/80">01</span>
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]" data-icon="badge">badge</span>
+</div>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-3">Buat Profil</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+            Tentukan preferensi posisi bermain, gaya main (tunggal/ganda), dan estimasi level awalmu.
+          </p>
+</div>
+<!-- Step 02 -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm relative group hover:border-outline transition-colors duration-200">
+<div class="flex items-center justify-between mb-8">
+<span class="text-display-hero-mobile font-display-hero-mobile text-primary-fixed-dim/80">02</span>
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]" data-icon="event_note">event_note</span>
+</div>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-3">Pilih Aktivitas</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+            Jelajahi jadwal mabar terdekat, pesan sesi coaching, atau daftar turnamen komunitas.
+          </p>
+</div>
+<!-- Step 03 -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm relative group hover:border-outline transition-colors duration-200">
+<div class="flex items-center justify-between mb-8">
+<span class="text-display-hero-mobile font-display-hero-mobile text-primary-fixed-dim/80">03</span>
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[20px]" data-icon="sports_score">sports_score</span>
+</div>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-3">Mulai Bermain</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+            Hadir tepat waktu di GOR, nikmati pertandingan seru, dan beri ulasan sportif pasca-laga.
+          </p>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 5. FEATURE OVERVIEW SECTION (Asymmetrical Grid) ==================== -->
+<section class="py-20 md:py-28 bg-surface-container-low/50 border-t border-surface-container-highest" id="fitur">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<!-- Section Header -->
+<div class="max-w-2xl mb-14">
+<span class="text-primary-container font-label-sport-tag text-label-sport-tag uppercase tracking-wider block mb-2">Fitur Utama</span>
+<h2 class="text-headline-lg font-headline-lg text-on-surface tracking-tight mb-3">
+          Semua kebutuhan bulutangkis dalam satu ekosistem.
+        </h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">
+          Didesain terstruktur untuk pemain rekreasi, atlet komunitas, maupun penyelenggara kompetisi lokal.
+        </p>
+</div>
+<!-- Asymmetrical Editorial Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Feature 1 (Large / Hero Card - Spans 2 Cols) -->
+<div class="md:col-span-2 p-8 md:p-10 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm relative flex flex-col justify-between group hover:border-outline transition-all duration-200">
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="w-12 h-12 rounded-2xl bg-secondary-fixed/50 text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="sync_alt">sync_alt</span>
+</span>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<h3 class="text-headline-lg font-headline-lg text-on-surface mb-3">Cari Mabar Selevel</h3>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-xl mb-6">
+              Algoritma rekomendasi mempertemukan kamu dengan partner dan lawan berimbang. Tidak ada lagi reli berat sebelah atau rasa canggung saat bergabung di lapangan baru.
+            </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-surface-container-high">
+<div class="p-3 rounded-xl bg-surface-container-low text-body-sm font-body-sm text-on-surface-variant">
+              🏸 Filtrasi Tipe Match (Single/Double)
+            </div>
+<div class="p-3 rounded-xl bg-surface-container-low text-body-sm font-body-sm text-on-surface-variant">
+              📍 Radius GOR Terdekat
+            </div>
+<div class="p-3 rounded-xl bg-surface-container-low text-body-sm font-body-sm text-on-surface-variant">
+              ⚡ Slot Konfirmasi Instan
+            </div>
+</div>
+</div>
+<!-- Feature 2: Buat Pertandingan -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm flex flex-col justify-between group hover:border-outline transition-all duration-200">
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="w-12 h-12 rounded-2xl bg-surface-container-low text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="add_circle">add_circle</span>
+</span>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-3">Buat Pertandingan</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+              Jadi host match mandiri, kelola slot pemain terbuka, dan koordinasi jadwal tanpa ribet chat panjang di grup pesan.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-surface-container-high text-body-sm font-body-sm text-on-surface-variant">
+            Notifikasi otomatis saat kuota penuh
+          </div>
+</div>
+<!-- Feature 3: Latihan dengan Coach -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm flex flex-col justify-between group hover:border-outline transition-all duration-200">
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="w-12 h-12 rounded-2xl bg-surface-container-low text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="fitness_center">fitness_center</span>
+</span>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-3">Latihan dengan Coach</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+              Tingkatkan teknik footwork, smash, dan penempatan shuttlecock bersama pelatih berpengalaman dengan silabus jelas.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-surface-container-high text-body-sm font-body-sm text-on-surface-variant">
+            Pilihan sesi privat maupun group drill
+          </div>
+</div>
+<!-- Feature 4: Host Event -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm flex flex-col justify-between group hover:border-outline transition-all duration-200">
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="w-12 h-12 rounded-2xl bg-surface-container-low text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="emoji_events">emoji_events</span>
+</span>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-3">Host Event</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+              Fasilitas manajemen turnamen mini, sistem gugur atau setengah kompetisi yang rapi untuk komunitas internalmu.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-surface-container-high text-body-sm font-body-sm text-on-surface-variant">
+            Bagan skor otomatis &amp; pembagian bagan adil
+          </div>
+</div>
+<!-- Feature 5 (Spanning Card / Accent) -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm flex flex-col justify-between group hover:border-outline transition-all duration-200">
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="w-12 h-12 rounded-2xl bg-secondary-fixed/50 text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="verified">verified</span>
+</span>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-3">Rating Antar Pemain</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed">
+              Sistem reputasi transparan berdasarkan ketepatan waktu, sportivitas, dan konsistensi bermain tanpa toksisitas.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-surface-container-high text-body-sm font-body-sm text-on-surface-variant">
+            Evaluasi dua arah pasca pertandingan
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 6. PLAYER LEVEL SECTION ==================== -->
+<section class="py-20 md:py-28" id="level-pemain">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<!-- Section Header -->
+<div class="max-w-2xl mb-14">
+<span class="text-primary-container font-label-sport-tag text-label-sport-tag uppercase tracking-wider block mb-2">Sistem Level Pemain</span>
+<h2 class="text-headline-lg font-headline-lg text-on-surface tracking-tight mb-3">
+          Panduan objektif tanpa membatasi siapa pun untuk berkembang.
+        </h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant">
+          Tolak ukur skill yang jelas membantu menciptakan iklim pertandingan yang kompetitif, seru, dan tetap ramah bagi semua tingkat kemahiran.
+        </p>
+</div>
+<!-- 3 Clean Comparative Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1: Beginner -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm flex flex-col justify-between hover:border-outline transition-colors">
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sport-tag text-label-sport-tag tracking-wider uppercase">
+                Tier 1
+              </span>
+<span class="material-symbols-outlined text-outline" data-icon="sports">sports</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-4">Beginner (Pemula)</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed mb-6">
+              Baru memulai atau bermain rekreasi. Fokus pada penguasaan servis, reli dasar, dan kebugaran santai tanpa tekanan skor.
+            </p>
+</div>
+<div class="pt-6 border-t border-surface-container-high space-y-2.5 text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Servis pendek &amp; panjang reguler</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Main santai akhir pekan</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Reli tempo bertahap</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Intermediate -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border-2 border-primary-container/40 shadow-md flex flex-col justify-between relative">
+<div class="absolute -top-3.5 left-8 px-3 py-0.5 rounded-full bg-primary-container text-on-primary font-label-sport-tag text-label-sport-tag uppercase tracking-wider">
+            Paling Populer
+          </div>
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sport-tag text-label-sport-tag tracking-wider uppercase">
+                Tier 2
+              </span>
+<span class="material-symbols-outlined text-primary-container" data-icon="speed">speed</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-4">Intermediate (Menengah)</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed mb-6">
+              Memahami rotasi ganda, penempatan pukulan, smash terarah, dan memiliki stamina bermain intens 3 set berturut-turut.
+            </p>
+</div>
+<div class="pt-6 border-t border-surface-container-high space-y-2.5 text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Rotasi depan-belakang &amp; kiri-kanan</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Defense drive &amp; net kill konsisten</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Stamina tempo reli cepat</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Advanced -->
+<div class="p-8 rounded-3xl bg-surface-container-lowest border border-surface-container-highest shadow-sm flex flex-col justify-between hover:border-outline transition-colors">
+<div>
+<div class="flex items-center justify-between mb-6">
+<span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sport-tag text-label-sport-tag tracking-wider uppercase">
+                Tier 3
+              </span>
+<span class="material-symbols-outlined text-outline" data-icon="military_tech">military_tech</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-on-surface mb-4">Professional / Advanced</h3>
+<p class="text-body-md font-body-md text-on-surface-variant leading-relaxed mb-6">
+              Pemain berpengalaman turnamen, penguasaan taktik reli cepat, variasi pukulan tipuan, dan konsistensi tinggi di lapangan.
+            </p>
+</div>
+<div class="pt-6 border-t border-surface-container-high space-y-2.5 text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Taktik match &amp; deceptions</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Pengalaman kompetisi terbuka</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-container" data-icon="check">check</span>
+<span>Power smash &amp; footwork presisi</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 7. FINAL CTA BANNER ==================== -->
+<section class="py-12 md:py-16">
+<div class="max-w-7xl mx-auto px-6 md:px-8">
+<div class="rounded-3xl bg-gradient-to-br from-primary-container to-tertiary text-on-primary p-10 md:p-16 relative overflow-hidden shadow-xl court-grid-pattern">
+<!-- Court line subtle overlay shape -->
+<div class="absolute inset-0 pointer-events-none opacity-10">
+<div class="w-full h-full border-4 border-white m-6"></div>
+</div>
+<div class="relative z-10 max-w-2xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sport-tag text-label-sport-tag uppercase tracking-wider mb-6">
+            Komunitas Terbuka
+          </div>
+<h2 class="text-display-hero-mobile md:text-headline-lg font-display-hero text-on-primary tracking-tight mb-4">
+            Partner berikutnya hanya satu langkah lagi.
+          </h2>
+<p class="text-body-lg font-body-lg text-white/80 mb-8 leading-relaxed">
+            Bergabung sekarang tanpa biaya langganan bulanan. Temukan jadwal main pertamamu pekan ini dan rasakan pengalaman tanding yang seimbang.
+          </p>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+<a class="h-12 px-8 rounded-2xl bg-surface-container-lowest text-primary-container font-label-lg text-label-lg flex items-center justify-center gap-2 hover:bg-white shadow-sm transition-all duration-150 active:scale-95" href="#daftar">
+<span>Daftar Gratis</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<a class="h-12 px-8 rounded-2xl border border-white/40 text-on-primary font-label-lg text-label-lg flex items-center justify-center hover:bg-white/10 transition-colors" href="#masuk">
+<span>Masuk</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 8. COMPACT FOOTER (Shared Component) ==================== -->
+<footer class="docked full-width bottom bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant/40 dark:border-outline/20">
+<div class="max-w-7xl mx-auto px-6 md:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6 w-full">
+<!-- Brand & Concise description -->
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-2 max-w-md">
+<a class="flex items-center gap-2" href="#">
+<span class="w-7 h-7 rounded-lg bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="sports_tennis">sports_tennis</span>
+</span>
+<span class="text-headline-sm font-headline-sm font-extrabold text-primary dark:text-inverse-primary">SmashMate</span>
+</a>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+          Platform ekosistem badminton modern untuk menghubungkan pemain, pelatih, dan komunitas di Indonesia.
+        </p>
+</div>
+<!-- Quick Navigational Links -->
+<div class="flex flex-wrap justify-center items-center gap-6 text-label-sm font-label-sm">
+<a class="text-on-surface-variant dark:text-surface-variant text-body-md font-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors" href="#cara-kerja">Cara Kerja</a>
+<a class="text-on-surface-variant dark:text-surface-variant text-body-md font-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors" href="#fitur">Fitur</a>
+<a class="text-on-surface-variant dark:text-surface-variant text-body-md font-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors" href="#level-pemain">Level Pemain</a>
+<a class="text-on-surface-variant dark:text-surface-variant text-body-md font-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors" href="#bantuan">Pusat Bantuan</a>
+<a class="text-on-surface-variant dark:text-surface-variant text-body-md font-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors" href="#privasi">Kebijakan Privasi</a>
+<a class="text-on-surface-variant dark:text-surface-variant text-body-md font-body-md hover:text-primary dark:hover:text-inverse-primary transition-colors" href="#ketentuan">Syarat &amp; Ketentuan</a>
+</div>
+</div>
+<!-- Copyright Sub-row -->
+<div class="border-t border-surface-container-high py-4">
+<div class="max-w-7xl mx-auto px-6 md:px-8 text-center text-body-sm font-body-sm text-on-surface-variant">
+        © 2025 SmashMate Indonesia. Semua hak cipta dilindungi. Komunitas badminton guyub dan kompetitif.
+      </div>
+</div>
+</footer>
+</body></html>

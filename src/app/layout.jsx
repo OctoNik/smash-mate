@@ -1,15 +1,4 @@
-import { Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin"],
-});
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "SmashMate — Temukan Partner Badminton",
@@ -19,10 +8,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="id"
-      className={`${plusJakartaSans.variable} ${manrope.variable} h-full antialiased`}
-    >
+    <html lang="id" className="h-full antialiased" data-scroll-behavior="smooth">
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

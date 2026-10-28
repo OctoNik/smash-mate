@@ -1,37 +1,36 @@
 # SmashMate
 
-Platform badminton untuk menemukan partner atau lawan bermain, membuat pertandingan, dan memesan lapangan beserta perlengkapannya.
+Prototipe aplikasi badminton: mabar, sesi latihan, event, rating antar peserta, permintaan sewa raket atau beli shuttlecock, profil, dan feedback.
 
-## Tech stack
+## Teknologi
 
-- Next.js (App Router)
-- React + TypeScript
+- Next.js App Router, React, JavaScript/JSX
 - Tailwind CSS
-- Supabase
+- Supabase Auth, PostgreSQL, dan Storage
 - npm
 
-## Menjalankan secara lokal
+## Setup lokal
 
-1. Salin `.env.example` menjadi `.env.local`.
-2. Isi URL dan publishable key dari Supabase Project Settings.
-3. Instal dependensi dengan `npm install`.
-4. Jalankan aplikasi dengan `npm run dev`.
-5. Buka `http://localhost:3000`.
+1. Salin `.env.example` ke `.env.local` dan isi URL serta publishable key dari Supabase.
+2. Ketiga migrasi di [`supabase/migrations`](supabase/migrations) sudah diterapkan ke proyek Supabase SmashMate pada 28 Oktober 2026. Untuk proyek Supabase baru, jalankan berurutan: `smashmate_mvp`, `smashmate_ratings`, lalu `smashmate_history_hardening`. Migrasi ini membuat tabel, bucket foto privat, Row Level Security, dan fungsi bisnis.
+3. Jalankan `npm install`, lalu `npm run dev`.
+4. Buka `http://localhost:3000`.
 
-## Environment variables
+Penghapusan akun memakai Supabase Edge Function `delete-account` yang sudah diterapkan pada proyek SmashMate. Kunci admin tetap tersimpan di lingkungan Supabase dan tidak perlu disalin ke `.env.local`. Untuk proyek Supabase baru, deploy [`supabase/functions/delete-account/index.js`](supabase/functions/delete-account/index.js) dengan verifikasi JWT aktif.
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-```
+## Batas prototipe
 
-Jangan commit `.env.local` atau service-role key ke GitHub.
+- Permintaan perlengkapan menyimpan kebutuhan pemain. Belum ada stok, harga, mitra, pembayaran, atau pemenuhan pesanan. Status yang tersedia adalah terkirim dan dibatalkan.
+- Sesi latihan dapat dibuat pengguna; verifikasi identitas coach belum tersedia.
+- Rating tersedia untuk peserta aktivitas setelah jadwal dimulai. Aplikasi belum memiliki waktu selesai aktivitas atau moderasi rating.
+- Aktivitas menggunakan waktu WIB pada form dan tampilan.
+- Email confirmation dan URL redirect perlu diatur di Supabase Authentication sesuai domain hosting saat aplikasi diterbitkan.
 
-## Perintah utama
+## Validasi
 
 ```bash
-npm run dev
 npm run lint
 npm run build
-npm start
 ```
+
+Aturan database sudah diuji lewat transaksi yang di-rollback: kepemilikan data, kapasitas aktivitas, penolakan host bergabung, rating antar peserta, penolakan rating ganda, dan penolakan rating dari bukan peserta. Untuk pengujian UI secara menyeluruh, buat dua akun uji. Dengan akun A buat aktivitas; dengan akun B bergabung, keluar, dan beri rating setelah jadwal aktivitas. Uji juga permintaan perlengkapan, feedback, unggah avatar, dan pembatasan halaman saat logout. Gunakan akun uji khusus sebelum menguji penghapusan akun.
