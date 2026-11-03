@@ -32,6 +32,9 @@ export async function createActivity(formData) {
     if (!coach) redirect(errorUrl("Aktifkan profil coach dahulu di halaman Coach."));
   }
   if (bookingId) {
+    const { data: existingActivity } = await supabase.from("activities")
+      .select("id").eq("booking_id", bookingId).limit(1).maybeSingle();
+    if (existingActivity) redirect(errorUrl("Booking ini sudah digunakan untuk aktivitas lain."));
     const { data: booking } = await supabase.from("court_bookings")
       .select("starts_at,status,venues(name,address),courts(name)")
       .eq("id", bookingId).eq("player_id", user.id).maybeSingle();

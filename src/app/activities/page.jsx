@@ -10,10 +10,10 @@ const levelLabels = { beginner: "Beginner", intermediate: "Intermediate", profes
 
 export default async function ActivitiesPage({ searchParams }) {
   const { supabase, user, name } = await requireAccount();
-  const { error, message } = await searchParams;
+  const { error, message, booking_id: requestedBookingId } = await searchParams;
   const { data: activities, error: listError } = await supabase
     .from("activities")
-    .select("id,host_id,host_name,kind,title,description,location,starts_at,capacity,level,activity_participants(user_id)")
+    .select("id,host_id,host_name,kind,title,description,location,starts_at,capacity,level,booking_id,activity_participants(user_id)")
     .gte("starts_at", new Date().toISOString())
     .order("starts_at", { ascending: true })
     .limit(50);
@@ -23,6 +23,10 @@ export default async function ActivitiesPage({ searchParams }) {
       .gte("starts_at", new Date().toISOString()).order("starts_at").limit(30),
     supabase.from("communities").select("id,name").eq("owner_id", user.id).order("name").limit(30),
   ]);
+  const usedBookingIds = new Set((activities ?? []).map((activity) => activity.booking_id).filter(Boolean));
+  const availableBookings = (bookings ?? []).filter((booking) => !usedBookingIds.has(booking.id));
+  const selectedBookingId = typeof requestedBookingId === "string" &&
+    availableBookings.some((booking) => booking.id === requestedBookingId) ? requestedBookingId : "";
 
   return (
     <div className="dashboard-shell min-h-screen">
@@ -30,7 +34,7 @@ export default async function ActivitiesPage({ searchParams }) {
       <main className="shell py-10 sm:py-14">
         <p className="eyebrow">Aktivitas badminton</p>
         <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Cari dan buat aktivitas</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Buat mabar, sesi latihan, atau event. Pengguna lain dapat bergabung selama masih ada slot.</p>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Host menyiapkan booking lapangan dan perlengkapan sekali untuk seluruh pemain. Peserta cukup bergabung ke mabar, sesi latihan, atau event selama masih ada slot.</p>
         {message && <p role="status" className="profile-message success">{message}</p>}
         {error && <p role="alert" className="profile-message error">{error}</p>}
         {listError && <p role="alert" className="profile-message error">Data aktivitas belum tersedia. Jalankan migrasi Supabase di SQL Editor terlebih dahulu.</p>}
@@ -38,7 +42,7 @@ export default async function ActivitiesPage({ searchParams }) {
         <div className="mt-9 grid items-start gap-6 lg:grid-cols-[.85fr_1.15fr]">
           <section id="new" className="dashboard-card p-6 sm:p-8" aria-labelledby="create-activity-title">
             <h2 id="create-activity-title" className="text-xl font-extrabold">Buat aktivitas</h2>
-            <p className="mt-2 text-sm text-court-950/60">Isi jadwal dan kebutuhan pemain dengan jelas.</p>
+            <p className="mt-2 text-sm text-court-950/60">Isi jadwal dan kebutuhan pemain dengan jelas. Jika sudah booking lapangan, kaitkan booking Anda di bawah.</p>
             <form action={createActivity} className="mt-6 space-y-4">
               <label className="profile-label">Jenis aktivitas
                 <select name="kind" className="profile-input" required>
@@ -53,8 +57,8 @@ export default async function ActivitiesPage({ searchParams }) {
               <label className="profile-label">Lokasi
                 <input name="location" type="text" className="profile-input" minLength={3} maxLength={160} placeholder="Nama GOR dan kota; otomatis jika memakai booking" />
               </label>
-              {(bookings ?? []).length > 0 && <label className="profile-label">Gunakan booking lapangan (opsional)
-                <select name="booking_id" className="profile-input"><option value="">Tanpa booking</option>{bookings.map((booking) => <option value={booking.id} key={booking.id}>{booking.venues?.name} · {booking.courts?.name} · {new Date(booking.starts_at).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", dateStyle: "medium", timeStyle: "short" })} WIB</option>)}</select>
+              {availableBookings.length > 0 && <label className="profile-label">Gunakan booking lapangan host (opsional)
+                <select name="booking_id" defaultValue={selectedBookingId} className="profile-input"><option value="">Tanpa booking</option>{availableBookings.map((booking) => <option value={booking.id} key={booking.id}>{booking.venues?.name} · {booking.courts?.name} · {new Date(booking.starts_at).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", dateStyle: "medium", timeStyle: "short" })} WIB</option>)}</select>
                 <span className="mt-1 block text-xs font-normal text-court-950/60">Jika dipilih, lokasi dan waktu mengikuti booking yang sudah dikonfirmasi.</span>
               </label>}
               <div className="grid gap-4 sm:grid-cols-2">

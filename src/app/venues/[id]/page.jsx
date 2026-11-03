@@ -5,7 +5,7 @@ import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
 import { requireAccount } from "@/lib/account";
 import { rupiah, waktuWib } from "@/lib/format";
-import { bookCourt, orderShuttlecock } from "../actions";
+import { bookCourt } from "../actions";
 
 export const instant = false;
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -41,7 +41,7 @@ export default async function VenueDetailPage({ params, searchParams }) {
         {error && <p role="alert" className="profile-message error">{error}</p>}
         <section className="mt-10" aria-labelledby="courts-title">
           <h2 id="courts-title" className="font-display text-2xl font-extrabold">Pilih lapangan</h2>
-          <p className="mt-2 text-sm text-court-950/60">Waktu pada form menggunakan WIB. Booking dan pembayaran di sini adalah simulasi untuk prototipe tugas.</p>
+          <p className="mt-2 text-sm text-court-950/60">Host memesan lapangan dan perlengkapan untuk seluruh pemain. Peserta mabar cukup bergabung ke aktivitas. Waktu menggunakan WIB; pembayaran di sini adalah simulasi.</p>
           <div className="mt-6 grid gap-5 lg:grid-cols-2">
             {(courts ?? []).length === 0 && <p className="dashboard-card p-6 text-sm text-court-950/65">Belum ada lapangan yang dapat dipesan saat ini.</p>}
             {(courts ?? []).map((court) => <article className="dashboard-card p-6" key={court.id}>
@@ -67,7 +67,7 @@ export default async function VenueDetailPage({ params, searchParams }) {
         </section>
         <section className="mt-12" aria-labelledby="catalog-title">
           <h2 id="catalog-title" className="font-display text-2xl font-extrabold">Katalog perlengkapan</h2>
-          <p className="mt-2 text-sm text-court-950/60">Ketersediaan tergantung stok Mitra GOR. Ambil produk di lokasi setelah pesanan dikonfirmasi.</p>
+          <p className="mt-2 text-sm text-court-950/60">Pilih perlengkapan dari katalog ini pada formulir booking lapangan di atas. Harga raket berlaku per sesi, sedangkan shuttlecock dijual per slop.</p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {(products ?? []).length === 0 && <p className="dashboard-card p-6 text-sm">Mitra ini belum menambahkan perlengkapan.</p>}
             {(products ?? []).map((product) => {
@@ -75,8 +75,7 @@ export default async function VenueDetailPage({ params, searchParams }) {
               return <article className="dashboard-card overflow-hidden" key={product.id}>
                 <div className="grid h-44 place-items-center bg-court-cream bg-cover bg-center text-5xl" style={imageUrl ? { backgroundImage: `url("${imageUrl}")` } : undefined}>{imageUrl ? "" : "🏸"}</div>
                 <div className="p-5"><span className="activity-tag">{product.kind === "racket_rental" ? "Sewa raket" : "Beli shuttlecock"}</span><h3 className="mt-3 font-extrabold">{product.name}</h3><p className="mt-2 line-clamp-2 min-h-10 text-xs leading-5 text-court-950/60">{product.description}</p><p className="mt-3 text-lg font-extrabold text-court-700">{rupiah(product.price)}<small className="text-xs"> / {product.kind === "racket_rental" ? "sesi" : "slop"}</small></p><p className="mt-1 text-xs text-court-950/60">Tersedia: {product.stock} {product.kind === "racket_rental" ? "raket" : "slop"}</p>
-                {product.kind === "shuttlecock_sale" && product.stock > 0 && <form action={orderShuttlecock} className="mt-4 flex gap-2"><input type="hidden" name="product_id" value={product.id} /><input type="hidden" name="venue_id" value={venue.id} /><input type="number" name="quantity" defaultValue="1" min="1" max={Math.min(product.stock, 100)} aria-label="Jumlah slop" className="profile-input w-20" /><SubmitButton className="btn btn-dark flex-1" pendingText="Memesan...">Pesan</SubmitButton></form>}
-                {product.kind === "racket_rental" && <p className="mt-4 text-xs text-court-950/60">Tambahkan saat booking lapangan.</p>}</div>
+                <p className="mt-4 text-xs text-court-950/60">Tambahkan saat booking lapangan.</p></div>
               </article>;
             })}
           </div>

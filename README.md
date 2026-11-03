@@ -7,7 +7,7 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 - Registrasi, konfirmasi email, login, logout, profil pemain, foto profil, dan penghapusan akun.
 - Pembuatan dan partisipasi dalam mabar, sesi latihan, dan event, termasuk rating antar peserta setelah bermain.
 - Profil coach sebagai fitur tambahan akun pemain, serta komunitas yang dapat mengadakan event.
-- Direktori Mitra GOR, booking lapangan, sewa raket per sesi saat booking, dan katalog shuttlecock per slop dengan stok serta harga per merek. Mitra dapat menambahkan foto produk.
+- Direktori Mitra GOR dan booking lapangan oleh host, termasuk sewa raket per sesi dan pembelian shuttlecock per slop dalam satu booking. Mitra dapat menambahkan foto produk.
 - Panel Mitra GOR untuk jumlah dan harga lapangan, deskripsi, lokasi Google Maps, katalog, dan daftar booking atas nama pemain.
 - Panel operator internal untuk membuat akun Mitra GOR secara langsung. Lima akun Mitra awal sudah terhubung ke GOR masing-masing. Pendaftaran publik hanya membuat akun pemain.
 - Checkout simulasi tanpa perpindahan uang, feedback, serta indikator loading pada formulir dan navigasi.
@@ -50,16 +50,22 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 
 Proyek Supabase saat ini berisi 5 GOR untuk uji coba: GOR Kencana Grogol, Karawaci Badminton Center, Senayan Shuttle Arena, Bekasi Racket Hall, dan Depok Smash Court. Nama ini digunakan sebagai data contoh, bukan klaim kemitraan dengan tempat nyata. Total ada **15 lapangan** dan **20 item perlengkapan**. Setiap GOR memiliki dua pilihan merek raket sewa dan dua pilihan merek shuttlecock. Harga raket berlaku per sesi booking dan stoknya berarti jumlah raket. Shuttlecock dijual per slop (12 buah pada data awal) dan stoknya berarti jumlah slop. Harga dan stok berbeda menurut GOR serta merek.
 
-File [`supabase/seed/20261103_initial_venues.sql`](supabase/seed/20261103_initial_venues.sql) berisi data awal tersebut dan hanya dijalankan sekali pada proyek baru. Setelah seed, operator dapat membuka `/operator` dan membuat 5 akun Mitra awal; tombol itu memindahkan kepemilikan GOR dan menampilkan kredensial awal sekali. Pada proyek Supabase SmashMate saat ini, kelima akun tersebut sudah dibuat dan GOR sudah dipasangkan. Fungsi pembuat akun memeriksa sesi serta peran operator.
+File [`supabase/seed/20261103_initial_venues.sql`](supabase/seed/20261103_initial_venues.sql) berisi data awal tersebut dan hanya dijalankan sekali pada proyek baru. Pada proyek Supabase SmashMate saat ini, kelima akun Mitra sudah dibuat dan GOR sudah dipasangkan. Tombol khusus untuk pembuatan massal akun awal telah dihapus; operator tetap dapat membuat satu akun Mitra baru melalui `/operator`.
+
+## Alur host dan data aktivitas
+
+Host memilih GOR, lapangan, waktu, raket sewa, dan shuttlecock pada satu formulir booking. Setelah checkout simulasi dikonfirmasi, host dapat membuat mabar, latihan, atau event menggunakan booking tersebut. Peserta hanya perlu bergabung ke aktivitas dan tidak membuat pesanan perlengkapan sendiri. Pembelian shuttlecock terpisah sudah dinonaktifkan.
+
+Data uji coba saat ini mencakup 10 akun pemain, 2 profil coach, 3 komunitas, 8 aktivitas (termasuk dua lomba), 39 partisipasi, dan 8 booking host. File [`supabase/seed/20261103_active_sample_data.sql`](supabase/seed/20261103_active_sample_data.sql) berisi profil dan kegiatan tersebut tanpa password; jalankan hanya sekali setelah akun pemainnya tersedia. Nama akun dan aktivitas adalah data contoh untuk prototipe. Tidak ada rating atau ulasan buatan.
 
 Tidak ada email undangan untuk Mitra. Akun yang dibuat operator langsung dapat dipakai dengan kata sandi awal. Konfirmasi email pemain umum tetap menggunakan pengaturan URL Supabase Auth; sebelum hosting, arahkan **Site URL** dan **Redirect URLs** ke domain aplikasi.
 
 ## Batas prototipe
 
-- Checkout mengonfirmasi booking atau pesanan tanpa penagihan uang. Slot lapangan dan stok shuttlecock tetap dihitung di database.
+- Checkout mengonfirmasi booking host tanpa penagihan uang. Slot lapangan dan stok shuttlecock tetap dihitung di database.
 - Profil coach dibuat sendiri oleh pemain dan belum melalui verifikasi sertifikasi.
 - Kelima GOR serta seluruh harga dan stok awal adalah data contoh untuk tugas; belum ada ulasan buatan. GOR Mitra lain dapat ditambahkan oleh operator.
-- Sewa raket hanya tersedia sebagai tambahan booking lapangan dan dihitung per sesi.
+- Sewa raket dan pembelian shuttlecock hanya tersedia sebagai tambahan booking lapangan oleh host.
 - Pencarian partner menggunakan daftar aktivitas; matchmaking otomatis, rekomendasi AI, payment gateway, dan monetisasi belum tersedia.
 - Rating tersedia setelah jadwal aktivitas dimulai. Moderasi rating belum tersedia.
 - Jadwal ditampilkan dalam WIB.
@@ -73,4 +79,4 @@ npm run lint
 npm run build
 ```
 
-Aturan booking, konflik slot, harga, stok, checkout, pembatalan, dan akses data telah diuji dalam transaksi database yang di-rollback. Data awal juga diuji untuk harga gabungan lapangan, raket, dan shuttlecock beserta pengurangan serta pemulihan stok. Kelima akun Mitra telah diverifikasi memiliki peran dan GOR yang sesuai.
+Aturan booking, konflik slot, harga, stok, checkout, pembatalan, dan akses data telah diuji dalam transaksi database yang di-rollback. Data awal juga diuji untuk harga gabungan lapangan, raket, dan shuttlecock beserta pengurangan serta pemulihan stok. Seluruh aktivitas uji coba telah diverifikasi memakai booking yang dimiliki host pada waktu yang sama.

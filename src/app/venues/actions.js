@@ -44,23 +44,6 @@ export async function bookCourt(formData) {
   redirect("/bookings?message=Booking dibuat. Selesaikan pembayaran simulasi.");
 }
 
-export async function orderShuttlecock(formData) {
-  const { supabase } = await requireAccount();
-  const productId = String(formData.get("product_id") ?? "");
-  const venueId = String(formData.get("venue_id") ?? "");
-  const quantity = Number(formData.get("quantity"));
-  if (!uuid.test(productId) || !Number.isInteger(quantity) || quantity < 1 || quantity > 100) {
-    redirect(errorUrl("Jumlah produk tidak valid.", venueId));
-  }
-  const { error } = await supabase.rpc("purchase_shuttlecock", {
-    p_product_id: productId, p_quantity: quantity,
-  });
-  if (error) redirect(errorUrl("Stok shuttlecock tidak mencukupi.", venueId));
-  revalidatePath("/bookings");
-  revalidatePath(`/venues/${venueId}`);
-  redirect("/bookings?message=Pesanan dibuat. Selesaikan pembayaran simulasi.");
-}
-
 async function runBookingAction(formData, functionName, successMessage) {
   const { supabase } = await requireAccount();
   const id = String(formData.get("id") ?? "");
@@ -78,21 +61,4 @@ export async function payBooking(formData) {
 }
 export async function cancelBooking(formData) {
   return runBookingAction(formData, "cancel_court_booking", "Booking dibatalkan.");
-}
-
-async function runOrderAction(formData, functionName, successMessage) {
-  const { supabase } = await requireAccount();
-  const id = String(formData.get("id") ?? "");
-  if (!uuid.test(id)) redirect(errorUrl("Pesanan tidak valid."));
-  const { error } = await supabase.rpc(functionName, { p_order_id: id });
-  if (error) redirect(errorUrl("Pesanan belum dapat diproses."));
-  revalidatePath("/bookings");
-  redirect(`/bookings?message=${encodeURIComponent(successMessage)}`);
-}
-
-export async function payOrder(formData) {
-  return runOrderAction(formData, "demo_pay_order", "Pembayaran simulasi berhasil. Pesanan dikonfirmasi.");
-}
-export async function cancelOrder(formData) {
-  return runOrderAction(formData, "cancel_venue_order", "Pesanan dibatalkan.");
 }

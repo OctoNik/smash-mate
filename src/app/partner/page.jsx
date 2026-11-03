@@ -17,18 +17,17 @@ export default async function PartnerPage({ searchParams }) {
   if (!venue) return <div className="dashboard-shell min-h-screen"><AccountHeader name={name} email={user.email ?? ""} user={user} active="partner" /><main className="shell py-12"><h1 className="font-display text-3xl font-extrabold">GOR belum terhubung</h1><p className="mt-3 text-sm text-court-950/65">Akun ini belum memiliki GOR. Hubungi operator SmashMate untuk memeriksa pembuatan akun.</p></main></div>;
   if (venue.status === "draft") redirect("/partner/setup");
 
-  const [{ data: courts }, { data: products }, { data: bookings }, { data: orders }] = await Promise.all([
+  const [{ data: courts }, { data: products }, { data: bookings }] = await Promise.all([
     supabase.from("courts").select("id,name,price_per_hour,is_active").eq("venue_id", venue.id).order("name"),
     supabase.from("venue_products").select("id,kind,name,description,price,stock,image_path,is_active").eq("venue_id", venue.id).order("created_at"),
-    supabase.from("court_bookings").select("id,player_name,starts_at,ends_at,total_amount,status,courts(name)").eq("venue_id", venue.id).order("starts_at", { ascending: false }).limit(50),
-    supabase.from("venue_orders").select("id,player_name,quantity,total_amount,status,created_at,venue_products(name)").eq("venue_id", venue.id).order("created_at", { ascending: false }).limit(50),
+    supabase.from("court_bookings").select("id,player_name,starts_at,ends_at,total_amount,status,racket_quantity,shuttle_quantity,courts(name)").eq("venue_id", venue.id).order("starts_at", { ascending: false }).limit(50),
   ]);
   return <div className="dashboard-shell min-h-screen">
     <AccountHeader name={name} email={user.email ?? ""} user={user} active="partner" />
     <main className="shell py-10 sm:py-14">
       <p className="eyebrow">Panel Mitra GOR</p>
       <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Kelola {venue.name}</h1>
-      <p className="mt-3 text-sm text-court-950/65">Atur lapangan dan katalog, lalu pantau pesanan pemain. Checkout pada prototipe ini adalah simulasi.</p>
+      <p className="mt-3 text-sm text-court-950/65">Atur lapangan dan katalog, lalu pantau booking host beserta raket dan shuttlecock yang dipesan. Checkout pada prototipe ini adalah simulasi.</p>
       {error && <p role="alert" className="profile-message error">{error}</p>}
       {message && <p role="status" className="profile-message success">{message}</p>}
 
@@ -107,9 +106,9 @@ export default async function PartnerPage({ searchParams }) {
         </div>
       </section>
 
-      <section className="mt-12 grid gap-8 lg:grid-cols-2" aria-label="Pesanan pemain">
-        <div><h2 className="text-xl font-extrabold">Booking lapangan</h2><div className="mt-4 space-y-3">{(bookings ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada booking.</p>}{(bookings ?? []).map((booking) => <article className="dashboard-card p-5" key={booking.id}><div className="flex justify-between gap-2"><strong>{booking.courts?.name}</strong><span className="activity-tag">{status[booking.status]}</span></div><p className="mt-2 text-sm">Atas nama {booking.player_name}</p><p className="mt-1 text-xs text-court-950/60">{waktuWib(booking.starts_at)} · {rupiah(booking.total_amount)}</p></article>)}</div></div>
-        <div><h2 className="text-xl font-extrabold">Pesanan shuttlecock</h2><div className="mt-4 space-y-3">{(orders ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada pesanan.</p>}{(orders ?? []).map((order) => <article className="dashboard-card p-5" key={order.id}><div className="flex justify-between gap-2"><strong>{order.venue_products?.name}</strong><span className="activity-tag">{status[order.status]}</span></div><p className="mt-2 text-sm">Atas nama {order.player_name} · {order.quantity} slop</p><p className="mt-1 text-xs text-court-950/60">{rupiah(order.total_amount)}</p></article>)}</div></div>
+      <section className="mt-12" aria-label="Booking pemain">
+        <h2 className="text-xl font-extrabold">Booking lapangan & perlengkapan</h2>
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">{(bookings ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada booking.</p>}{(bookings ?? []).map((booking) => <article className="dashboard-card p-5" key={booking.id}><div className="flex justify-between gap-2"><strong>{booking.courts?.name}</strong><span className="activity-tag">{status[booking.status]}</span></div><p className="mt-2 text-sm">Host: {booking.player_name}</p><p className="mt-1 text-xs text-court-950/60">{waktuWib(booking.starts_at)} · {rupiah(booking.total_amount)}</p><p className="mt-2 text-xs text-court-950/60">Raket sewa: {booking.racket_quantity} · Shuttlecock: {booking.shuttle_quantity} slop</p></article>)}</div>
       </section>
     </main>
   </div>;
