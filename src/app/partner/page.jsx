@@ -69,7 +69,7 @@ export default async function PartnerPage({ searchParams }) {
 
       <section className="mt-12" aria-labelledby="products-heading">
         <h2 id="products-heading" className="text-xl font-extrabold">Katalog perlengkapan</h2>
-        <p className="mt-2 text-sm text-court-950/60">Stok dan harga disimpan per produk. Sewa raket tersedia saat booking; shuttlecock juga dapat dibeli terpisah.</p>
+        <p className="mt-2 text-sm text-court-950/60">Harga sewa raket berlaku per sesi, dengan stok jumlah raket tersedia. Shuttlecock dijual per slop, dengan stok jumlah slop.</p>
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {(products ?? []).map((product) => {
             const imageUrl = product.image_path ? supabase.storage.from("venue-products").getPublicUrl(product.image_path).data.publicUrl : null;
@@ -82,7 +82,7 @@ export default async function PartnerPage({ searchParams }) {
                   <input type="hidden" name="id" value={product.id} />
                   <label className="profile-label">Nama<input name="name" defaultValue={product.name} required maxLength={100} className="profile-input" /></label>
                   <label className="profile-label">Deskripsi<textarea name="description" defaultValue={product.description} maxLength={500} rows={2} className="profile-input" /></label>
-                  <div className="grid grid-cols-2 gap-3"><label className="profile-label">Harga (Rp)<input name="price" type="number" min="0" max="10000000" defaultValue={product.price} required className="profile-input" /></label><label className="profile-label">Stok<input name="stock" type="number" min="0" max="100000" defaultValue={product.stock} required className="profile-input" /></label></div>
+                  <div className="grid grid-cols-2 gap-3"><label className="profile-label">Harga / {product.kind === "racket_rental" ? "sesi" : "slop"} (Rp)<input name="price" type="number" min="0" max="10000000" defaultValue={product.price} required className="profile-input" /></label><label className="profile-label">Stok ({product.kind === "racket_rental" ? "raket" : "slop"})<input name="stock" type="number" min="0" max="100000" defaultValue={product.stock} required className="profile-input" /></label></div>
                   <label className="flex items-center gap-2 text-sm"><input name="is_active" type="checkbox" defaultChecked={product.is_active} /> Tampil di katalog</label>
                   <SubmitButton className="btn btn-outline-dark" pendingText="Menyimpan...">Simpan produk</SubmitButton>
                 </form>
@@ -100,6 +100,7 @@ export default async function PartnerPage({ searchParams }) {
             <label className="profile-label">Jenis<select name="kind" className="profile-input"><option value="racket_rental">Sewa raket</option><option value="shuttlecock_sale">Jual shuttlecock</option></select></label>
             <label className="profile-label">Nama<input name="name" required minLength={3} maxLength={100} className="profile-input" /></label>
             <label className="profile-label">Deskripsi<textarea name="description" maxLength={500} rows={3} className="profile-input" /></label>
+            <p className="text-xs text-court-950/60">Untuk raket, harga per sesi dan stok jumlah raket. Untuk shuttlecock, harga dan stok per slop.</p>
             <div className="grid grid-cols-2 gap-3"><label className="profile-label">Harga (Rp)<input name="price" type="number" min="0" max="10000000" required className="profile-input" /></label><label className="profile-label">Stok<input name="stock" type="number" min="0" max="100000" required className="profile-input" /></label></div>
             <SubmitButton className="btn btn-dark" pendingText="Menambah...">Tambah produk</SubmitButton>
           </form>
@@ -108,7 +109,7 @@ export default async function PartnerPage({ searchParams }) {
 
       <section className="mt-12 grid gap-8 lg:grid-cols-2" aria-label="Pesanan pemain">
         <div><h2 className="text-xl font-extrabold">Booking lapangan</h2><div className="mt-4 space-y-3">{(bookings ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada booking.</p>}{(bookings ?? []).map((booking) => <article className="dashboard-card p-5" key={booking.id}><div className="flex justify-between gap-2"><strong>{booking.courts?.name}</strong><span className="activity-tag">{status[booking.status]}</span></div><p className="mt-2 text-sm">Atas nama {booking.player_name}</p><p className="mt-1 text-xs text-court-950/60">{waktuWib(booking.starts_at)} · {rupiah(booking.total_amount)}</p></article>)}</div></div>
-        <div><h2 className="text-xl font-extrabold">Pesanan shuttlecock</h2><div className="mt-4 space-y-3">{(orders ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada pesanan.</p>}{(orders ?? []).map((order) => <article className="dashboard-card p-5" key={order.id}><div className="flex justify-between gap-2"><strong>{order.venue_products?.name}</strong><span className="activity-tag">{status[order.status]}</span></div><p className="mt-2 text-sm">Atas nama {order.player_name} · {order.quantity} unit</p><p className="mt-1 text-xs text-court-950/60">{rupiah(order.total_amount)}</p></article>)}</div></div>
+        <div><h2 className="text-xl font-extrabold">Pesanan shuttlecock</h2><div className="mt-4 space-y-3">{(orders ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada pesanan.</p>}{(orders ?? []).map((order) => <article className="dashboard-card p-5" key={order.id}><div className="flex justify-between gap-2"><strong>{order.venue_products?.name}</strong><span className="activity-tag">{status[order.status]}</span></div><p className="mt-2 text-sm">Atas nama {order.player_name} · {order.quantity} slop</p><p className="mt-1 text-xs text-court-950/60">{rupiah(order.total_amount)}</p></article>)}</div></div>
       </section>
     </main>
   </div>;

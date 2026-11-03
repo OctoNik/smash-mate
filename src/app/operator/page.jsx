@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import AccountHeader from "@/components/account-header";
-import PartnerProvisionForm from "@/components/partner-provision-form";
+import PartnerProvisionForm, { DemoProvisionForm } from "@/components/partner-provision-form";
 import { requireAccount } from "@/lib/account";
 
 export const instant = false;
@@ -10,8 +10,10 @@ export default async function OperatorPage({ searchParams }) {
   if (user.app_metadata?.smashmate_role !== "operator") redirect("/dashboard");
   const { error, message } = await searchParams;
   const { data: venues, error: listError } = await supabase.from("venues")
-    .select("id,name,address,status,created_at,courts(id)")
+    .select("id,name,address,status,owner_id,created_at,courts(id)")
     .order("created_at", { ascending: false }).limit(100);
+  const demoVenues = (venues ?? []).filter((venue) => venue.name.startsWith("GOR Demo "));
+  const demoReady = demoVenues.length === 5 && demoVenues.every((venue) => venue.owner_id === user.id);
   return <div className="dashboard-shell min-h-screen">
     <AccountHeader name={name} email={user.email ?? ""} user={user} active="operator" />
     <main className="shell max-w-6xl py-10 sm:py-14">
@@ -21,11 +23,17 @@ export default async function OperatorPage({ searchParams }) {
       {error && <p role="alert" className="profile-message error">{error}</p>}
       {message && <p role="status" className="profile-message success">{message}</p>}
       <div className="mt-9 grid items-start gap-7 lg:grid-cols-[.8fr_1.2fr]">
-        <section className="dashboard-card p-6 sm:p-8" aria-labelledby="create-partner-title">
+        <div className="space-y-5"><section className="dashboard-card p-6 sm:p-8" aria-labelledby="create-partner-title">
           <h2 id="create-partner-title" className="text-xl font-extrabold">Buat akun Mitra GOR</h2>
           <p className="mt-2 text-sm text-court-950/60">Gunakan email Mitra yang belum terdaftar. Tidak ada email undangan yang dikirim.</p>
           <PartnerProvisionForm />
         </section>
+          {demoVenues.length === 5 && <section className="dashboard-card p-6 sm:p-8" aria-labelledby="demo-partner-title">
+            <h2 id="demo-partner-title" className="text-xl font-extrabold">Akun untuk 5 GOR demo</h2>
+            <p className="mt-2 text-sm leading-6 text-court-950/60">Kelima GOR dan katalognya sudah tersedia. Buat akun Mitra demo dan pasangkan otomatis. Kata sandi awal hanya tampil sekali.</p>
+            <DemoProvisionForm ready={demoReady} />
+          </section>}
+        </div>
         <section aria-labelledby="venue-list-title">
           <h2 id="venue-list-title" className="text-xl font-extrabold">GOR terdaftar</h2>
           {listError && <p role="alert" className="profile-message error">Daftar GOR belum dapat dimuat.</p>}

@@ -10,6 +10,14 @@ const secretKey = () => {
   catch { return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"); }
 };
 
+const demoPartners = [
+  { email: "mitra.grogol@smashmate-demo.test", venue: "GOR Demo Grogol" },
+  { email: "mitra.tangerang@smashmate-demo.test", venue: "GOR Demo Tangerang" },
+  { email: "mitra.senayan@smashmate-demo.test", venue: "GOR Demo Senayan" },
+  { email: "mitra.bekasi@smashmate-demo.test", venue: "GOR Demo Bekasi" },
+  { email: "mitra.depok@smashmate-demo.test", venue: "GOR Demo Depok" },
+];
+
 Deno.serve(async (request) => {
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
   const token = /^Bearer (\S+)$/i.exec(request.headers.get("authorization") ?? "")?.[1];
@@ -23,6 +31,54 @@ Deno.serve(async (request) => {
   if (authError || !user) return json({ error: "Sesi tidak valid." }, 401);
   let body;
   try { body = await request.json(); } catch { return json({ error: "Permintaan tidak valid." }, 400); }
+
+  if (body?.action === "create_demo_partners") {
+    if (user.app_metadata?.smashmate_role !== "operator") return json({ error: "Akses operator diperlukan." }, 403);
+    const { data: venues, error: venueError } = await admin.from("venues")
+      .select("id,name,owner_id,status").in("name", demoPartners.map((item) => item.venue));
+    if (venueError || venues?.length !== demoPartners.length ||
+        venues.some((venue) => venue.owner_id !== user.id || venue.status !== "active")) {
+      return json({ ok: false, error: "Kelima GOR demo harus aktif dan masih dimiliki operator." });
+    }
+    const created = [];
+    const transferred = [];
+    const credentials = [];
+    try {
+      for (const item of demoPartners) {
+        const password = crypto.randomUUID().replaceAll("-", "");
+        const { data: account, error: createError } = await admin.auth.admin.createUser({
+          email: item.email, password, email_confirm: true,
+          user_metadata: { full_name: `Mitra ${item.venue.replace("GOR Demo ", "")}` },
+        });
+        if (createError || !account.user) throw new Error(`Akun ${item.venue} gagal dibuat.`);
+        created.push(account.user.id);
+        const { error: roleError } = await admin.auth.admin.updateUserById(account.user.id, {
+          app_metadata: { ...account.user.app_metadata, smashmate_role: "partner", password_setup_required: true },
+        });
+        if (roleError) throw new Error(`Peran ${item.venue} gagal disimpan.`);
+        const venue = venues.find((candidate) => candidate.name === item.venue);
+        const { data: moved, error: moveError } = await admin.from("venues")
+          .update({ owner_id: account.user.id }).eq("id", venue.id).eq("owner_id", user.id)
+          .select("id").maybeSingle();
+        if (moveError || !moved) throw new Error(`Kepemilikan ${item.venue} gagal dipindahkan.`);
+        transferred.push(venue.id);
+        credentials.push({ email: item.email, initialPassword: password, venue: item.venue });
+      }
+      return json({ ok: true, credentials });
+    } catch (error) {
+      let ownershipRestored = true;
+      for (const venueId of transferred.reverse()) {
+        const { error: restoreError } = await admin.from("venues").update({ owner_id: user.id }).eq("id", venueId);
+        if (restoreError) ownershipRestored = false;
+      }
+      if (ownershipRestored) {
+        for (const userId of created.reverse()) await admin.auth.admin.deleteUser(userId);
+      }
+      return json({ ok: false, error: ownershipRestored
+        ? String(error.message ?? error)
+        : "Pembuatan akun terhenti. Hubungi admin untuk memeriksa kepemilikan GOR sebelum mencoba lagi." });
+    }
+  }
 
   if (body?.action === "create") {
     if (user.app_metadata?.smashmate_role !== "operator") return json({ error: "Akses operator diperlukan." }, 403);
