@@ -10,12 +10,12 @@ const secretKey = () => {
   catch { return Deno.env.get("SUPABASE_SERVICE_ROLE_KEY"); }
 };
 
-const demoPartners = [
-  { email: "mitra.grogol@smashmate-demo.test", venue: "GOR Demo Grogol" },
-  { email: "mitra.tangerang@smashmate-demo.test", venue: "GOR Demo Tangerang" },
-  { email: "mitra.senayan@smashmate-demo.test", venue: "GOR Demo Senayan" },
-  { email: "mitra.bekasi@smashmate-demo.test", venue: "GOR Demo Bekasi" },
-  { email: "mitra.depok@smashmate-demo.test", venue: "GOR Demo Depok" },
+const initialPartners = [
+  { email: "mitra.grogol@smashmate-demo.test", venue: "GOR Kencana Grogol" },
+  { email: "mitra.tangerang@smashmate-demo.test", venue: "Karawaci Badminton Center" },
+  { email: "mitra.senayan@smashmate-demo.test", venue: "Senayan Shuttle Arena" },
+  { email: "mitra.bekasi@smashmate-demo.test", venue: "Bekasi Racket Hall" },
+  { email: "mitra.depok@smashmate-demo.test", venue: "Depok Smash Court" },
 ];
 
 Deno.serve(async (request) => {
@@ -32,23 +32,23 @@ Deno.serve(async (request) => {
   let body;
   try { body = await request.json(); } catch { return json({ error: "Permintaan tidak valid." }, 400); }
 
-  if (body?.action === "create_demo_partners") {
+  if (body?.action === "create_initial_partners") {
     if (user.app_metadata?.smashmate_role !== "operator") return json({ error: "Akses operator diperlukan." }, 403);
     const { data: venues, error: venueError } = await admin.from("venues")
-      .select("id,name,owner_id,status").in("name", demoPartners.map((item) => item.venue));
-    if (venueError || venues?.length !== demoPartners.length ||
+      .select("id,name,owner_id,status").in("name", initialPartners.map((item) => item.venue));
+    if (venueError || venues?.length !== initialPartners.length ||
         venues.some((venue) => venue.owner_id !== user.id || venue.status !== "active")) {
-      return json({ ok: false, error: "Kelima GOR demo harus aktif dan masih dimiliki operator." });
+      return json({ ok: false, error: "Kelima GOR awal harus aktif dan masih dimiliki operator." });
     }
     const created = [];
     const transferred = [];
     const credentials = [];
     try {
-      for (const item of demoPartners) {
+      for (const item of initialPartners) {
         const password = crypto.randomUUID().replaceAll("-", "");
         const { data: account, error: createError } = await admin.auth.admin.createUser({
           email: item.email, password, email_confirm: true,
-          user_metadata: { full_name: `Mitra ${item.venue.replace("GOR Demo ", "")}` },
+          user_metadata: { full_name: `Mitra ${item.venue}` },
         });
         if (createError || !account.user) throw new Error(`Akun ${item.venue} gagal dibuat.`);
         created.push(account.user.id);

@@ -21,14 +21,14 @@ export async function provisionPartner(_previousState, formData) {
   return { error: "", credentials: { email: data.email, initialPassword: data.initialPassword } };
 }
 
-export async function provisionDemoPartners() {
+export async function provisionInitialPartners() {
   const { supabase, user } = await requireAccount();
   if (user.app_metadata?.smashmate_role !== "operator") redirect("/dashboard");
   const { data, error } = await supabase.functions.invoke("provision-partner", {
-    body: { action: "create_demo_partners" },
+    body: { action: "create_initial_partners" },
   });
   if (error || !data?.ok || data.credentials?.length !== 5) {
-    return { error: data?.error || "Kelima akun demo belum dapat dibuat.", credentials: [] };
+    return { error: data?.error || "Kelima akun Mitra awal belum dapat dibuat.", credentials: [] };
   }
   return { error: "", credentials: data.credentials };
 }

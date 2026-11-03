@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { provisionPartner, provisionDemoPartners } from "@/app/operator/actions";
+import { provisionPartner, provisionInitialPartners } from "@/app/operator/actions";
 
 const initialState = { error: "", credentials: null };
 
@@ -33,8 +33,8 @@ export default function PartnerProvisionForm() {
   </>;
 }
 
-export function DemoProvisionForm({ ready }) {
-  const [state, formAction, pending] = useActionState(provisionDemoPartners, { error: "", credentials: [] });
+export function InitialProvisionForm({ ready }) {
+  const [state, formAction, pending] = useActionState(provisionInitialPartners, { error: "", credentials: [] });
   const [copied, setCopied] = useState(false);
   async function copyAll() {
     try {
@@ -46,10 +46,10 @@ export function DemoProvisionForm({ ready }) {
   return <>
     {ready && <form action={formAction} className="mt-5">
       <button className="btn btn-dark w-full" type="submit" disabled={pending}>
-        {pending ? "Membuat 5 akun..." : "Buat 5 akun Mitra demo"}
+        {pending ? "Membuat 5 akun..." : "Buat 5 akun Mitra awal"}
       </button>
     </form>}
-    {!ready && state.credentials.length === 0 && <p className="mt-4 text-sm text-court-950/65">Akun Mitra demo sudah terhubung ke GOR. Kredensial awal hanya ditampilkan saat pembuatan akun.</p>}
+    {!ready && state.credentials.length === 0 && <p className="mt-4 text-sm text-court-950/65">Akun Mitra sudah terhubung ke GOR. Kredensial awal hanya ditampilkan saat pembuatan akun.</p>}
     {state.error && <p role="alert" className="profile-message error">{state.error}</p>}
     {state.credentials.length === 5 && <div role="status" className="mt-5 rounded-xl border border-court-700/30 bg-court-cream p-4 text-xs">
       <strong>5 akun berhasil dibuat dan dipasangkan ke GOR.</strong>

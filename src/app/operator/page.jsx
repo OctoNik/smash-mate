@@ -1,9 +1,13 @@
 import { redirect } from "next/navigation";
 import AccountHeader from "@/components/account-header";
-import PartnerProvisionForm, { DemoProvisionForm } from "@/components/partner-provision-form";
+import PartnerProvisionForm, { InitialProvisionForm } from "@/components/partner-provision-form";
 import { requireAccount } from "@/lib/account";
 
 export const instant = false;
+const initialVenueNames = new Set([
+  "GOR Kencana Grogol", "Karawaci Badminton Center", "Senayan Shuttle Arena",
+  "Bekasi Racket Hall", "Depok Smash Court",
+]);
 
 export default async function OperatorPage({ searchParams }) {
   const { supabase, user, name } = await requireAccount();
@@ -12,8 +16,8 @@ export default async function OperatorPage({ searchParams }) {
   const { data: venues, error: listError } = await supabase.from("venues")
     .select("id,name,address,status,owner_id,created_at,courts(id)")
     .order("created_at", { ascending: false }).limit(100);
-  const demoVenues = (venues ?? []).filter((venue) => venue.name.startsWith("GOR Demo "));
-  const demoReady = demoVenues.length === 5 && demoVenues.every((venue) => venue.owner_id === user.id);
+  const initialVenues = (venues ?? []).filter((venue) => initialVenueNames.has(venue.name));
+  const initialReady = initialVenues.length === 5 && initialVenues.every((venue) => venue.owner_id === user.id);
   return <div className="dashboard-shell min-h-screen">
     <AccountHeader name={name} email={user.email ?? ""} user={user} active="operator" />
     <main className="shell max-w-6xl py-10 sm:py-14">
@@ -28,10 +32,10 @@ export default async function OperatorPage({ searchParams }) {
           <p className="mt-2 text-sm text-court-950/60">Gunakan email Mitra yang belum terdaftar. Tidak ada email undangan yang dikirim.</p>
           <PartnerProvisionForm />
         </section>
-          {demoVenues.length === 5 && <section className="dashboard-card p-6 sm:p-8" aria-labelledby="demo-partner-title">
-            <h2 id="demo-partner-title" className="text-xl font-extrabold">Akun untuk 5 GOR demo</h2>
-            <p className="mt-2 text-sm leading-6 text-court-950/60">Kelima GOR dan katalognya sudah tersedia. Buat akun Mitra demo dan pasangkan otomatis. Kata sandi awal hanya tampil sekali.</p>
-            <DemoProvisionForm ready={demoReady} />
+          {initialVenues.length === 5 && <section className="dashboard-card p-6 sm:p-8" aria-labelledby="initial-partner-title">
+            <h2 id="initial-partner-title" className="text-xl font-extrabold">Akun untuk 5 GOR awal</h2>
+            <p className="mt-2 text-sm leading-6 text-court-950/60">Kelima GOR dan katalognya sudah tersedia. Buat akun Mitra dan pasangkan otomatis. Kata sandi awal hanya tampil sekali.</p>
+            <InitialProvisionForm ready={initialReady} />
           </section>}
         </div>
         <section aria-labelledby="venue-list-title">

@@ -9,7 +9,7 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 - Profil coach sebagai fitur tambahan akun pemain, serta komunitas yang dapat mengadakan event.
 - Direktori Mitra GOR, booking lapangan, sewa raket per sesi saat booking, dan katalog shuttlecock per slop dengan stok serta harga per merek. Mitra dapat menambahkan foto produk.
 - Panel Mitra GOR untuk jumlah dan harga lapangan, deskripsi, lokasi Google Maps, katalog, dan daftar booking atas nama pemain.
-- Panel operator internal untuk membuat akun Mitra GOR secara langsung, termasuk 5 akun demo melalui satu tombol. Pendaftaran publik hanya membuat akun pemain.
+- Panel operator internal untuk membuat akun Mitra GOR secara langsung. Lima akun Mitra awal sudah terhubung ke GOR masing-masing. Pendaftaran publik hanya membuat akun pemain.
 - Checkout simulasi tanpa perpindahan uang, feedback, serta indikator loading pada formulir dan navigasi.
 
 ## Tech stack
@@ -44,13 +44,13 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 
 - **Pemain:** daftar, konfirmasi email, lalu gunakan dashboard. Coach adalah profil tambahan dalam akun pemain; paket premium belum dirancang.
 - **Operator:** administrator Supabase menetapkan `app_metadata.smashmate_role = "operator"` pada akun internal. Akun operator proyek saat ini sudah ditetapkan. Masuk ulang agar token memuat peran baru, lalu buka `/operator`.
-- **Mitra GOR:** operator membuat akun dengan email yang belum terdaftar dan menerima kata sandi awal sekali. Operator memberikannya langsung kepada Mitra. Saat login pertama, Mitra wajib mengganti kata sandi di `/partner/password`, lalu melengkapi GOR di `/partner/setup`. Mitra tidak dapat mendaftar langsung. Untuk 5 GOR demo yang sudah terisi, tombol khusus di `/operator` membuat akun dan memindahkan kepemilikan GOR; setelah mengganti kata sandi, Mitra langsung masuk ke panelnya.
+- **Mitra GOR:** operator membuat akun dengan email yang belum terdaftar dan menerima kata sandi awal sekali. Operator memberikannya langsung kepada Mitra. Saat login pertama, Mitra wajib mengganti kata sandi di `/partner/password`, lalu melengkapi GOR di `/partner/setup`. Mitra tidak dapat mendaftar langsung. Lima GOR awal sudah terisi dan masing-masing dimiliki akun Mitra; setelah mengganti kata sandi, Mitra langsung masuk ke panelnya.
 
-## Data demo GOR
+## Data awal GOR
 
-Proyek Supabase saat ini berisi 5 GOR fiktif: Grogol, Tangerang, Senayan, Bekasi, dan Depok. Total ada **15 lapangan** dan **20 item perlengkapan**. Setiap GOR memiliki dua pilihan merek raket sewa dan dua pilihan merek shuttlecock. Harga raket berlaku per sesi booking dan stoknya berarti jumlah raket. Shuttlecock dijual per slop (12 buah dalam data demo) dan stoknya berarti jumlah slop. Harga dan stok berbeda menurut GOR serta merek.
+Proyek Supabase saat ini berisi 5 GOR untuk uji coba: GOR Kencana Grogol, Karawaci Badminton Center, Senayan Shuttle Arena, Bekasi Racket Hall, dan Depok Smash Court. Nama ini digunakan sebagai data contoh, bukan klaim kemitraan dengan tempat nyata. Total ada **15 lapangan** dan **20 item perlengkapan**. Setiap GOR memiliki dua pilihan merek raket sewa dan dua pilihan merek shuttlecock. Harga raket berlaku per sesi booking dan stoknya berarti jumlah raket. Shuttlecock dijual per slop (12 buah pada data awal) dan stoknya berarti jumlah slop. Harga dan stok berbeda menurut GOR serta merek.
 
-File [`supabase/seed/20261103_demo_venues.sql`](supabase/seed/20261103_demo_venues.sql) berisi data awal tersebut dan hanya dijalankan sekali. Selama akun demo belum dibuat, kelima GOR sementara dimiliki operator. Masuk sebagai operator, buka `/operator`, tekan **Buat 5 akun Mitra demo**, lalu simpan kredensial awal yang ditampilkan. Tombol ini memakai Edge Function yang memeriksa sesi dan peran operator; akun demo tidak dibuat lewat pendaftaran publik.
+File [`supabase/seed/20261103_initial_venues.sql`](supabase/seed/20261103_initial_venues.sql) berisi data awal tersebut dan hanya dijalankan sekali pada proyek baru. Setelah seed, operator dapat membuka `/operator` dan membuat 5 akun Mitra awal; tombol itu memindahkan kepemilikan GOR dan menampilkan kredensial awal sekali. Pada proyek Supabase SmashMate saat ini, kelima akun tersebut sudah dibuat dan GOR sudah dipasangkan. Fungsi pembuat akun memeriksa sesi serta peran operator.
 
 Tidak ada email undangan untuk Mitra. Akun yang dibuat operator langsung dapat dipakai dengan kata sandi awal. Konfirmasi email pemain umum tetap menggunakan pengaturan URL Supabase Auth; sebelum hosting, arahkan **Site URL** dan **Redirect URLs** ke domain aplikasi.
 
@@ -58,7 +58,7 @@ Tidak ada email undangan untuk Mitra. Akun yang dibuat operator langsung dapat d
 
 - Checkout mengonfirmasi booking atau pesanan tanpa penagihan uang. Slot lapangan dan stok shuttlecock tetap dihitung di database.
 - Profil coach dibuat sendiri oleh pemain dan belum melalui verifikasi sertifikasi.
-- Kelima GOR dan seluruh harga/stok demo adalah data fiktif untuk tugas; belum ada ulasan buatan. GOR Mitra lain dapat ditambahkan oleh operator.
+- Kelima GOR serta seluruh harga dan stok awal adalah data contoh untuk tugas; belum ada ulasan buatan. GOR Mitra lain dapat ditambahkan oleh operator.
 - Sewa raket hanya tersedia sebagai tambahan booking lapangan dan dihitung per sesi.
 - Pencarian partner menggunakan daftar aktivitas; matchmaking otomatis, rekomendasi AI, payment gateway, dan monetisasi belum tersedia.
 - Rating tersedia setelah jadwal aktivitas dimulai. Moderasi rating belum tersedia.
@@ -73,4 +73,4 @@ npm run lint
 npm run build
 ```
 
-Aturan booking, konflik slot, harga, stok, checkout, pembatalan, dan akses data telah diuji dalam transaksi database yang di-rollback. Data demo juga diuji untuk harga gabungan lapangan, raket, dan shuttlecock beserta pengurangan serta pemulihan stok. Pembuatan 5 akun Mitra demo perlu dijalankan sekali dari sesi operator pada aplikasi.
+Aturan booking, konflik slot, harga, stok, checkout, pembatalan, dan akses data telah diuji dalam transaksi database yang di-rollback. Data awal juga diuji untuk harga gabungan lapangan, raket, dan shuttlecock beserta pengurangan serta pemulihan stok. Kelima akun Mitra telah diverifikasi memiliki peran dan GOR yang sesuai.
