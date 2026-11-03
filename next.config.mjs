@@ -3,7 +3,7 @@ const nextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   experimental: {
-    serverActions: { bodySizeLimit: "3mb" },
+    serverActions: { bodySizeLimit: "4mb" },
   },
 };
 

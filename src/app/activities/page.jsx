@@ -17,6 +17,12 @@ export default async function ActivitiesPage({ searchParams }) {
     .gte("starts_at", new Date().toISOString())
     .order("starts_at", { ascending: true })
     .limit(50);
+  const [{ data: bookings }, { data: communities }] = await Promise.all([
+    supabase.from("court_bookings").select("id,starts_at,venues(name),courts(name)")
+      .eq("player_id", user.id).eq("status", "confirmed")
+      .gte("starts_at", new Date().toISOString()).order("starts_at").limit(30),
+    supabase.from("communities").select("id,name").eq("owner_id", user.id).order("name").limit(30),
+  ]);
 
   return (
     <div className="dashboard-shell min-h-screen">
@@ -45,11 +51,15 @@ export default async function ActivitiesPage({ searchParams }) {
                 <input name="title" type="text" className="profile-input" minLength={5} maxLength={100} required placeholder="Contoh: Mabar ganda Sabtu pagi" />
               </label>
               <label className="profile-label">Lokasi
-                <input name="location" type="text" className="profile-input" minLength={3} maxLength={160} required placeholder="Nama GOR dan kota" />
+                <input name="location" type="text" className="profile-input" minLength={3} maxLength={160} placeholder="Nama GOR dan kota; otomatis jika memakai booking" />
               </label>
+              {(bookings ?? []).length > 0 && <label className="profile-label">Gunakan booking lapangan (opsional)
+                <select name="booking_id" className="profile-input"><option value="">Tanpa booking</option>{bookings.map((booking) => <option value={booking.id} key={booking.id}>{booking.venues?.name} · {booking.courts?.name} · {new Date(booking.starts_at).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", dateStyle: "medium", timeStyle: "short" })} WIB</option>)}</select>
+                <span className="mt-1 block text-xs font-normal text-court-950/60">Jika dipilih, lokasi dan waktu mengikuti booking yang sudah dikonfirmasi.</span>
+              </label>}
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="profile-label">Waktu mulai (WIB)
-                  <input name="starts_at" type="datetime-local" className="profile-input" required />
+                  <input name="starts_at" type="datetime-local" className="profile-input" />
                 </label>
                 <label className="profile-label">Total slot termasuk host
                   <input name="capacity" type="number" min="2" max="100" defaultValue="4" className="profile-input" required />
@@ -63,6 +73,7 @@ export default async function ActivitiesPage({ searchParams }) {
                   <option value="professional">Professional</option>
                 </select>
               </label>
+              {(communities ?? []).length > 0 && <label className="profile-label">Komunitas penyelenggara (opsional)<select name="community_id" className="profile-input"><option value="">Pribadi</option>{communities.map((community) => <option key={community.id} value={community.id}>{community.name}</option>)}</select></label>}
               <label className="profile-label">Keterangan
                 <textarea name="description" maxLength={1000} rows={4} className="profile-input" placeholder="Format permainan, kebutuhan pemain, atau informasi lain" />
               </label>

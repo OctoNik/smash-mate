@@ -2,6 +2,7 @@ import Link from "@/components/loading-link";
 import BrandLogo from "@/components/brand-logo";
 import BadmintonHeroMotion from "@/components/badminton-hero-motion";
 import UtilityLoop from "@/components/utility-loop";
+import InviteFragmentRedirect from "@/components/invite-fragment-redirect";
 
 const steps = [
   ["01", "Buat Profil", "Tentukan level dan preferensi bermain agar aktivitas yang tampil lebih sesuai."],
@@ -15,8 +16,8 @@ const features = [
   { title: "Latihan dengan Coach", text: "Pilih program dan jadwal latihan sesuai target perkembangan Anda.", icon: "⌁" },
   { title: "Host Event", text: "Atur event untuk pemain atau komunitas dengan alur yang terstruktur.", icon: "◇" },
   { title: "Rating Antar Pemain", text: "Berikan penilaian setelah bermain untuk membangun komunitas sportif.", icon: "★" },
-  { title: "Sewa Raket", text: "Temukan pilihan raket untuk disewa saat ingin bermain tanpa membawa perlengkapan sendiri.", icon: "🏸", status: "Dalam pengembangan" },
-  { title: "Beli Shuttlecock", text: "Siapkan shuttlecock untuk pertandingan atau latihan dari aplikasi yang sama.", icon: "◈", wide: true, status: "Dalam pengembangan" },
+  { title: "Sewa Raket", text: "Pilih raket Mitra GOR saat booking lapangan, sesuai stok yang tersedia.", icon: "🏸" },
+  { title: "Beli Shuttlecock", text: "Pesan shuttlecock dari katalog Mitra GOR, terpisah atau bersama booking.", icon: "◈", wide: true },
 ];
 
 const levels = [
@@ -28,6 +29,7 @@ const levels = [
 export default function Home() {
   return (
     <div className="precision-page">
+      <InviteFragmentRedirect />
       <header className="precision-header">
         <div className="precision-shell flex h-[76px] items-center justify-between">
           <BrandLogo />

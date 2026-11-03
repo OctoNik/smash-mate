@@ -14,12 +14,36 @@ export async function createActivity(formData) {
   const kind = String(formData.get("kind") ?? "");
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
-  const location = String(formData.get("location") ?? "").trim();
+  let location = String(formData.get("location") ?? "").trim();
   const level = String(formData.get("level") ?? "");
   const capacity = Number(formData.get("capacity"));
   const dateInput = String(formData.get("starts_at") ?? "");
-  const startsAt = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(dateInput)
+  let startsAt = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(dateInput)
     ? new Date(`${dateInput}:00+07:00`) : new Date(NaN);
+  const bookingId = String(formData.get("booking_id") ?? "");
+  const communityId = String(formData.get("community_id") ?? "");
+
+  if ((bookingId && !uuidPattern.test(bookingId)) || (communityId && !uuidPattern.test(communityId))) {
+    redirect(errorUrl("Booking atau komunitas tidak valid."));
+  }
+  if (kind === "coaching") {
+    const { data: coach } = await supabase.from("coach_profiles").select("user_id")
+      .eq("user_id", user.id).eq("is_active", true).maybeSingle();
+    if (!coach) redirect(errorUrl("Aktifkan profil coach dahulu di halaman Coach."));
+  }
+  if (bookingId) {
+    const { data: booking } = await supabase.from("court_bookings")
+      .select("starts_at,status,venues(name,address),courts(name)")
+      .eq("id", bookingId).eq("player_id", user.id).maybeSingle();
+    if (!booking || booking.status !== "confirmed") redirect(errorUrl("Booking harus sudah dikonfirmasi."));
+    startsAt = new Date(booking.starts_at);
+    location = `${booking.venues?.name ?? "GOR"} · ${booking.courts?.name ?? "Lapangan"}`.slice(0, 160);
+  }
+  if (communityId) {
+    const { data: community } = await supabase.from("communities").select("id")
+      .eq("id", communityId).eq("owner_id", user.id).maybeSingle();
+    if (!community) redirect(errorUrl("Anda hanya dapat mengaitkan komunitas milik sendiri."));
+  }
 
   if (!kinds.has(kind) || !levels.has(level) || title.length < 5 || title.length > 100 ||
       description.length > 1000 || location.length < 3 || location.length > 160 ||
@@ -38,6 +62,8 @@ export async function createActivity(formData) {
     level,
     capacity,
     starts_at: startsAt.toISOString(),
+    booking_id: bookingId || null,
+    community_id: communityId || null,
   });
   if (error) redirect(errorUrl("Aktivitas belum tersimpan. Coba lagi."));
   revalidatePath("/activities");

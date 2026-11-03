@@ -129,7 +129,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .account-menu-name small{color:#507593;font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
 .account-avatar,.profile-avatar{display:grid;flex:none;place-items:center;background:#507593;color:#fff;font-family:var(--font-manrope);font-weight:900}
 .account-avatar{width:2.55rem;height:2.55rem;border-radius:.7rem;font-size:1rem}
-.account-menu-panel{position:absolute;top:calc(100% + .65rem);right:0;z-index:60;width:min(18rem,calc(100vw - 2rem));overflow:hidden;border:1px solid rgb(2 46 74/.12);border-radius:1rem;background:#fff;padding:.45rem;box-shadow:0 22px 55px rgb(2 46 74/.17)}
+.account-menu-panel{position:absolute;top:calc(100% + .65rem);right:0;z-index:60;width:min(18rem,calc(100vw - 2rem));max-height:min(75vh,38rem);overflow-y:auto;border:1px solid rgb(2 46 74/.12);border-radius:1rem;background:#fff;padding:.45rem;box-shadow:0 22px 55px rgb(2 46 74/.17)}
 .account-menu-identity{display:flex;flex-direction:column;gap:.22rem;border-bottom:1px solid rgb(2 46 74/.09);padding:.8rem .85rem 1rem}
 .account-menu-identity strong{font-size:.83rem}.account-menu-identity span{overflow:hidden;color:rgb(2 46 74/.58);font-size:.7rem;text-overflow:ellipsis;white-space:nowrap}
 .account-menu-panel a,.account-menu-panel button{display:block;width:100%;border-radius:.6rem;background:transparent;padding:.8rem .85rem;color:#022e4a;font-size:.82rem;font-weight:700;text-align:left;transition:background-color .2s ease,color .2s ease}
