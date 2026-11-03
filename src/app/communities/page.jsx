@@ -32,7 +32,7 @@ export default async function CommunitiesPage({ searchParams }) {
               const owner = community.owner_id === user.id;
               return <article className="dashboard-card p-6" key={community.id}><div className="flex flex-wrap justify-between gap-3"><h3 className="text-lg font-extrabold">{community.name}</h3><span className="activity-tag">{community.city || "Online"}</span></div>
                 <p className="mt-2 text-sm leading-6 text-court-950/65">{community.description || "Belum ada deskripsi."}</p><p className="mt-3 text-xs text-court-950/60">{community.community_members?.length ?? 0} anggota</p>
-                <div className="mt-4">{owner ? <Link href="/activities#new" className="btn btn-outline-dark">Buat event</Link> : joined ? <form action={leaveCommunity}><input type="hidden" name="id" value={community.id} /><SubmitButton className="btn btn-outline-dark" pendingText="Keluar...">Keluar komunitas</SubmitButton></form> : <form action={joinCommunity}><input type="hidden" name="id" value={community.id} /><SubmitButton className="btn btn-dark" pendingText="Bergabung...">Gabung komunitas</SubmitButton></form>}</div>
+                <div className="mt-4">{owner ? <Link href="/activities?view=create#new" className="btn btn-outline-dark">Buat event</Link> : joined ? <form action={leaveCommunity}><input type="hidden" name="id" value={community.id} /><SubmitButton className="btn btn-outline-dark" pendingText="Keluar...">Keluar komunitas</SubmitButton></form> : <form action={joinCommunity}><input type="hidden" name="id" value={community.id} /><SubmitButton className="btn btn-dark" pendingText="Bergabung...">Gabung komunitas</SubmitButton></form>}</div>
               </article>;
             })}
           </div>

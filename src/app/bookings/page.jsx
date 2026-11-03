@@ -40,7 +40,7 @@ export default async function BookingsPage({ searchParams }) {
             <p className="mt-4 text-xl font-extrabold text-court-700">{rupiah(booking.total_amount)}</p>
             {booking.status !== "cancelled" && <div className="mt-5 flex flex-wrap gap-3">
               {booking.status === "pending_payment" && <form action={payBooking}><input type="hidden" name="id" value={booking.id} /><SubmitButton className="btn btn-dark" pendingText="Mengonfirmasi...">Konfirmasi pembayaran simulasi</SubmitButton></form>}
-              {booking.status === "confirmed" && !usedBookingIds.has(booking.id) && <Link href={`/activities?booking_id=${booking.id}#new`} className="btn btn-dark">Buat aktivitas dari booking</Link>}
+              {booking.status === "confirmed" && !usedBookingIds.has(booking.id) && <Link href={`/activities?view=create&booking_id=${booking.id}#new`} className="btn btn-dark">Buat aktivitas dari booking</Link>}
               {booking.status === "confirmed" && usedBookingIds.has(booking.id) && <Link href="/activities" className="btn btn-outline-dark">Lihat aktivitas</Link>}
               <form action={cancelBooking}><input type="hidden" name="id" value={booking.id} /><SubmitButton className="btn btn-outline-dark" pendingText="Membatalkan..." confirmMessage="Batalkan booking ini?">Batalkan</SubmitButton></form>
             </div>}

@@ -16,7 +16,7 @@ const features = [
   { title: "Host Event", text: "Atur event untuk pemain atau komunitas dengan alur yang terstruktur.", icon: "◇" },
   { title: "Rating Antar Pemain", text: "Berikan penilaian setelah bermain untuk membangun komunitas sportif.", icon: "★" },
   { title: "Sewa Raket", text: "Pilih raket Mitra GOR saat booking lapangan, sesuai stok yang tersedia.", icon: "🏸" },
-  { title: "Beli Shuttlecock", text: "Pesan shuttlecock dari katalog Mitra GOR, terpisah atau bersama booking.", icon: "◈", wide: true },
+  { title: "Beli Shuttlecock", text: "Host dapat menambahkan shuttlecock dari katalog Mitra GOR saat booking lapangan.", icon: "◈", wide: true },
 ];
 
 const levels = [

@@ -7,7 +7,7 @@ import { requireAccount } from "@/lib/account";
 const kinds = new Set(["match", "coaching", "event"]);
 const levels = new Set(["beginner", "intermediate", "professional", "all"]);
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const errorUrl = (message) => `/activities?error=${encodeURIComponent(message)}`;
+const errorUrl = (message) => `/activities?view=create&error=${encodeURIComponent(message)}`;
 
 export async function createActivity(formData) {
   const { supabase, user, name } = await requireAccount();
@@ -55,7 +55,7 @@ export async function createActivity(formData) {
     redirect(errorUrl("Periksa judul, lokasi, waktu, kapasitas, dan level aktivitas."));
   }
 
-  const { error } = await supabase.from("activities").insert({
+  const { data: createdActivity, error } = await supabase.from("activities").insert({
     host_id: user.id,
     host_name: name.slice(0, 60),
     kind,
@@ -67,38 +67,41 @@ export async function createActivity(formData) {
     starts_at: startsAt.toISOString(),
     booking_id: bookingId || null,
     community_id: communityId || null,
-  });
-  if (error) redirect(errorUrl("Aktivitas belum tersimpan. Coba lagi."));
+  }).select("id").single();
+  if (error || !createdActivity) redirect(errorUrl("Aktivitas belum tersimpan. Coba lagi."));
   revalidatePath("/activities");
-  redirect("/activities?message=Aktivitas berhasil dibuat.");
+  redirect(`/activities/${createdActivity.id}`);
 }
 
-export async function joinActivity(formData) {
+export async function joinActivity(_previousState, formData) {
   const { supabase } = await requireAccount();
   const id = String(formData.get("id") ?? "");
-  if (!uuidPattern.test(id)) redirect(errorUrl("Aktivitas tidak valid."));
+  if (!uuidPattern.test(id)) return { error: "Aktivitas tidak valid.", success: false };
   const { error } = await supabase.rpc("join_activity", { p_activity_id: id });
-  if (error) redirect(errorUrl("Tidak dapat bergabung. Periksa ketersediaan slot."));
+  if (error) return { error: "Tidak dapat bergabung. Periksa ketersediaan slot.", success: false };
   revalidatePath("/activities");
-  redirect("/activities?message=Anda berhasil bergabung.");
+  revalidatePath(`/activities/${id}`);
+  return { error: "", success: true };
 }
 
-export async function leaveActivity(formData) {
+export async function leaveActivity(_previousState, formData) {
   const { supabase, user } = await requireAccount();
   const id = String(formData.get("id") ?? "");
-  if (!uuidPattern.test(id)) redirect(errorUrl("Aktivitas tidak valid."));
-  const { error } = await supabase.from("activity_participants").delete().eq("activity_id", id).eq("user_id", user.id);
-  if (error) redirect(errorUrl("Belum dapat keluar dari aktivitas."));
+  if (!uuidPattern.test(id)) return { error: "Aktivitas tidak valid.", success: false };
+  const { data, error } = await supabase.from("activity_participants").delete()
+    .eq("activity_id", id).eq("user_id", user.id).select("activity_id").maybeSingle();
+  if (error || !data) return { error: "Belum dapat keluar dari aktivitas.", success: false };
   revalidatePath("/activities");
-  redirect("/activities?message=Anda keluar dari aktivitas.");
+  revalidatePath(`/activities/${id}`);
+  return { error: "", success: true };
 }
 
 export async function deleteActivity(formData) {
   const { supabase, user } = await requireAccount();
   const id = String(formData.get("id") ?? "");
-  if (!uuidPattern.test(id)) redirect(errorUrl("Aktivitas tidak valid."));
+  if (!uuidPattern.test(id)) redirect("/activities?view=mine&error=Aktivitas%20tidak%20valid.");
   const { error } = await supabase.from("activities").delete().eq("id", id).eq("host_id", user.id);
-  if (error) redirect(errorUrl("Aktivitas belum dapat dihapus."));
+  if (error) redirect("/activities?view=mine&error=Aktivitas%20belum%20dapat%20dihapus.");
   revalidatePath("/activities");
-  redirect("/activities?message=Aktivitas dihapus.");
+  redirect("/activities?view=mine&message=Aktivitas%20dihapus.");
 }

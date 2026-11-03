@@ -7,9 +7,9 @@ export const instant = false;
 
 const quickActions = [
   { icon: "◎", title: "Cari mabar", description: "Temukan aktivitas sesuai level dan waktu bermain.", label: "Lihat aktivitas", href: "/activities" },
-  { icon: "+", title: "Buat match", description: "Atur jadwal dan buka slot untuk pemain lain.", label: "Buat aktivitas", href: "/activities#new" },
+  { icon: "+", title: "Buat match", description: "Atur jadwal dan buka slot untuk pemain lain.", label: "Buat aktivitas", href: "/activities?view=create#new" },
   { icon: "⌁", title: "Sesi latihan", description: "Buat atau ikuti latihan bersama pemain lain.", label: "Lihat latihan", href: "/activities" },
-  { icon: "◇", title: "Host event", description: "Siapkan event untuk pemain atau komunitas.", label: "Buat event", href: "/activities#new" },
+  { icon: "◇", title: "Host event", description: "Siapkan event untuk pemain atau komunitas.", label: "Buat event", href: "/activities?view=create#new" },
   { icon: "🏸", title: "GOR & perlengkapan", description: "Booking lapangan, sewa raket, dan pesan shuttlecock dari mitra.", label: "Cari GOR", href: "/venues" },
   { icon: "◈", title: "Coach", description: "Temukan coach atau aktifkan profil untuk mengadakan latihan.", label: "Lihat coach", href: "/coaches" },
   { icon: "○", title: "Komunitas", description: "Buat komunitas, gabung, dan selenggarakan event bersama.", label: "Lihat komunitas", href: "/communities" },
@@ -54,7 +54,7 @@ export default async function DashboardView() {
         </section>
 
         <section className="mt-12 grid gap-5 lg:grid-cols-2">
-          {[["Aktivitas saya", "⌁", "Kelola jadwal bermain", "Lihat match, latihan, atau event yang Anda buat dan ikuti.", "/activities"], ["Booking saya", "🏸", "Lapangan & perlengkapan", "Lihat booking lapangan dan pesanan shuttlecock Anda.", "/bookings"]].map(([eyebrow, icon, title, description, href]) => <Link href={href} key={eyebrow} className="dashboard-card p-6"><p className="eyebrow">{eyebrow}</p><div className="grid min-h-44 place-items-center text-center"><div><span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-court-cream text-court-700">{icon}</span><h3 className="mt-4 font-display text-base font-extrabold">{title}</h3><p className="mx-auto mt-2 max-w-sm text-xs leading-6 text-court-950/60">{description}</p></div></div></Link>)}
+          {[["Aktivitas saya", "⌁", "Kelola jadwal bermain", "Lihat match, latihan, atau event yang Anda buat dan ikuti.", "/activities?view=mine"], ["Booking saya", "🏸", "Lapangan & perlengkapan", "Lihat booking lapangan dan perlengkapan yang Anda pesan.", "/bookings"]].map(([eyebrow, icon, title, description, href]) => <Link href={href} key={eyebrow} className="dashboard-card p-6"><p className="eyebrow">{eyebrow}</p><div className="grid min-h-44 place-items-center text-center"><div><span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-court-cream text-court-700">{icon}</span><h3 className="mt-4 font-display text-base font-extrabold">{title}</h3><p className="mx-auto mt-2 max-w-sm text-xs leading-6 text-court-950/60">{description}</p></div></div></Link>)}
         </section>
 
       </main>
