@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
 import { requireAccount } from "@/lib/account";
@@ -7,9 +8,10 @@ import { rupiah, waktuWib } from "@/lib/format";
 import { bookCourt, orderShuttlecock } from "../actions";
 
 export const instant = false;
-const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export default async function VenueDetailPage({ params, searchParams }) {
+  await connection();
   const { supabase, user, name } = await requireAccount();
   const { id } = await params;
   if (!uuid.test(id)) notFound();

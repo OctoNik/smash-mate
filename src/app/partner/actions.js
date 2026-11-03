@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAccount } from "@/lib/account";
 
-const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const partnerError = (message) => `/partner?error=${encodeURIComponent(message)}`;
 const setupError = (message) => `/partner/setup?error=${encodeURIComponent(message)}`;
 const productKinds = new Set(["racket_rental", "shuttlecock_sale"]);
