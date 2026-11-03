@@ -27,6 +27,7 @@ export default async function DashboardView() {
     : user.email?.split("@")[0] ?? "Pemain";
   const firstName = fullName.split(" ")[0];
   const role = user.app_metadata?.smashmate_role;
+  if (role === "partner" && user.app_metadata?.password_setup_required === true) redirect("/partner/password");
   if (role === "operator") redirect("/operator");
   if (role === "partner") redirect("/partner");
 

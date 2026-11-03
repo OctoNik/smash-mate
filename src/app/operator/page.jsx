@@ -1,8 +1,7 @@
 import { redirect } from "next/navigation";
 import AccountHeader from "@/components/account-header";
-import SubmitButton from "@/components/submit-button";
+import PartnerProvisionForm from "@/components/partner-provision-form";
 import { requireAccount } from "@/lib/account";
-import { invitePartner } from "./actions";
 
 export const instant = false;
 
@@ -18,18 +17,14 @@ export default async function OperatorPage({ searchParams }) {
     <main className="shell max-w-6xl py-10 sm:py-14">
       <p className="eyebrow">Internal SmashMate</p>
       <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Operator GOR</h1>
-      <p className="mt-3 text-sm leading-7 text-court-950/65">Hanya operator yang dapat membuat akun Mitra GOR. Mitra menerima undangan email, lalu melengkapi profil dan lapangannya.</p>
+      <p className="mt-3 text-sm leading-7 text-court-950/65">Operator membuat akun saat bertemu Mitra GOR, lalu memberikan kredensial awal secara langsung. Mitra mengganti kata sandi dan mengisi data GOR sendiri.</p>
       {error && <p role="alert" className="profile-message error">{error}</p>}
       {message && <p role="status" className="profile-message success">{message}</p>}
       <div className="mt-9 grid items-start gap-7 lg:grid-cols-[.8fr_1.2fr]">
-        <section className="dashboard-card p-6 sm:p-8" aria-labelledby="invite-title">
-          <h2 id="invite-title" className="text-xl font-extrabold">Undang Mitra GOR</h2>
-          <p className="mt-2 text-sm text-court-950/60">Gunakan email baru yang belum punya akun SmashMate.</p>
-          <form action={invitePartner} className="mt-5 space-y-4">
-            <label className="profile-label">Email admin GOR<input name="email" type="email" required autoComplete="off" className="profile-input" /></label>
-            <label className="profile-label">Nama GOR<input name="venue_name" required minLength={3} maxLength={100} className="profile-input" /></label>
-            <SubmitButton className="btn btn-dark w-full" pendingText="Mengirim undangan...">Kirim undangan</SubmitButton>
-          </form>
+        <section className="dashboard-card p-6 sm:p-8" aria-labelledby="create-partner-title">
+          <h2 id="create-partner-title" className="text-xl font-extrabold">Buat akun Mitra GOR</h2>
+          <p className="mt-2 text-sm text-court-950/60">Gunakan email Mitra yang belum terdaftar. Tidak ada email undangan yang dikirim.</p>
+          <PartnerProvisionForm />
         </section>
         <section aria-labelledby="venue-list-title">
           <h2 id="venue-list-title" className="text-xl font-extrabold">GOR terdaftar</h2>

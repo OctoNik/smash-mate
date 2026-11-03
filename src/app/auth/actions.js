@@ -17,12 +17,14 @@ export async function login(formData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     redirect(authMessage("/login", "error", "Email atau kata sandi tidak sesuai."));
   }
 
+  if (data.user?.app_metadata?.smashmate_role === "partner" &&
+      data.user?.app_metadata?.password_setup_required === true) redirect("/partner/password");
   redirect("/dashboard");
 }
 

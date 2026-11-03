@@ -14,7 +14,7 @@ export default async function PartnerPage({ searchParams }) {
   const { data: venue } = await supabase.from("venues")
     .select("id,name,description,address,maps_url,contact_phone,status,open_time,close_time")
     .eq("owner_id", user.id).order("created_at").limit(1).maybeSingle();
-  if (!venue) return <div className="dashboard-shell min-h-screen"><AccountHeader name={name} email={user.email ?? ""} user={user} active="partner" /><main className="shell py-12"><h1 className="font-display text-3xl font-extrabold">GOR belum terhubung</h1><p className="mt-3 text-sm text-court-950/65">Akun ini belum memiliki GOR. Hubungi operator SmashMate untuk memeriksa undangan.</p></main></div>;
+  if (!venue) return <div className="dashboard-shell min-h-screen"><AccountHeader name={name} email={user.email ?? ""} user={user} active="partner" /><main className="shell py-12"><h1 className="font-display text-3xl font-extrabold">GOR belum terhubung</h1><p className="mt-3 text-sm text-court-950/65">Akun ini belum memiliki GOR. Hubungi operator SmashMate untuk memeriksa pembuatan akun.</p></main></div>;
   if (venue.status === "draft") redirect("/partner/setup");
 
   const [{ data: courts }, { data: products }, { data: bookings }, { data: orders }] = await Promise.all([

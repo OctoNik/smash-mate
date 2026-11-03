@@ -2,7 +2,6 @@ import Link from "@/components/loading-link";
 import BrandLogo from "@/components/brand-logo";
 import BadmintonHeroMotion from "@/components/badminton-hero-motion";
 import UtilityLoop from "@/components/utility-loop";
-import InviteFragmentRedirect from "@/components/invite-fragment-redirect";
 
 const steps = [
   ["01", "Buat Profil", "Tentukan level dan preferensi bermain agar aktivitas yang tampil lebih sesuai."],
@@ -29,7 +28,6 @@ const levels = [
 export default function Home() {
   return (
     <div className="precision-page">
-      <InviteFragmentRedirect />
       <header className="precision-header">
         <div className="precision-shell flex h-[76px] items-center justify-between">
           <BrandLogo />

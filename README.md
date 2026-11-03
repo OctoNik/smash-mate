@@ -9,7 +9,7 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 - Profil coach sebagai fitur tambahan akun pemain, serta komunitas yang dapat mengadakan event.
 - Direktori Mitra GOR, booking lapangan, sewa raket saat booking, dan katalog pembelian shuttlecock dengan foto, stok, serta harga.
 - Panel Mitra GOR untuk jumlah dan harga lapangan, deskripsi, lokasi Google Maps, katalog, dan daftar booking atas nama pemain.
-- Panel operator internal untuk mengundang dan mengaktifkan akun Mitra GOR. Pendaftaran publik hanya membuat akun pemain.
+- Panel operator internal untuk membuat akun Mitra GOR secara langsung. Pendaftaran publik hanya membuat akun pemain.
 - Checkout simulasi tanpa perpindahan uang, feedback, serta indikator loading pada formulir dan navigasi.
 
 ## Tech stack
@@ -38,21 +38,21 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 2. Jalankan `npm ci`, lalu `npm run dev` (gunakan `npm.cmd` jika PowerShell membatasi skrip npm).
 3. Buka `http://localhost:3000`.
 4. Untuk proyek Supabase baru, terapkan seluruh file di [`supabase/migrations`](supabase/migrations) sesuai urutan nama. Semua migrasi sudah diterapkan pada proyek SmashMate saat ini.
-5. Deploy [`delete-account`](supabase/functions/delete-account/index.js) dan [`invite-partner`](supabase/functions/invite-partner/index.js) dengan verifikasi JWT aktif. Kunci admin hanya berada di lingkungan Edge Function, bukan di frontend.
+5. Deploy [`delete-account`](supabase/functions/delete-account/index.js) dan [`provision-partner`](supabase/functions/provision-partner/index.js) dengan verifikasi JWT aktif. Kunci admin hanya berada di lingkungan Edge Function, bukan di frontend. Fungsi lama `invite-partner` dinonaktifkan.
 
 ## Alur akun
 
 - **Pemain:** daftar, konfirmasi email, lalu gunakan dashboard. Coach adalah profil tambahan dalam akun pemain; paket premium belum dirancang.
 - **Operator:** administrator Supabase menetapkan `app_metadata.smashmate_role = "operator"` pada akun internal. Akun operator proyek saat ini sudah ditetapkan. Masuk ulang agar token memuat peran baru, lalu buka `/operator`.
-- **Mitra GOR:** operator mengirim undangan ke alamat email baru. Mitra membuka tautan undangan saat aplikasi lokal aktif, membuat kata sandi di `/invite`, lalu melengkapi GOR di `/partner/setup`. Mitra tidak dapat mendaftar langsung.
+- **Mitra GOR:** operator membuat akun dengan email yang belum terdaftar dan menerima kata sandi awal sekali. Operator memberikannya langsung kepada Mitra. Saat login pertama, Mitra wajib mengganti kata sandi di `/partner/password`, lalu melengkapi GOR di `/partner/setup`. Mitra tidak dapat mendaftar langsung.
 
-Sebelum hosting, atur **Site URL** dan **Redirect URLs** pada Supabase Auth ke domain aplikasi. Undangan saat ini mengarah ke `http://localhost:3000/invite`; penerima perlu menjalankan aplikasi lokal ketika membuka tautan. Masa berlaku undangan mengikuti pengaturan Supabase Auth.
+Tidak ada email undangan untuk Mitra. Akun yang dibuat operator langsung dapat dipakai dengan kata sandi awal. Konfirmasi email pemain umum tetap menggunakan pengaturan URL Supabase Auth; sebelum hosting, arahkan **Site URL** dan **Redirect URLs** ke domain aplikasi.
 
 ## Batas prototipe
 
 - Checkout mengonfirmasi booking atau pesanan tanpa penagihan uang. Slot lapangan dan stok shuttlecock tetap dihitung di database.
 - Profil coach dibuat sendiri oleh pemain dan belum melalui verifikasi sertifikasi.
-- GOR dan katalog akan kosong sampai operator mengundang Mitra dan Mitra mengisi data. Tidak ada GOR atau ulasan contoh buatan.
+- GOR dan katalog akan kosong sampai operator membuat akun Mitra dan Mitra mengisi data. Tidak ada GOR atau ulasan contoh buatan.
 - Sewa raket hanya tersedia sebagai tambahan booking lapangan dan dihitung per sesi.
 - Pencarian partner menggunakan daftar aktivitas; matchmaking otomatis, rekomendasi AI, payment gateway, dan monetisasi belum tersedia.
 - Rating tersedia setelah jadwal aktivitas dimulai. Moderasi rating belum tersedia.
@@ -67,4 +67,4 @@ npm run lint
 npm run build
 ```
 
-Aturan booking, konflik slot, harga, stok, checkout, pembatalan, dan akses data telah diuji dalam transaksi database yang di-rollback. Pengujian undangan email secara penuh memerlukan email Mitra baru dan sesi operator pada aplikasi lokal.
+Aturan booking, konflik slot, harga, stok, checkout, pembatalan, dan akses data telah diuji dalam transaksi database yang di-rollback. Pengujian pembuatan akun Mitra secara penuh memerlukan email Mitra baru dan sesi operator pada aplikasi lokal.
