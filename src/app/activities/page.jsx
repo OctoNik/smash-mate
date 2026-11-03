@@ -48,10 +48,11 @@ export default async function ActivitiesPage({ searchParams }) {
         {error && <p role="alert" className="profile-message error">{error}</p>}
         {listError && <p role="alert" className="profile-message error">Data aktivitas belum tersedia. Jalankan migrasi Supabase di SQL Editor terlebih dahulu.</p>}
 
-        <nav aria-label="Pilihan aktivitas" className="mt-8 flex flex-wrap gap-2 border-b border-court-950/10 pb-4">
-          {[["explore", "Jelajahi"], ["mine", "Aktivitas saya"], ["create", "Buat aktivitas"]].map(([tab, label]) =>
+        <nav aria-label="Pilihan aktivitas" className="mt-8 flex flex-wrap items-center gap-2 border-b border-court-950/10 pb-4">
+          {[["explore", "Jelajahi"], ["mine", "Aktivitas saya"]].map(([tab, label]) =>
             <Link key={tab} href={tab === "explore" ? "/activities" : `/activities?view=${tab}`} aria-current={view === tab ? "page" : undefined}
               className={`rounded-xl px-4 py-2.5 text-sm font-extrabold ${view === tab ? "bg-court-950 text-white" : "bg-white text-court-950 hover:bg-court-cream"}`}>{label}</Link>)}
+          <Link href="/activities?view=create#new" aria-current={view === "create" ? "page" : undefined} className="btn btn-dark ml-auto">Buat aktivitas</Link>
         </nav>
 
         {view === "create" ? <div className="mt-8 max-w-3xl">
@@ -131,6 +132,11 @@ export default async function ActivitiesPage({ searchParams }) {
               })}
             </div>
           </section>}
+        <div className="mt-10 flex flex-wrap gap-x-5 gap-y-2 border-t border-court-950/10 pt-6 text-sm font-bold text-court-700">
+          <Link href="/coaches" className="hover:underline">Cari coach</Link>
+          <Link href="/communities" className="hover:underline">Jelajahi komunitas</Link>
+          <Link href="/ratings" className="hover:underline">Rating pemain</Link>
+        </div>
       </main>
   );
 }

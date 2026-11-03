@@ -43,18 +43,16 @@ export default function AccountMenu({ name, email, avatarUrl, role }) {
         <div className="account-menu-panel" role="menu" aria-label="Menu akun">
           <div className="account-menu-identity"><strong>{name}</strong><span>{email}</span></div>
           {role !== "operator" && role !== "partner" && <>
-            <Link href="/activities" role="menuitem" onClick={() => setOpen(false)}>Aktivitas</Link>
-            <Link href="/coaches" role="menuitem" onClick={() => setOpen(false)}>Coach</Link>
-            <Link href="/communities" role="menuitem" onClick={() => setOpen(false)}>Komunitas</Link>
-            <Link href="/venues" role="menuitem" onClick={() => setOpen(false)}>Cari GOR & perlengkapan</Link>
+            <Link href="/activities" role="menuitem" className="mobile-menu-link" onClick={() => setOpen(false)}>Main Bareng</Link>
+            <Link href="/venues" role="menuitem" className="mobile-menu-link" onClick={() => setOpen(false)}>Sewa Lapangan</Link>
+            <Link href="/dashboard" role="menuitem" onClick={() => setOpen(false)}>Beranda</Link>
+            <Link href="/activities?view=mine" role="menuitem" onClick={() => setOpen(false)}>Aktivitas saya</Link>
             <Link href="/bookings" role="menuitem" onClick={() => setOpen(false)}>Booking saya</Link>
-            <Link href="/ratings" role="menuitem" onClick={() => setOpen(false)}>Rating pemain</Link>
           </>}
           {role === "partner" && <Link href="/partner" role="menuitem" onClick={() => setOpen(false)}>Kelola GOR</Link>}
           {role === "operator" && <Link href="/operator" role="menuitem" onClick={() => setOpen(false)}>Panel operator</Link>}
           <Link href="/profile" role="menuitem" onClick={() => setOpen(false)}>Profil saya</Link>
           <Link href="/settings" role="menuitem" onClick={() => setOpen(false)}>Pengaturan</Link>
-          <Link href="/feedback" role="menuitem" onClick={() => setOpen(false)}>Kirim feedback</Link>
           <form action={logout}><SubmitButton role="menuitem" pendingText="Sedang keluar...">Keluar dari akun</SubmitButton></form>
         </div>
       )}

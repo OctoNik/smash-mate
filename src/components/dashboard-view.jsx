@@ -5,59 +5,61 @@ import AccountHeader from "@/components/account-header";
 
 export const instant = false;
 
-const quickActions = [
-  { icon: "◎", title: "Cari mabar", description: "Temukan aktivitas sesuai level dan waktu bermain.", label: "Lihat aktivitas", href: "/activities" },
-  { icon: "+", title: "Buat match", description: "Atur jadwal dan buka slot untuk pemain lain.", label: "Buat aktivitas", href: "/activities?view=create#new" },
-  { icon: "⌁", title: "Sesi latihan", description: "Buat atau ikuti latihan bersama pemain lain.", label: "Lihat latihan", href: "/activities" },
-  { icon: "◇", title: "Host event", description: "Siapkan event untuk pemain atau komunitas.", label: "Buat event", href: "/activities?view=create#new" },
-  { icon: "🏸", title: "GOR & perlengkapan", description: "Booking lapangan, sewa raket, dan pesan shuttlecock dari mitra.", label: "Cari GOR", href: "/venues" },
-  { icon: "◈", title: "Coach", description: "Temukan coach atau aktifkan profil untuk mengadakan latihan.", label: "Lihat coach", href: "/coaches" },
-  { icon: "○", title: "Komunitas", description: "Buat komunitas, gabung, dan selenggarakan event bersama.", label: "Lihat komunitas", href: "/communities" },
-  { icon: "★", title: "Rating pemain", description: "Nilai pemain yang pernah ikut aktivitas bersama Anda.", label: "Beri rating", href: "/ratings" },
-  { icon: "✦", title: "Feedback", description: "Bagikan masalah dan ide untuk SmashMate.", label: "Kirim masukan", href: "/feedback" },
-];
+const kindLabels = { match: "Mabar", coaching: "Latihan", event: "Event" };
 
 export default async function DashboardView() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login?error=Silakan masuk untuk membuka dashboard.");
+  if (user.app_metadata?.smashmate_role === "partner" && user.app_metadata?.password_setup_required === true) redirect("/partner/password");
+  if (user.app_metadata?.smashmate_role === "operator") redirect("/operator");
+  if (user.app_metadata?.smashmate_role === "partner") redirect("/partner");
 
   const fullName = typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name.trim()
-    ? user.user_metadata.full_name.trim()
-    : user.email?.split("@")[0] ?? "Pemain";
-  const firstName = fullName.split(" ")[0];
-  const role = user.app_metadata?.smashmate_role;
-  if (role === "partner" && user.app_metadata?.password_setup_required === true) redirect("/partner/password");
-  if (role === "operator") redirect("/operator");
-  if (role === "partner") redirect("/partner");
+    ? user.user_metadata.full_name.trim() : user.email?.split("@")[0] ?? "Pemain";
+  const [{ data: joinedRows }, { data: hostedRows }] = await Promise.all([
+    supabase.from("activity_participants").select("activity_id").eq("user_id", user.id).limit(100),
+    supabase.from("activities").select("id").eq("host_id", user.id)
+      .gte("starts_at", new Date().toISOString()).limit(100),
+  ]);
+  const activityIds = [...new Set([...(joinedRows ?? []).map((row) => row.activity_id), ...(hostedRows ?? []).map((row) => row.id)])];
+  const { data: schedule } = activityIds.length ? await supabase.from("activities")
+    .select("id,host_id,kind,title,location,starts_at")
+    .in("id", activityIds).gte("starts_at", new Date().toISOString())
+    .order("starts_at", { ascending: true }).limit(3) : { data: [] };
 
-  return (
-    <div className="dashboard-shell">
-      <AccountHeader name={fullName} email={user.email ?? ""} user={user} />
+  return <div className="dashboard-shell min-h-screen">
+    <AccountHeader name={fullName} email={user.email ?? ""} user={user} />
+    <main className="shell py-8 sm:py-11">
+      <p className="eyebrow">Beranda pemain</p>
+      <h1 className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">Halo, {fullName.split(" ")[0]}</h1>
+      <p className="mt-2 text-sm text-court-950/65">Mau main bareng atau mencari lapangan hari ini?</p>
 
-      <main className="shell py-8 sm:py-10">
-        <div className="mb-8 flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="eyebrow">{role === "operator" ? "Operator dashboard" : role === "partner" ? "Mitra GOR dashboard" : "Player dashboard"}</p><h1 className="font-display text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">Halo, {firstName} 👋</h1><p className="mt-2 text-sm text-court-950/60">Atur profil, temukan aktivitas, dan siapkan perlengkapan bermain.</p></div><p className="rounded-full bg-white px-4 py-2 text-[10px] font-extrabold uppercase tracking-[.14em] text-court-700">Akun aktif · {role === "operator" ? "Operator" : role === "partner" ? "Mitra GOR" : "Player"}</p></div>
+      <section className="mt-8 grid gap-4 md:grid-cols-2" aria-label="Mulai bermain">
+        <Link href="/activities" className="dashboard-card dashboard-choice-primary flex min-h-52 flex-col justify-between p-7">
+          <span className="text-xs font-extrabold uppercase tracking-widest text-court-lime">01 · Main Bareng</span>
+          <div><h2 className="font-display text-2xl font-extrabold">Temukan teman bermain</h2><p className="mt-2 max-w-sm text-sm leading-6 text-white/75">Jelajahi mabar, latihan, dan event; lihat pemainnya sebelum bergabung.</p></div>
+        </Link>
+        <Link href="/venues" className="dashboard-card flex min-h-52 flex-col justify-between p-7 hover:border-court-700">
+          <span className="text-xs font-extrabold uppercase tracking-widest text-court-red">02 · Sewa Lapangan</span>
+          <div><h2 className="font-display text-2xl font-extrabold">Cari GOR dan perlengkapan</h2><p className="mt-2 max-w-sm text-sm leading-6 text-court-950/65">Booking lapangan; tambahkan raket sewa dan shuttlecock dalam satu pesanan host.</p></div>
+        </Link>
+      </section>
 
-        <section className="grid gap-5 lg:grid-cols-[1.55fr_.75fr]">
-          <div className="cta-court min-h-[310px] text-white"><div className="relative z-10 max-w-2xl"><div className="pill pill-dark">Langkah berikutnya</div><h2 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-[-.05em] sm:text-5xl">Kenali levelmu.<br /><span className="text-court-lime">Temukan cara bermain.</span></h2><p className="mt-5 max-w-lg text-sm leading-7 text-white/70">Lengkapi profil lalu jelajahi mabar, latihan, dan event yang dibuat komunitas.</p><div className="mt-7 flex flex-wrap gap-3"><Link href="/activities" className="btn btn-primary">Jelajahi aktivitas</Link><Link href="/profile" className="btn btn-outline">Edit profil</Link></div></div></div>
-          <aside className="dashboard-card p-6">
-            <p className="eyebrow">Akun pemain</p><h2 className="font-display text-xl font-extrabold">Selamat datang di SmashMate</h2>
-            <p className="mt-4 text-sm leading-7 text-court-950/65">Buat atau ikuti mabar, lalu pilih GOR dan perlengkapan yang tersedia. Anda juga bisa mengirim masukan.</p>
-            <div className="mt-8 rounded-xl bg-court-cream p-4 text-xs leading-6 text-court-950/70">Nama dan level bermain dapat diubah dari halaman Profil.</div>
-            <Link href="/profile" className="mt-5 inline-flex text-xs font-extrabold text-court-red hover:underline">Buka profil</Link>
-          </aside>
-        </section>
+      <section className="mt-11" aria-labelledby="schedule-title">
+        <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="eyebrow">Jadwal mendatang</p><h2 id="schedule-title" className="mt-1 font-display text-2xl font-extrabold">Aktivitas saya</h2></div><Link href="/activities?view=mine" className="text-sm font-bold text-court-700 hover:underline">Lihat semua</Link></div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          {(schedule ?? []).length === 0 && <div className="dashboard-card p-6 text-sm text-court-950/65">Belum ada jadwal. Cari kegiatan yang cocok untuk Anda.</div>}
+          {(schedule ?? []).map((activity) => <Link href={`/activities/${activity.id}`} key={activity.id} className="dashboard-card p-5 hover:border-court-700"><span className="activity-tag">{kindLabels[activity.kind]}</span><h3 className="mt-3 font-extrabold">{activity.title}</h3><p className="mt-2 text-xs text-court-950/65">{new Date(activity.starts_at).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", dateStyle: "medium", timeStyle: "short" })} WIB</p><p className="mt-1 text-xs text-court-950/65">{activity.location}</p><p className="mt-3 text-xs font-bold text-court-700">{activity.host_id === user.id ? "Anda host" : "Anda bergabung"}</p></Link>)}
+        </div>
+      </section>
 
-        <section className="mt-12">
-          <div className="flex items-end justify-between"><div><p className="eyebrow">Akses cepat</p><h2 className="font-display text-2xl font-extrabold tracking-[-.035em] sm:text-3xl">Mau main apa hari ini?</h2></div></div>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{quickActions.map((action) => <Link href={action.href} key={action.title} className="quick-card group"><div className="quick-card-icon">{action.icon}</div><h3 className="mt-6 font-display text-lg font-extrabold">{action.title}</h3><p className="mt-2 text-xs leading-6 text-court-950/60">{action.description}</p><span className="mt-5 inline-flex text-[10px] font-black uppercase tracking-[.12em] text-court-700 group-hover:text-court-950">{action.label}</span></Link>)}</div>
-        </section>
-
-        <section className="mt-12 grid gap-5 lg:grid-cols-2">
-          {[["Aktivitas saya", "⌁", "Kelola jadwal bermain", "Lihat match, latihan, atau event yang Anda buat dan ikuti.", "/activities?view=mine"], ["Booking saya", "🏸", "Lapangan & perlengkapan", "Lihat booking lapangan dan perlengkapan yang Anda pesan.", "/bookings"]].map(([eyebrow, icon, title, description, href]) => <Link href={href} key={eyebrow} className="dashboard-card p-6"><p className="eyebrow">{eyebrow}</p><div className="grid min-h-44 place-items-center text-center"><div><span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-court-cream text-court-700">{icon}</span><h3 className="mt-4 font-display text-base font-extrabold">{title}</h3><p className="mx-auto mt-2 max-w-sm text-xs leading-6 text-court-950/60">{description}</p></div></div></Link>)}
-        </section>
-
-      </main>
-    </div>
-  );
+      <section className="mt-11 border-t border-court-950/10 pt-7" aria-labelledby="more-title">
+        <h2 id="more-title" className="font-display text-lg font-extrabold">Lainnya di SmashMate</h2>
+        <div className="mt-4 flex flex-wrap gap-2 text-sm font-bold">
+          {[["Buat aktivitas", "/activities?view=create#new"], ["Coach", "/coaches"], ["Komunitas", "/communities"], ["Rating pemain", "/ratings"], ["Kirim masukan", "/feedback"]].map(([label, href]) => <Link href={href} key={label} className="rounded-full border border-court-950/15 bg-white px-4 py-2 text-court-950 hover:bg-court-cream">{label}</Link>)}
+        </div>
+      </section>
+    </main>
+  </div>;
 }

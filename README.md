@@ -56,7 +56,8 @@ File [`supabase/seed/20261103_initial_venues.sql`](supabase/seed/20261103_initia
 
 Host memilih GOR, lapangan, waktu, raket sewa, dan shuttlecock pada satu formulir booking. Setelah checkout simulasi dikonfirmasi, host dapat membuat mabar, latihan, atau event menggunakan booking tersebut. Peserta hanya perlu bergabung ke aktivitas dan tidak membuat pesanan perlengkapan sendiri. Pembelian shuttlecock terpisah sudah dinonaktifkan.
 
-Halaman aktivitas memiliki tab **Jelajahi**, **Aktivitas saya**, dan **Buat aktivitas**. Kartu kegiatan membuka halaman detail yang menampilkan host, jadwal, lokasi, level, dan nama peserta. Peserta bergabung setelah mengonfirmasi melalui dialog; hasilnya diperbarui di halaman tanpa berpindah ke daftar. **Aktivitas saya** menampilkan kegiatan yang dibuat maupun diikuti, termasuk riwayatnya.
+Halaman aktivitas memiliki tab **Jelajahi** dan **Aktivitas saya**, serta tombol **Buat aktivitas**. Kartu kegiatan membuka halaman detail yang menampilkan host, jadwal, lokasi, level, dan nama peserta. Peserta bergabung setelah mengonfirmasi melalui dialog; hasilnya diperbarui di halaman tanpa berpindah ke daftar. **Aktivitas saya** menampilkan kegiatan yang dibuat maupun diikuti, termasuk riwayatnya.
+Navigasi pemain menonjolkan **Main Bareng** dan **Sewa Lapangan**. Beranda merangkum dua alur utama dan jadwal terdekat; aktivitas, booking, profil, serta pengaturan akun dapat diakses dari menu profil. Coach, komunitas, rating, dan feedback tetap tersedia melalui tautan kontekstual.
 
 Data uji coba saat ini mencakup 10 akun pemain, 2 profil coach, 3 komunitas, 8 aktivitas (termasuk dua lomba), 39 partisipasi, dan 8 booking host. File [`supabase/seed/20261103_active_sample_data.sql`](supabase/seed/20261103_active_sample_data.sql) berisi profil dan kegiatan tersebut tanpa password; jalankan hanya sekali setelah akun pemainnya tersedia. Nama akun dan aktivitas adalah data contoh untuk prototipe. Tidak ada rating atau ulasan buatan.
 
