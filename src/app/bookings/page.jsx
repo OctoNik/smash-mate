@@ -7,6 +7,12 @@ import { payBooking, cancelBooking } from "@/app/venues/actions";
 
 export const instant = false;
 const statusLabels = { pending_payment: "Menunggu checkout simulasi", confirmed: "Dikonfirmasi (simulasi)", cancelled: "Dibatalkan" };
+function Equipment({ booking }) {
+  const items = booking.court_booking_items ?? [];
+  if (items.length) return <ul className="mt-2 space-y-1 text-sm text-court-950/70">{items.map((item) => <li key={item.product_id}>{item.quantity} × {item.product_name} <span className="text-court-950/50">({item.kind === "racket_rental" ? "sewa raket" : "shuttlecock"})</span> · {rupiah(item.unit_price * item.quantity)}</li>)}</ul>;
+  if (booking.racket_quantity > 0 || booking.shuttle_quantity > 0) return <p className="mt-2 text-sm text-court-950/70">Raket sewa: {booking.racket_quantity} · Shuttlecock: {booking.shuttle_quantity} slop</p>;
+  return <p className="mt-2 text-sm text-court-950/60">Tanpa perlengkapan tambahan.</p>;
+}
 
 function BookingActions({ booking, activityId }) {
   if (booking.status === "cancelled") return null;
@@ -23,7 +29,7 @@ function BookingCard({ booking, activityId }) {
     <span className="activity-tag">{statusLabels[booking.status] ?? booking.status}</span>
     <h3 className="mt-4 text-lg font-extrabold">{booking.venues?.name} · {booking.courts?.name}</h3>
     <p className="mt-2 text-sm text-court-950/65">{waktuWib(booking.starts_at)} – {new Date(booking.ends_at).toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit" })} WIB</p>
-    {(booking.racket_quantity > 0 || booking.shuttle_quantity > 0) && <p className="mt-2 text-xs text-court-950/60">Raket sewa: {booking.racket_quantity} · Shuttlecock: {booking.shuttle_quantity} slop</p>}
+    <Equipment booking={booking} />
     <p className="mt-4 text-xl font-extrabold text-court-700">{rupiah(booking.total_amount)}</p>
     <BookingActions booking={booking} activityId={activityId} />
   </article>;
@@ -33,7 +39,7 @@ export default async function BookingsPage({ searchParams }) {
   const { supabase, user, name } = await requirePlayerAccount();
   const { message, error, checkout } = await searchParams;
   const { data: bookings, error: bookingError } = await supabase.from("court_bookings")
-      .select("id,player_name,starts_at,ends_at,total_amount,status,racket_quantity,shuttle_quantity,venues(id,name,address),courts(name)")
+      .select("id,player_name,starts_at,ends_at,total_amount,status,racket_quantity,shuttle_quantity,venues(id,name,address),courts(name),court_booking_items(product_id,kind,product_name,quantity,unit_price)")
       .eq("player_id", user.id).order("created_at", { ascending: false }).limit(30);
   const bookingIds = (bookings ?? []).map((booking) => booking.id);
   const { data: linkedActivities } = bookingIds.length
@@ -58,7 +64,7 @@ export default async function BookingsPage({ searchParams }) {
           <div className="mt-6 border-t border-court-950/10 pt-5"><h3 className="text-sm font-extrabold">Penyewa</h3><p className="mt-2 text-sm">{selectedBooking.player_name} · {user.email}</p></div>
           <div className="mt-5 border-t border-court-950/10 pt-5"><h3 className="text-sm font-extrabold">GOR dan lapangan</h3><p className="mt-2 font-bold">{selectedBooking.venues?.name} · {selectedBooking.courts?.name}</p><p className="mt-1 text-sm text-court-950/65">{selectedBooking.venues?.address}</p>{selectedBooking.venues?.id && <Link href={`/venues/${selectedBooking.venues.id}`} className="mt-2 inline-block text-xs font-bold text-court-700 hover:underline">Lihat GOR</Link>}</div>
           <div className="mt-5 border-t border-court-950/10 pt-5"><h3 className="text-sm font-extrabold">Jadwal bermain</h3><p className="mt-2 text-sm">{waktuWib(selectedBooking.starts_at)} – {new Date(selectedBooking.ends_at).toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit" })} WIB</p></div>
-          <div className="mt-5 border-t border-court-950/10 pt-5"><h3 className="text-sm font-extrabold">Perlengkapan</h3><p className="mt-2 text-sm text-court-950/70">{selectedBooking.racket_quantity > 0 ? `${selectedBooking.racket_quantity} raket sewa` : "Tanpa raket sewa"} · {selectedBooking.shuttle_quantity > 0 ? `${selectedBooking.shuttle_quantity} slop shuttlecock` : "Tanpa shuttlecock"}</p></div>
+          <div className="mt-5 border-t border-court-950/10 pt-5"><h3 className="text-sm font-extrabold">Perlengkapan</h3><Equipment booking={selectedBooking} /></div>
         </div>
         <aside className="dashboard-card p-6 sm:p-8">
           <span className="activity-tag">{statusLabels[selectedBooking.status] ?? selectedBooking.status}</span>
@@ -68,13 +74,13 @@ export default async function BookingsPage({ searchParams }) {
           <BookingActions booking={selectedBooking} activityId={activitiesByBooking.get(selectedBooking.id)} />
         </aside>
       </section>}
-      <section className="mt-9" aria-labelledby="bookings-title">
-        <div className="flex items-end justify-between gap-3"><h2 id="bookings-title" className="text-xl font-extrabold">{selectedBooking ? "Booking lainnya" : "Booking lapangan"}</h2><Link href="/venues" className="text-sm font-bold text-court-700 hover:underline">Cari GOR</Link></div>
+      {!selectedBooking && <section className="mt-9" aria-labelledby="bookings-title">
+        <div className="flex items-end justify-between gap-3"><h2 id="bookings-title" className="text-xl font-extrabold">Booking lapangan</h2><Link href="/venues" className="text-sm font-bold text-court-700 hover:underline">Cari GOR</Link></div>
         <div className="mt-5 grid gap-5 lg:grid-cols-2">
-          {historyBookings.length === 0 && <p className="dashboard-card p-6 text-sm text-court-950/65">{selectedBooking ? "Belum ada booking lain." : "Anda belum memesan lapangan."}</p>}
+          {historyBookings.length === 0 && <p className="dashboard-card p-6 text-sm text-court-950/65">Anda belum memesan lapangan.</p>}
           {historyBookings.map((booking) => <BookingCard booking={booking} activityId={activitiesByBooking.get(booking.id)} key={booking.id} />)}
         </div>
-      </section>
+      </section>}
     </main>
   </div>;
 }

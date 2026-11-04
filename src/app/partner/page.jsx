@@ -20,7 +20,7 @@ export default async function PartnerPage({ searchParams }) {
   const [{ data: courts }, { data: products }, { data: bookings }] = await Promise.all([
     supabase.from("courts").select("id,name,price_per_hour,is_active").eq("venue_id", venue.id).order("name"),
     supabase.from("venue_products").select("id,kind,name,description,price,stock,image_path,is_active").eq("venue_id", venue.id).order("created_at"),
-    supabase.from("court_bookings").select("id,player_name,starts_at,ends_at,total_amount,status,racket_quantity,shuttle_quantity,courts(name)").eq("venue_id", venue.id).order("starts_at", { ascending: false }).limit(50),
+    supabase.from("court_bookings").select("id,player_name,starts_at,ends_at,total_amount,status,racket_quantity,shuttle_quantity,courts(name),court_booking_items(product_id,product_name,quantity,kind)").eq("venue_id", venue.id).order("starts_at", { ascending: false }).limit(50),
   ]);
   return <div className="dashboard-shell min-h-screen">
     <AccountHeader name={name} email={user.email ?? ""} user={user} active="partner" />
@@ -114,7 +114,7 @@ export default async function PartnerPage({ searchParams }) {
 
       <section className="mt-12 scroll-mt-28" aria-labelledby="bookings-heading">
         <h2 id="bookings-heading" className="text-xl font-extrabold">Booking lapangan & perlengkapan</h2>
-        <div className="mt-4 grid gap-4 lg:grid-cols-2">{(bookings ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada booking.</p>}{(bookings ?? []).map((booking) => <article className="dashboard-card p-5" key={booking.id}><div className="flex justify-between gap-2"><strong>{booking.courts?.name}</strong><span className="activity-tag">{status[booking.status]}</span></div><p className="mt-2 text-sm">Host: {booking.player_name}</p><p className="mt-1 text-xs text-court-950/60">{waktuWib(booking.starts_at)} · {rupiah(booking.total_amount)}</p><p className="mt-2 text-xs text-court-950/60">Raket sewa: {booking.racket_quantity} · Shuttlecock: {booking.shuttle_quantity} slop</p></article>)}</div>
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">{(bookings ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada booking.</p>}{(bookings ?? []).map((booking) => <article className="dashboard-card p-5" key={booking.id}><div className="flex justify-between gap-2"><strong>{booking.courts?.name}</strong><span className="activity-tag">{status[booking.status]}</span></div><p className="mt-2 text-sm">Host: {booking.player_name}</p><p className="mt-1 text-xs text-court-950/60">{waktuWib(booking.starts_at)} – {new Date(booking.ends_at).toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit" })} WIB · {rupiah(booking.total_amount)}</p>{booking.court_booking_items?.length ? <ul className="mt-2 space-y-1 text-xs text-court-950/60">{booking.court_booking_items.map((item) => <li key={item.product_id}>{item.quantity} × {item.product_name} ({item.kind === "racket_rental" ? "sewa" : "beli"})</li>)}</ul> : <p className="mt-2 text-xs text-court-950/60">Raket sewa: {booking.racket_quantity} · Shuttlecock: {booking.shuttle_quantity} slop</p>}</article>)}</div>
       </section>
     </main>
   </div>;

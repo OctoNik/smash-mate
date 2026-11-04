@@ -25,8 +25,12 @@ export default async function VenueDetailPage({ params, searchParams }) {
       .eq("venue_id", id).eq("is_active", true).order("created_at"),
     supabase.rpc("venue_busy_slots", { p_venue_id: id }),
   ]);
-  const rentals = (products ?? []).filter((product) => product.kind === "racket_rental" && product.stock > 0);
-  const shuttles = (products ?? []).filter((product) => product.kind === "shuttlecock_sale" && product.stock > 0);
+  const availableProducts = (products ?? []).filter((product) => product.stock > 0).map((product) => ({
+    ...product,
+    imageUrl: product.image_path ? supabase.storage.from("venue-products").getPublicUrl(product.image_path).data.publicUrl : null,
+  }));
+  const rentals = availableProducts.filter((product) => product.kind === "racket_rental");
+  const shuttles = availableProducts.filter((product) => product.kind === "shuttlecock_sale");
   const startingPrice = courts?.length ? Math.min(...courts.map((court) => court.price_per_hour)) : null;
 
   return (
@@ -59,7 +63,7 @@ export default async function VenueDetailPage({ params, searchParams }) {
         {error && <p role="alert" className="profile-message error">{error}</p>}
         <section id="booking" className="mt-10 scroll-mt-28" aria-labelledby="courts-title">
           <h2 id="courts-title" className="font-display text-2xl font-extrabold">Pilih lapangan dan jadwal</h2>
-          <p className="mt-2 text-sm text-court-950/60">Host memilih satu lapangan, lalu menambahkan raket dan shuttlecock jika diperlukan. Peserta mabar cukup bergabung ke aktivitas.</p>
+          <p className="mt-2 text-sm text-court-950/60">Host dapat memilih beberapa jam berurutan dan menambahkan berbagai merek raket atau shuttlecock. Peserta mabar cukup bergabung ke aktivitas.</p>
           <VenueBookingFlow venueId={venue.id} courts={courts ?? []} rentals={rentals} shuttles={shuttles} busySlots={bookings ?? []} openTime={venue.open_time} closeTime={venue.close_time} />
         </section>
         <section className="mt-12" aria-labelledby="catalog-title">

@@ -15,28 +15,22 @@ export async function bookCourt(formData) {
   const courtId = String(formData.get("court_id") ?? "");
   const dateInput = String(formData.get("starts_at") ?? "");
   const duration = Number(formData.get("duration"));
-  const racketId = String(formData.get("racket_id") ?? "");
-  const racketQuantity = Number(formData.get("racket_quantity") ?? 0);
-  const shuttleId = String(formData.get("shuttle_id") ?? "");
-  const shuttleQuantity = Number(formData.get("shuttle_quantity") ?? 0);
+  let items;
+  try { items = JSON.parse(String(formData.get("items_json") ?? "[]")); } catch { items = null; }
   const startsAt = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(dateInput)
     ? new Date(`${dateInput}:00+07:00`) : new Date(NaN);
-  if (!uuid.test(courtId) || ![60, 120].includes(duration) ||
+  if (!uuid.test(courtId) || !Number.isInteger(duration) || duration < 60 || duration > 480 || duration % 60 !== 0 ||
     !Number.isFinite(startsAt.getTime()) || startsAt.getTime() <= Date.now() ||
-    !Number.isInteger(racketQuantity) || racketQuantity < 0 || racketQuantity > 20 ||
-    !Number.isInteger(shuttleQuantity) || shuttleQuantity < 0 || shuttleQuantity > 100 ||
-    (racketQuantity > 0 && !uuid.test(racketId)) ||
-    (shuttleQuantity > 0 && !uuid.test(shuttleId))) {
+    !Array.isArray(items) || items.length > 20 ||
+    items.some((item) => !item || !uuid.test(item.product_id) || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 100) ||
+    new Set(items.map((item) => item.product_id)).size !== items.length) {
     redirect(errorUrl("Periksa jadwal, durasi, dan jumlah perlengkapan.", venueId));
   }
-  const { data: bookingId, error } = await supabase.rpc("book_court", {
+  const { data: bookingId, error } = await supabase.rpc("book_court_with_items", {
     p_court_id: courtId,
     p_starts_at: startsAt.toISOString(),
     p_duration_minutes: duration,
-    p_racket_product_id: racketQuantity ? racketId : null,
-    p_racket_quantity: racketQuantity,
-    p_shuttle_product_id: shuttleQuantity ? shuttleId : null,
-    p_shuttle_quantity: shuttleQuantity,
+    p_items: items,
   });
   if (error || !uuid.test(bookingId ?? "")) redirect(errorUrl("Slot atau stok tidak tersedia. Pilih jadwal/perlengkapan lain.", venueId));
   revalidatePath("/bookings");
