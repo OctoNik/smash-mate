@@ -26,7 +26,7 @@ export default function ActivityParticipation({ activityId, joined, title }) {
       {joined ? "Keluar dari aktivitas" : "Gabung aktivitas"}
     </button>
     {state.error && <p role="alert" className="profile-message error mt-3">{state.error}</p>}
-    <dialog ref={dialogRef} className="w-[min(100%-2rem,28rem)] rounded-2xl border border-court-950/10 bg-white p-0 text-court-950 shadow-2xl backdrop:bg-court-950/65">
+    <dialog ref={dialogRef} className="m-auto w-[min(100%-2rem,28rem)] rounded-2xl border border-court-950/10 bg-white p-0 text-court-950 shadow-2xl backdrop:bg-court-950/65">
       <div className="p-6 sm:p-7">
         <span className="activity-tag">Konfirmasi {joined ? "keluar" : "gabung"}</span>
         <h2 className="mt-4 font-display text-2xl font-extrabold">{joined ? "Keluar dari aktivitas?" : "Siap ikut bermain?"}</h2>
