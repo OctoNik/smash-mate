@@ -9,13 +9,14 @@ const levelLabels = { beginner: "Beginner", intermediate: "Intermediate", profes
 
 export default async function ActivitiesPage({ searchParams }) {
   const { supabase, user } = await requirePlayerAccount();
-  const { error, message, booking_id: requestedBookingId, community_id: requestedCommunityId, view: requestedView } = await searchParams;
+  const { error, message, booking_id: requestedBookingId, community_id: requestedCommunityId, kind: requestedKind, view: requestedView } = await searchParams;
   const view = requestedView === "mine" ? "mine" : requestedView === "create" ? "create" : "explore";
-  const [{ data: bookings }, { data: communities }, { data: memberships }] = await Promise.all([
+  const [{ data: bookings }, { data: communities }, { data: opponents }, { data: memberships }] = await Promise.all([
     supabase.from("court_bookings").select("id,starts_at,venues(name),courts(name)")
       .eq("player_id", user.id).eq("status", "confirmed")
       .gte("starts_at", new Date().toISOString()).order("starts_at").limit(30),
-    supabase.from("communities").select("id,name").eq("owner_id", user.id).order("name").limit(30),
+    supabase.from("communities").select("id,name,owner_id,community_members(user_id,role)").order("name").limit(50),
+    supabase.from("communities").select("id,name").order("name").limit(100),
     view === "mine" ? supabase.from("activity_participants").select("activity_id")
       .eq("user_id", user.id).limit(100) : Promise.resolve({ data: [] }),
   ]);
@@ -58,7 +59,7 @@ export default async function ActivitiesPage({ searchParams }) {
           <section id="new" className="dashboard-card p-6 sm:p-8" aria-labelledby="create-activity-title">
             <h2 id="create-activity-title" className="text-xl font-extrabold">Buat aktivitas</h2>
             <p className="mt-2 text-sm text-court-950/60">Tentukan jenis kegiatan, lapangan, jadwal, dan siapa yang boleh ikut.</p>
-            <ActivityCreateForm bookings={availableBookings} communities={communities ?? []} selectedBookingId={selectedBookingId} selectedCommunityId={requestedCommunityId} />
+            <ActivityCreateForm bookings={availableBookings} communities={(communities ?? []).filter((community) => community.owner_id === user.id || community.community_members?.some((member) => member.user_id === user.id && member.role === "admin"))} opponents={opponents ?? []} selectedBookingId={selectedBookingId} selectedCommunityId={requestedCommunityId} selectedKind={requestedKind} />
           </section>
         </div> : <section className="mt-8" aria-labelledby="activity-list-title">
             <div className="flex flex-wrap items-end justify-between gap-3">

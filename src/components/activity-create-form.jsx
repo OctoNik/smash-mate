@@ -5,14 +5,15 @@ import Link from "@/components/loading-link";
 import SubmitButton from "@/components/submit-button";
 import { createActivity } from "@/app/activities/actions";
 
-export default function ActivityCreateForm({ bookings, communities, selectedBookingId, selectedCommunityId }) {
+export default function ActivityCreateForm({ bookings, communities, opponents = [], selectedBookingId, selectedCommunityId, selectedKind }) {
   const [venueMode, setVenueMode] = useState(selectedBookingId || bookings.length ? "booking" : "own");
   const [bookingId, setBookingId] = useState(selectedBookingId || bookings[0]?.id || "");
+  const [kind, setKind] = useState(selectedKind === "event" ? "event" : "match");
 
   return <form action={createActivity} className="mt-6 space-y-6">
     <div className="grid gap-4 sm:grid-cols-2">
       <label className="profile-label">Jenis kegiatan
-        <select name="kind" className="profile-input" required>
+        <select name="kind" value={kind} onChange={(event) => setKind(event.target.value)} className="profile-input" required>
           <option value="match">Main bareng</option><option value="coaching">Sesi latihan / coaching</option><option value="event">Event / kompetisi</option>
         </select>
       </label>
@@ -52,6 +53,7 @@ export default function ActivityCreateForm({ bookings, communities, selectedBook
       {communities.length > 0 && <label className="profile-label">Penyelenggara
         <select name="community_id" defaultValue={communities.some((community) => community.id === selectedCommunityId) ? selectedCommunityId : ""} className="profile-input"><option value="">Pribadi</option>{communities.map((community) => <option key={community.id} value={community.id}>{community.name}</option>)}</select>
       </label>}
+      {kind === "event" && communities.length > 0 && <label className="profile-label">Komunitas lawan untuk sparring (opsional)<select name="sparring_opponent_id" className="profile-input"><option value="">Bukan sparring antar komunitas</option>{opponents.filter((opponent) => opponent.id !== selectedCommunityId).map((opponent) => <option key={opponent.id} value={opponent.id}>{opponent.name}</option>)}</select></label>}
     </div>
     <label className="profile-label">Info untuk peserta
       <textarea name="description" maxLength={1000} rows={4} className="profile-input" placeholder="Format permainan, perlengkapan yang tersedia, dan hal yang perlu diketahui" />

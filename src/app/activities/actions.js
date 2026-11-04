@@ -22,10 +22,12 @@ export async function createActivity(formData) {
     ? new Date(`${dateInput}:00+07:00`) : new Date(NaN);
   const bookingId = String(formData.get("booking_id") ?? "");
   const communityId = String(formData.get("community_id") ?? "");
+  const opponentId = String(formData.get("sparring_opponent_id") ?? "");
 
   if ((bookingId && !uuidPattern.test(bookingId)) || (communityId && !uuidPattern.test(communityId))) {
     redirect(errorUrl("Booking atau komunitas tidak valid."));
   }
+  if (opponentId && (!uuidPattern.test(opponentId) || !communityId || opponentId === communityId || kind !== "event")) redirect(errorUrl("Komunitas lawan tidak valid."));
   if (bookingId) {
     const { data: existingActivity } = await supabase.from("activities")
       .select("id").eq("booking_id", bookingId).limit(1).maybeSingle();
@@ -38,9 +40,12 @@ export async function createActivity(formData) {
     location = `${booking.venues?.name ?? "GOR"} · ${booking.courts?.name ?? "Lapangan"}`.slice(0, 160);
   }
   if (communityId) {
-    const { data: community } = await supabase.from("communities").select("id")
-      .eq("id", communityId).eq("owner_id", user.id).maybeSingle();
-    if (!community) redirect(errorUrl("Anda hanya dapat mengaitkan komunitas milik sendiri."));
+    const { data: community } = await supabase.from("communities").select("id,owner_id,community_members(user_id,role)").eq("id", communityId).maybeSingle();
+    if (!community || (community.owner_id !== user.id && !community.community_members?.some((member) => member.user_id === user.id && member.role === "admin"))) redirect(errorUrl("Hanya pendiri atau admin dapat membuat kegiatan komunitas."));
+  }
+  if (opponentId) {
+    const { data: opponent } = await supabase.from("communities").select("id").eq("id", opponentId).maybeSingle();
+    if (!opponent) redirect(errorUrl("Komunitas lawan tidak ditemukan."));
   }
 
   if (!kinds.has(kind) || !levels.has(level) || title.length < 5 || title.length > 100 ||
@@ -62,10 +67,12 @@ export async function createActivity(formData) {
     starts_at: startsAt.toISOString(),
     booking_id: bookingId || null,
     community_id: communityId || null,
+    sparring_opponent_id: opponentId || null,
   }).select("id").single();
   if (error || !createdActivity) redirect(errorUrl("Aktivitas belum tersimpan. Coba lagi."));
   revalidatePath("/activities");
   if (communityId) revalidatePath(`/communities/${communityId}`);
+  if (opponentId) revalidatePath(`/communities/${opponentId}`);
   redirect(`/activities/${createdActivity.id}`);
 }
 

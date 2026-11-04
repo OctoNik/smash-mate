@@ -58,13 +58,37 @@ export async function updateCommunity(formData) {
   redirect(`/communities/${id}?message=Profil komunitas diperbarui.`);
 }
 
+export async function setCommunityAdmin(formData) {
+  const { supabase, user } = await requirePlayerAccount();
+  const id = String(formData.get("id") ?? "");
+  const memberId = String(formData.get("member_id") ?? "");
+  const role = String(formData.get("role") ?? "");
+  if (!uuid.test(id) || !uuid.test(memberId) || !["member", "admin"].includes(role)) redirect("/communities?error=Data anggota tidak valid.");
+  const { data: community } = await supabase.from("communities").select("owner_id").eq("id", id).maybeSingle();
+  if (community?.owner_id !== user.id || memberId === user.id) redirect(`/communities/${id}?tab=members&error=Hanya pendiri yang dapat mengatur admin.`);
+  const { data, error } = await supabase.from("community_members").update({ role }).eq("community_id", id).eq("user_id", memberId).select("user_id").maybeSingle();
+  if (error || !data) redirect(`/communities/${id}?tab=members&error=Peran anggota belum tersimpan.`);
+  revalidatePath(`/communities/${id}`);
+  redirect(`/communities/${id}?tab=members&message=Peran anggota diperbarui.`);
+}
+
+export async function deleteCommunity(formData) {
+  const { supabase, user } = await requirePlayerAccount();
+  const id = String(formData.get("id") ?? "");
+  if (!uuid.test(id)) redirect("/communities?error=Komunitas tidak valid.");
+  const { data, error } = await supabase.from("communities").delete().eq("id", id).eq("owner_id", user.id).select("id").maybeSingle();
+  if (error || !data) redirect(`/communities/${id}?error=Komunitas belum dapat dihapus.`);
+  revalidatePath("/communities");
+  redirect("/communities?message=Komunitas dihapus.");
+}
+
 export async function uploadCommunityPhoto(formData) {
   const { supabase, user } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   const file = formData.get("image");
   if (!uuid.test(id) || !(file instanceof File) || file.size < 1 || file.size > 3 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) redirect("/communities?error=Foto harus JPG, PNG, atau WebP maksimal 3 MB.");
-  const { data: owned } = await supabase.from("communities").select("id").eq("id", id).eq("owner_id", user.id).maybeSingle();
-  if (!owned) redirect("/communities?error=Komunitas tidak ditemukan.");
+  const { data: owned } = await supabase.from("communities").select("id,owner_id,community_members(user_id,role)").eq("id", id).maybeSingle();
+  if (!owned || (owned.owner_id !== user.id && !owned.community_members?.some((member) => member.user_id === user.id && member.role === "admin"))) redirect("/communities?error=Komunitas tidak ditemukan.");
   const { count } = await supabase.from("community_photos").select("id", { count: "exact", head: true }).eq("community_id", id);
   if ((count ?? 0) >= 12) redirect(`/communities/${id}?error=Maksimal 12 foto komunitas.`);
   const bytes = Buffer.from(await file.arrayBuffer());
@@ -86,8 +110,8 @@ export async function removeCommunityPhoto(formData) {
   const id = String(formData.get("id") ?? "");
   const photoId = String(formData.get("photo_id") ?? "");
   if (!uuid.test(id) || !uuid.test(photoId)) redirect("/communities?error=Foto tidak valid.");
-  const { data: owned } = await supabase.from("communities").select("id").eq("id", id).eq("owner_id", user.id).maybeSingle();
-  if (!owned) redirect("/communities?error=Komunitas tidak ditemukan.");
+  const { data: owned } = await supabase.from("communities").select("id,owner_id,community_members(user_id,role)").eq("id", id).maybeSingle();
+  if (!owned || (owned.owner_id !== user.id && !owned.community_members?.some((member) => member.user_id === user.id && member.role === "admin"))) redirect("/communities?error=Komunitas tidak ditemukan.");
   const { data: photo } = await supabase.from("community_photos").select("image_path").eq("id", photoId).eq("community_id", id).maybeSingle();
   if (!photo) redirect(`/communities/${id}?error=Foto tidak ditemukan.`);
   const { error } = await supabase.from("community_photos").delete().eq("id", photoId);
