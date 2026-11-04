@@ -5,7 +5,7 @@ import AccountHeader from "@/components/account-header";
 
 export const instant = false;
 
-const kindLabels = { match: "Mabar", coaching: "Latihan", event: "Event" };
+const kindLabels = { match: "Main Bareng", coaching: "Coaching", event: "Event / kompetisi" };
 
 export default async function DashboardView() {
   const supabase = await createClient();
@@ -57,7 +57,7 @@ export default async function DashboardView() {
       <section className="mt-11 border-t border-court-950/10 pt-7" aria-labelledby="more-title">
         <h2 id="more-title" className="font-display text-lg font-extrabold">Lainnya di SmashMate</h2>
         <div className="mt-4 flex flex-wrap gap-2 text-sm font-bold">
-          {[["Buat aktivitas", "/activities?view=create#new"], ["Coach", "/coaches"], ["Komunitas", "/communities"], ["Rating pemain", "/ratings"], ["Kirim masukan", "/feedback"]].map(([label, href]) => <Link href={href} key={label} className="rounded-full border border-court-950/15 bg-white px-4 py-2 text-court-950 hover:bg-court-cream">{label}</Link>)}
+          {[["Buat aktivitas", "/activities?view=create#new"], ["Komunitas", "/communities"], ["Rating pemain", "/ratings"]].map(([label, href]) => <Link href={href} key={label} className="rounded-full border border-court-950/15 bg-white px-4 py-2 text-court-950 hover:bg-court-cream">{label}</Link>)}
         </div>
       </section>
     </main>

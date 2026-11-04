@@ -26,11 +26,6 @@ export async function createActivity(formData) {
   if ((bookingId && !uuidPattern.test(bookingId)) || (communityId && !uuidPattern.test(communityId))) {
     redirect(errorUrl("Booking atau komunitas tidak valid."));
   }
-  if (kind === "coaching") {
-    const { data: coach } = await supabase.from("coach_profiles").select("user_id")
-      .eq("user_id", user.id).eq("is_active", true).maybeSingle();
-    if (!coach) redirect(errorUrl("Aktifkan profil coach dahulu di halaman Coach."));
-  }
   if (bookingId) {
     const { data: existingActivity } = await supabase.from("activities")
       .select("id").eq("booking_id", bookingId).limit(1).maybeSingle();
@@ -70,6 +65,7 @@ export async function createActivity(formData) {
   }).select("id").single();
   if (error || !createdActivity) redirect(errorUrl("Aktivitas belum tersimpan. Coba lagi."));
   revalidatePath("/activities");
+  if (communityId) revalidatePath(`/communities/${communityId}`);
   redirect(`/activities/${createdActivity.id}`);
 }
 

@@ -67,7 +67,7 @@ export default async function ProfilePage({ searchParams }) {
         </div>
         <section id="delete-account" className="dashboard-card mt-5 scroll-mt-28 p-6 sm:p-8" aria-labelledby="delete-account-title">
           <h2 id="delete-account-title" className="text-xl font-extrabold">Hapus akun</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Tindakan ini permanen. Aktivitas, permintaan perlengkapan, dan feedback milik akun akan ikut dihapus.</p>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Tindakan ini permanen. Aktivitas dan permintaan perlengkapan milik akun akan ikut dihapus.</p>
           {accountError && <p role="alert" className="profile-message error">{accountError}</p>}
           <form action={deleteAccount} className="mt-5 max-w-xl space-y-4">
             <label className="profile-label">Ketik HAPUS untuk konfirmasi

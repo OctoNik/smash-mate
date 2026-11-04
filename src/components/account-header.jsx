@@ -15,7 +15,7 @@ export default async function AccountHeader({ name, email, user, active = "dashb
           {role === "operator" ? <Link href="/operator" aria-current={active === "operator" ? "page" : undefined}>Panel operator</Link>
             : role === "partner" ? <><Link href="/partner" aria-current={active === "partner" ? "page" : undefined}>Kelola GOR</Link><Link href="/partner/bookings" aria-current={active === "partner-bookings" ? "page" : undefined}>Dashboard Booking</Link></>
               : <><Link href="/activities" aria-current={active === "activities" ? "page" : undefined}>Main Bareng</Link>
-                <Link href="/venues" aria-current={active === "venues" ? "page" : undefined}>Sewa Lapangan</Link></>}
+                <Link href="/venues" aria-current={active === "venues" ? "page" : undefined}>Sewa Lapangan</Link><Link href="/communities" aria-current={active === "communities" ? "page" : undefined}>Komunitas</Link></>}
         </nav>
         <AccountMenu name={name} email={email} avatarUrl={avatarUrl} role={role} />
       </div>

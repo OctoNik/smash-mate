@@ -4,12 +4,12 @@ import { requirePlayerAccount } from "@/lib/account";
 
 export const instant = false;
 
-const kindLabels = { match: "Mabar", coaching: "Latihan", event: "Event" };
+const kindLabels = { match: "Main Bareng", coaching: "Coaching", event: "Event / kompetisi" };
 const levelLabels = { beginner: "Beginner", intermediate: "Intermediate", professional: "Professional", all: "Semua level" };
 
 export default async function ActivitiesPage({ searchParams }) {
   const { supabase, user } = await requirePlayerAccount();
-  const { error, message, booking_id: requestedBookingId, view: requestedView } = await searchParams;
+  const { error, message, booking_id: requestedBookingId, community_id: requestedCommunityId, view: requestedView } = await searchParams;
   const view = requestedView === "mine" ? "mine" : requestedView === "create" ? "create" : "explore";
   const [{ data: bookings }, { data: communities }, { data: memberships }] = await Promise.all([
     supabase.from("court_bookings").select("id,starts_at,venues(name),courts(name)")
@@ -58,7 +58,7 @@ export default async function ActivitiesPage({ searchParams }) {
           <section id="new" className="dashboard-card p-6 sm:p-8" aria-labelledby="create-activity-title">
             <h2 id="create-activity-title" className="text-xl font-extrabold">Buat aktivitas</h2>
             <p className="mt-2 text-sm text-court-950/60">Tentukan jenis kegiatan, lapangan, jadwal, dan siapa yang boleh ikut.</p>
-            <ActivityCreateForm bookings={availableBookings} communities={communities ?? []} selectedBookingId={selectedBookingId} />
+            <ActivityCreateForm bookings={availableBookings} communities={communities ?? []} selectedBookingId={selectedBookingId} selectedCommunityId={requestedCommunityId} />
           </section>
         </div> : <section className="mt-8" aria-labelledby="activity-list-title">
             <div className="flex flex-wrap items-end justify-between gap-3">
@@ -97,7 +97,6 @@ export default async function ActivitiesPage({ searchParams }) {
             </div>
           </section>}
         <div className="mt-10 flex flex-wrap gap-x-5 gap-y-2 border-t border-court-950/10 pt-6 text-sm font-bold text-court-700">
-          <Link href="/coaches" className="hover:underline">Cari coach</Link>
           <Link href="/communities" className="hover:underline">Jelajahi komunitas</Link>
           <Link href="/ratings" className="hover:underline">Rating pemain</Link>
         </div>

@@ -5,7 +5,7 @@ import Link from "@/components/loading-link";
 import SubmitButton from "@/components/submit-button";
 import { createActivity } from "@/app/activities/actions";
 
-export default function ActivityCreateForm({ bookings, communities, selectedBookingId }) {
+export default function ActivityCreateForm({ bookings, communities, selectedBookingId, selectedCommunityId }) {
   const [venueMode, setVenueMode] = useState(selectedBookingId || bookings.length ? "booking" : "own");
   const [bookingId, setBookingId] = useState(selectedBookingId || bookings[0]?.id || "");
 
@@ -13,7 +13,7 @@ export default function ActivityCreateForm({ bookings, communities, selectedBook
     <div className="grid gap-4 sm:grid-cols-2">
       <label className="profile-label">Jenis kegiatan
         <select name="kind" className="profile-input" required>
-          <option value="match">Main bareng</option><option value="coaching">Latihan dengan coach</option><option value="event">Event komunitas</option>
+          <option value="match">Main bareng</option><option value="coaching">Sesi latihan / coaching</option><option value="event">Event / kompetisi</option>
         </select>
       </label>
       <label className="profile-label">Slot termasuk host
@@ -50,13 +50,13 @@ export default function ActivityCreateForm({ bookings, communities, selectedBook
         <select name="level" className="profile-input" required><option value="all">Semua level</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="professional">Professional</option></select>
       </label>
       {communities.length > 0 && <label className="profile-label">Penyelenggara
-        <select name="community_id" className="profile-input"><option value="">Pribadi</option>{communities.map((community) => <option key={community.id} value={community.id}>{community.name}</option>)}</select>
+        <select name="community_id" defaultValue={communities.some((community) => community.id === selectedCommunityId) ? selectedCommunityId : ""} className="profile-input"><option value="">Pribadi</option>{communities.map((community) => <option key={community.id} value={community.id}>{community.name}</option>)}</select>
       </label>}
     </div>
     <label className="profile-label">Info untuk peserta
       <textarea name="description" maxLength={1000} rows={4} className="profile-input" placeholder="Format permainan, perlengkapan yang tersedia, dan hal yang perlu diketahui" />
     </label>
-    <p className="text-xs leading-6 text-court-950/60">Untuk membuat sesi latihan, aktifkan <Link href="/coaches" className="font-bold text-court-700 underline">profil coach</Link> terlebih dahulu.</p>
+    <p className="text-xs leading-6 text-court-950/60">Siapa pun dapat menjadi host latihan. Jelaskan konsep dan biaya sesi pada judul serta info peserta.</p>
     <SubmitButton className="btn btn-dark w-full" pendingText="Menyimpan kegiatan..." disabled={venueMode === "booking" && !bookings.length}>Terbitkan kegiatan</SubmitButton>
   </form>;
 }

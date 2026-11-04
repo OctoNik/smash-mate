@@ -14,7 +14,7 @@ const hostSteps = [
   ["03", "Pantau peserta", "Lihat siapa yang bergabung dari halaman detail kegiatan."],
 ];
 const extras = [
-  ["Latihan dengan coach", "Pemain yang mengaktifkan profil coach dapat membuka sesi latihan."],
+  ["Latihan dan coaching", "Pemain dapat menjadi host sesi latihan dengan judul dan informasi yang jelas."],
   ["Komunitas dan event", "Buat komunitas, adakan event, dan undang pemain untuk bergabung."],
   ["Perlengkapan dalam booking", "Host menambahkan raket sewa atau shuttlecock dari katalog Mitra GOR."],
   ["Rating setelah bermain", "Pemain dapat memberi penilaian bintang setelah kegiatan dimulai."],
@@ -88,6 +88,6 @@ export default function Home() {
       <section className="precision-cta-section"><div className="precision-shell"><div className="precision-cta"><div><p>Siap bermain?</p><h2>Buka kegiatan pertamamu di SmashMate.</h2><span>Daftar sebagai pemain, lalu cari mabar atau siapkan lapangan untuk temanmu.</span></div><div className="flex flex-wrap gap-3"><Link href="/register" className="precision-button light large">Daftar Gratis</Link><Link href="/login" className="precision-button outline-light large">Masuk</Link></div></div></div></section>
     </main>
 
-    <footer className="precision-footer"><div className="precision-shell"><div className="flex flex-col justify-between gap-8 border-b border-white/10 pb-10 sm:flex-row"><div><BrandLogo /><p>Tempat pemain, coach, komunitas, dan Mitra GOR bertemu untuk bermain badminton.</p></div><div className="flex flex-wrap gap-x-7 gap-y-3 text-sm"><a href="#main-bareng">Main Bareng</a><a href="#sewa-lapangan">Sewa Lapangan</a><a href="#how">Cara Kerja</a></div></div><p className="pt-6 text-xs opacity-45">© 2026 SmashMate Indonesia.</p></div></footer>
+    <footer className="precision-footer"><div className="precision-shell"><div className="flex flex-col justify-between gap-8 border-b border-white/10 pb-10 sm:flex-row"><div><BrandLogo /><p>Tempat pemain, komunitas, dan Mitra GOR bertemu untuk bermain badminton.</p></div><div className="flex flex-wrap gap-x-7 gap-y-3 text-sm"><a href="#main-bareng">Main Bareng</a><a href="#sewa-lapangan">Sewa Lapangan</a><a href="#how">Cara Kerja</a></div></div><p className="pt-6 text-xs opacity-45">© 2026 SmashMate Indonesia.</p></div></footer>
   </div>;
 }

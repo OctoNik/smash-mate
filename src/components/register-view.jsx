@@ -10,7 +10,7 @@ export default async function RegisterView({ searchParams }) {
     <>
       <p className="eyebrow text-court-lime">Buat akun pemain</p>
       <h1 className="font-display text-4xl font-extrabold tracking-[-.045em] text-white">Mulai bermain.</h1>
-      <p className="mt-3 text-sm leading-6 text-white/75">Semua pengguna mulai sebagai pemain. Profil coach dapat diaktifkan setelah masuk.</p>
+      <p className="mt-3 text-sm leading-6 text-white/75">Semua pengguna mulai sebagai pemain dan bisa menjadi host kegiatan.</p>
       {error && <p role="alert" className="mt-6 rounded-xl border border-red-400/25 bg-red-400/8 p-4 text-sm leading-6 text-red-200">{error}</p>}
       {message && <p className="mt-6 rounded-xl border border-court-lime/25 bg-court-lime/8 p-4 text-sm leading-6 text-court-lime">{message}</p>}
       <form action={register} className="mt-8 space-y-5">

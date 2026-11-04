@@ -45,6 +45,7 @@ export default function AccountMenu({ name, email, avatarUrl, role }) {
           {role !== "operator" && role !== "partner" && <>
             <Link href="/activities" role="menuitem" className="mobile-menu-link" onClick={() => setOpen(false)}>Main Bareng</Link>
             <Link href="/venues" role="menuitem" className="mobile-menu-link" onClick={() => setOpen(false)}>Sewa Lapangan</Link>
+            <Link href="/communities" role="menuitem" className="mobile-menu-link" onClick={() => setOpen(false)}>Komunitas</Link>
             <Link href="/dashboard" role="menuitem" onClick={() => setOpen(false)}>Beranda</Link>
             <Link href="/activities?view=mine" role="menuitem" onClick={() => setOpen(false)}>Aktivitas saya</Link>
             <Link href="/bookings" role="menuitem" onClick={() => setOpen(false)}>Booking saya</Link>
