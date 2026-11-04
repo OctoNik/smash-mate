@@ -82,6 +82,47 @@ export async function deleteCommunity(formData) {
   redirect("/communities?message=Komunitas dihapus.");
 }
 
+export async function saveCommunityIdentityImage(formData) {
+  const { supabase, user } = await requirePlayerAccount();
+  const id = String(formData.get("id") ?? "");
+  const kind = String(formData.get("kind") ?? "");
+  const file = formData.get("image");
+  if (!uuid.test(id) || !["avatar", "banner"].includes(kind) || !(file instanceof File) || file.size < 1 || file.size > 3 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) redirect("/communities?error=Foto harus JPG, PNG, atau WebP maksimal 3 MB.");
+  const { data: community } = await supabase.from("communities").select("avatar_path,banner_path").eq("id", id).eq("owner_id", user.id).maybeSingle();
+  if (!community) redirect("/communities?error=Hanya pendiri yang dapat mengubah foto profil dan banner.");
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const jpeg = file.type === "image/jpeg" && bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
+  const png = file.type === "image/png" && bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]));
+  const webp = file.type === "image/webp" && bytes.toString("ascii",0,4) === "RIFF" && bytes.toString("ascii",8,12) === "WEBP";
+  if (!jpeg && !png && !webp) redirect(`/communities/${id}?error=Isi foto tidak sesuai format.`);
+  const path = `${id}/${kind}-${crypto.randomUUID()}.${jpeg ? "jpg" : png ? "png" : "webp"}`;
+  const bucket = supabase.storage.from("community-identity");
+  const { error: uploadError } = await bucket.upload(path, bytes, { contentType: file.type });
+  if (uploadError) redirect(`/communities/${id}?error=Foto belum dapat diunggah.`);
+  const column = kind === "avatar" ? "avatar_path" : "banner_path";
+  const { data, error } = await supabase.from("communities").update({ [column]: path }).eq("id", id).eq("owner_id", user.id).select("id").maybeSingle();
+  if (error || !data) { await bucket.remove([path]); redirect(`/communities/${id}?error=Foto belum dapat disimpan.`); }
+  if (community[column]) await bucket.remove([community[column]]);
+  revalidatePath("/communities"); revalidatePath(`/communities/${id}`);
+  redirect(`/communities/${id}?message=${kind === "avatar" ? "Foto profil" : "Banner"}%20komunitas%20diperbarui.`);
+}
+
+export async function removeCommunityIdentityImage(formData) {
+  const { supabase, user } = await requirePlayerAccount();
+  const id = String(formData.get("id") ?? "");
+  const kind = String(formData.get("kind") ?? "");
+  if (!uuid.test(id) || !["avatar", "banner"].includes(kind)) redirect("/communities?error=Foto tidak valid.");
+  const column = kind === "avatar" ? "avatar_path" : "banner_path";
+  const { data: community } = await supabase.from("communities").select(column).eq("id", id).eq("owner_id", user.id).maybeSingle();
+  if (!community) redirect("/communities?error=Hanya pendiri yang dapat menghapus foto profil dan banner.");
+  if (!community[column]) redirect(`/communities/${id}?error=Foto belum ada.`);
+  const { data, error } = await supabase.from("communities").update({ [column]: null }).eq("id", id).eq("owner_id", user.id).select("id").maybeSingle();
+  if (error || !data) redirect(`/communities/${id}?error=Foto belum dapat dihapus.`);
+  await supabase.storage.from("community-identity").remove([community[column]]);
+  revalidatePath("/communities"); revalidatePath(`/communities/${id}`);
+  redirect(`/communities/${id}?message=Foto%20komunitas%20dihapus.`);
+}
+
 export async function uploadCommunityPhoto(formData) {
   const { supabase, user } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
