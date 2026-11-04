@@ -49,7 +49,7 @@ export default function AccountMenu({ name, email, avatarUrl, role }) {
             <Link href="/activities?view=mine" role="menuitem" onClick={() => setOpen(false)}>Aktivitas saya</Link>
             <Link href="/bookings" role="menuitem" onClick={() => setOpen(false)}>Booking saya</Link>
           </>}
-          {role === "partner" && <Link href="/partner" role="menuitem" onClick={() => setOpen(false)}>Kelola GOR</Link>}
+          {role === "partner" && <><Link href="/partner" role="menuitem" onClick={() => setOpen(false)}>Kelola GOR</Link><Link href="/partner/bookings" role="menuitem" onClick={() => setOpen(false)}>Dashboard Booking</Link></>}
           {role === "operator" && <Link href="/operator" role="menuitem" onClick={() => setOpen(false)}>Panel operator</Link>}
           {role === "partner" || role === "operator"
             ? <Link href="/settings" role="menuitem" onClick={() => setOpen(false)}>Pengaturan akun</Link>

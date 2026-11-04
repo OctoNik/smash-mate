@@ -3,12 +3,10 @@ import Image from "next/image";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
 import { requireAccount } from "@/lib/account";
-import { rupiah, waktuWib } from "@/lib/format";
 import { sampleEquipmentImage, sampleVenueImage } from "@/lib/venue-images";
-import { addCourt, addProduct, addVenueClosure, removeVenueClosure, removeVenuePhoto, updateCourt, updateProduct, updateVenue, uploadProductImage, uploadVenuePhoto } from "./actions";
+import { addCourt, addProduct, addVenueClosure, hideProduct, removeVenueClosure, removeVenuePhoto, updateCourt, updateProduct, updateVenue, uploadProductImage, uploadVenuePhoto } from "./actions";
 
 export const instant = false;
-const status = { pending_payment: "Menunggu checkout", confirmed: "Dikonfirmasi", cancelled: "Dibatalkan" };
 const weekdays = [{ id: 1, label: "Senin" }, { id: 2, label: "Selasa" }, { id: 3, label: "Rabu" }, { id: 4, label: "Kamis" }, { id: 5, label: "Jumat" }, { id: 6, label: "Sabtu" }, { id: 0, label: "Minggu" }];
 const longDate = (value) => new Date(`${value}T12:00:00+07:00`).toLocaleDateString("id-ID", { timeZone: "Asia/Jakarta", day: "numeric", month: "long", year: "numeric" });
 
@@ -21,10 +19,9 @@ export default async function PartnerPage({ searchParams }) {
   if (!venue) return <div className="dashboard-shell min-h-screen"><AccountHeader name={name} email={user.email ?? ""} user={user} active="partner" /><main className="shell py-12"><h1 className="font-display text-3xl font-extrabold">GOR belum terhubung</h1><p className="mt-3 text-sm text-court-950/65">Akun ini belum memiliki GOR. Hubungi operator SmashMate untuk memeriksa pembuatan akun.</p></main></div>;
   if (venue.status === "draft") redirect("/partner/setup");
 
-  const [{ data: courts }, { data: products }, { data: bookings }, { data: closures }, { data: photos }] = await Promise.all([
+  const [{ data: courts }, { data: products }, { data: closures }, { data: photos }] = await Promise.all([
     supabase.from("courts").select("id,name,price_per_hour,is_active").eq("venue_id", venue.id).order("name"),
     supabase.from("venue_products").select("id,kind,name,description,price,stock,image_path,is_active").eq("venue_id", venue.id).order("created_at"),
-    supabase.from("court_bookings").select("id,player_name,starts_at,ends_at,total_amount,status,racket_quantity,shuttle_quantity,courts(name),court_booking_items(product_id,product_name,quantity,kind)").eq("venue_id", venue.id).order("starts_at", { ascending: false }).limit(50),
     supabase.from("venue_closures").select("id,starts_on,ends_on,reason").eq("venue_id", venue.id).order("starts_on").limit(50),
     supabase.from("venue_photos").select("id,image_path,created_at").eq("venue_id", venue.id).order("created_at").limit(8),
   ]);
@@ -33,7 +30,7 @@ export default async function PartnerPage({ searchParams }) {
     <main className="shell py-10 sm:py-14">
       <p className="eyebrow">Panel Mitra GOR</p>
       <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Kelola {venue.name}</h1>
-      <p className="mt-3 text-sm text-court-950/65">Atur lapangan dan katalog, lalu pantau booking host beserta raket dan shuttlecock yang dipesan. Checkout pada prototipe ini adalah simulasi.</p>
+      <p className="mt-3 text-sm text-court-950/65">Perbarui informasi, jadwal, foto, lapangan, dan katalog GOR kapan saja. Booking pemain ada di tab Dashboard Booking.</p>
       {error && <p role="alert" className="profile-message error">{error}</p>}
       {message && <p role="status" className="profile-message success">{message}</p>}
       <nav aria-label="Bagian panel Mitra" className="mt-7 flex flex-wrap gap-2 text-sm font-bold">
@@ -42,13 +39,13 @@ export default async function PartnerPage({ searchParams }) {
         <a href="#photos-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Foto GOR</a>
         <a href="#courts-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Lapangan</a>
         <a href="#products-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Katalog</a>
-        <a href="#bookings-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Booking pemain</a>
       </nav>
 
       <section className="dashboard-card mt-9 scroll-mt-28 p-6 sm:p-8" aria-labelledby="venue-heading">
         <h2 id="venue-heading" className="text-xl font-extrabold">Informasi GOR</h2>
         <form action={updateVenue} className="mt-5 grid gap-4 sm:grid-cols-2">
           <input type="hidden" name="id" value={venue.id} />
+          <label className="profile-label sm:col-span-2">Nama GOR<input name="name" defaultValue={venue.name} minLength={3} maxLength={100} required className="profile-input" /></label>
           <label className="profile-label sm:col-span-2">Deskripsi<textarea name="description" defaultValue={venue.description} maxLength={2000} rows={3} className="profile-input" /></label>
           <label className="profile-label sm:col-span-2">Aturan GOR<textarea name="venue_rules" defaultValue={venue.venue_rules} maxLength={3000} rows={4} placeholder="Contoh: Wajib memakai sepatu olahraga. Dilarang merokok di area lapangan." className="profile-input" /></label>
           <label className="profile-label sm:col-span-2">Alamat<input name="address" defaultValue={venue.address} minLength={10} maxLength={250} required className="profile-input" /></label>
@@ -114,7 +111,7 @@ export default async function PartnerPage({ searchParams }) {
             return <article className="dashboard-card overflow-hidden" key={product.id}>
               <div className="relative h-40 bg-court-cream"><Image src={imageUrl} alt={product.name} fill sizes="(max-width: 640px) 100vw, 33vw" className="object-cover" unoptimized={imageUrl.startsWith("http")} />{!product.image_path && <span className="absolute bottom-2 left-2 rounded-lg bg-court-950/90 px-2 py-1 text-[10px] font-bold text-white">Ilustrasi produk</span>}</div>
               <div className="space-y-4 p-5">
-                <span className="activity-tag">{product.kind === "racket_rental" ? "Sewa raket" : "Jual shuttlecock"}</span>
+                <span className="activity-tag">{product.kind === "racket_rental" ? "Sewa raket" : "Jual shuttlecock"}{!product.is_active && " · Disembunyikan"}</span>
                 <p className="text-xs text-court-950/60">{product.description || "Belum ada deskripsi."}</p>
                 <form action={updateProduct} className="space-y-3">
                   <input type="hidden" name="id" value={product.id} />
@@ -129,6 +126,7 @@ export default async function PartnerPage({ searchParams }) {
                   <label className="profile-label">Foto produk (maks. 3 MB)<input name="image" type="file" accept="image/jpeg,image/png,image/webp" required className="profile-input text-xs" /></label>
                   <SubmitButton className="btn btn-outline-dark mt-3" pendingText="Mengunggah...">Unggah foto</SubmitButton>
                 </form>
+                {product.is_active && <form action={hideProduct} className="border-t border-court-950/10 pt-4"><input type="hidden" name="id" value={product.id} /><SubmitButton className="text-xs font-bold text-court-red hover:underline" pendingText="Menyembunyikan..." confirmMessage="Sembunyikan produk ini dari katalog pemain? Riwayat booking tetap tersimpan.">Hapus dari katalog</SubmitButton></form>}
               </div>
             </article>;
           })}
@@ -145,10 +143,6 @@ export default async function PartnerPage({ searchParams }) {
         </div>
       </section>
 
-      <section className="mt-12 scroll-mt-28" aria-labelledby="bookings-heading">
-        <h2 id="bookings-heading" className="text-xl font-extrabold">Booking lapangan & perlengkapan</h2>
-        <div className="mt-4 grid gap-4 lg:grid-cols-2">{(bookings ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada booking.</p>}{(bookings ?? []).map((booking) => <article className="dashboard-card p-5" key={booking.id}><div className="flex justify-between gap-2"><strong>{booking.courts?.name}</strong><span className="activity-tag">{status[booking.status]}</span></div><p className="mt-2 text-sm">Host: {booking.player_name}</p><p className="mt-1 text-xs text-court-950/60">{waktuWib(booking.starts_at)} – {new Date(booking.ends_at).toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit" })} WIB · {rupiah(booking.total_amount)}</p>{booking.court_booking_items?.length ? <ul className="mt-2 space-y-1 text-xs text-court-950/60">{booking.court_booking_items.map((item) => <li key={item.product_id}>{item.quantity} × {item.product_name} ({item.kind === "racket_rental" ? "sewa" : "beli"})</li>)}</ul> : <p className="mt-2 text-xs text-court-950/60">Raket sewa: {booking.racket_quantity} · Shuttlecock: {booking.shuttle_quantity} slop</p>}</article>)}</div>
-      </section>
     </main>
   </div>;
 }

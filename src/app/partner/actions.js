@@ -45,9 +45,77 @@ export async function publishVenue(formData) {
   redirect("/partner?message=GOR berhasil diterbitkan.");
 }
 
+export async function publishVenueComplete(formData) {
+  const { supabase, user } = await requireAccount();
+  const venueId = String(formData.get("venue_id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+  const description = String(formData.get("description") ?? "").trim();
+  const rules = String(formData.get("venue_rules") ?? "").trim();
+  const address = String(formData.get("address") ?? "").trim();
+  const mapsUrl = String(formData.get("maps_url") ?? "").trim();
+  const contactPhone = String(formData.get("contact_phone") ?? "").trim();
+  const openTime = String(formData.get("open_time") ?? "");
+  const closeTime = String(formData.get("close_time") ?? "");
+  const weekdays = [...new Set(formData.getAll("open_weekdays").map(Number))].sort((a, b) => a - b);
+  let courts, products, map;
+  try {
+    courts = JSON.parse(String(formData.get("courts_json") ?? ""));
+    products = JSON.parse(String(formData.get("products_json") ?? ""));
+    map = new URL(mapsUrl);
+  } catch { redirect(setupError("Periksa data GOR, lapangan, dan katalog.")); }
+  const photos = formData.getAll("photos").filter((file) => file instanceof File && file.size > 0);
+  if (!uuid.test(venueId) || name.length < 3 || name.length > 100 || description.length > 2000 ||
+    rules.length > 3000 || address.length < 10 || address.length > 250 || contactPhone.length > 30 ||
+    map.protocol !== "https:" || !mapsHosts.has(map.hostname) ||
+    !/^\d{2}:\d{2}$/.test(openTime) || !/^\d{2}:\d{2}$/.test(closeTime) || openTime >= closeTime ||
+    weekdays.length < 1 || weekdays.some((day) => !Number.isInteger(day) || day < 0 || day > 6) ||
+    !Array.isArray(courts) || courts.length < 1 || courts.length > 30 ||
+    courts.some((court) => typeof court.name !== "string" || !court.name.trim() || court.name.length > 60 || !Number.isInteger(court.price) || court.price < 0 || court.price > 10000000) ||
+    new Set(courts.map((court) => court.name.trim().toLowerCase())).size !== courts.length ||
+    !Array.isArray(products) || products.length > 30 || products.some((product) => !productKinds.has(product.kind) ||
+      typeof product.name !== "string" || product.name.trim().length < 3 || product.name.length > 100 ||
+      typeof product.description !== "string" || product.description.length > 500 ||
+      !Number.isInteger(product.price) || product.price < 0 || product.price > 10000000 ||
+      !Number.isInteger(product.stock) || product.stock < 0 || product.stock > 100000) ||
+    photos.length > 4 || photos.some((file) => file.size > 3 * 1024 * 1024 || !["image/jpeg", "image/png", "image/webp"].includes(file.type))) {
+    redirect(setupError("Periksa data GOR, jadwal, harga, stok, dan foto (maksimal empat foto, masing-masing 3 MB)."));
+  }
+  const preparedPhotos = [];
+  for (const file of photos) {
+    const bytes = Buffer.from(await file.arrayBuffer());
+    const validJpeg = file.type === "image/jpeg" && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+    const validPng = file.type === "image/png" && bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+    const validWebp = file.type === "image/webp" && bytes.toString("ascii", 0, 4) === "RIFF" && bytes.toString("ascii", 8, 12) === "WEBP";
+    if (!validJpeg && !validPng && !validWebp) redirect(setupError("Isi foto tidak sesuai format."));
+    preparedPhotos.push({ bytes, type: file.type, extension: validJpeg ? "jpg" : validPng ? "png" : "webp" });
+  }
+  const { data: venue } = await supabase.from("venues").select("id").eq("id", venueId).eq("owner_id", user.id).eq("status", "draft").maybeSingle();
+  if (!venue) redirect(setupError("GOR draft tidak ditemukan."));
+  const { error } = await supabase.rpc("publish_venue_complete", {
+    p_venue_id: venueId, p_name: name, p_description: description, p_rules: rules,
+    p_address: address, p_maps_url: mapsUrl, p_contact_phone: contactPhone,
+    p_open_time: openTime, p_close_time: closeTime, p_open_weekdays: weekdays,
+    p_courts: courts, p_products: products,
+  });
+  if (error) redirect(setupError("GOR belum dapat diterbitkan. Periksa nama lapangan dan data katalog."));
+  let failedPhotos = 0;
+  for (const photo of preparedPhotos) {
+    const path = `${venueId}/venues/${crypto.randomUUID()}.${photo.extension}`;
+    const { error: uploadError } = await supabase.storage.from("venue-products").upload(path, photo.bytes, { contentType: photo.type, cacheControl: "3600" });
+    if (uploadError) { failedPhotos++; continue; }
+    const { error: insertError } = await supabase.from("venue_photos").insert({ venue_id: venueId, image_path: path });
+    if (insertError) { failedPhotos++; await supabase.storage.from("venue-products").remove([path]); }
+  }
+  revalidatePath("/partner");
+  revalidatePath("/venues");
+  redirect(failedPhotos ? "/partner?error=GOR%20terbit%2C%20tetapi%20sebagian%20foto%20belum%20tersimpan.%20Unggah%20lagi%20di%20Kelola%20GOR."
+    : "/partner?message=Setup%20GOR%20selesai.%20Anda%20masih%20bisa%20mengubah%20data%20di%20Kelola%20GOR.");
+}
+
 export async function updateVenue(formData) {
   const { supabase, user } = await requireAccount();
   const id = String(formData.get("id") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const venueRules = String(formData.get("venue_rules") ?? "").trim();
   const address = String(formData.get("address") ?? "").trim();
@@ -58,14 +126,14 @@ export async function updateVenue(formData) {
   const openWeekdays = [...new Set(formData.getAll("open_weekdays").map(Number))].sort((a, b) => a - b);
   let map;
   try { map = new URL(mapsUrl); } catch { redirect(partnerError("Tautan Google Maps tidak valid.")); }
-  if (!uuid.test(id) || description.length > 2000 || venueRules.length > 3000 || address.length < 10 || address.length > 250 ||
+  if (!uuid.test(id) || name.length < 3 || name.length > 100 || description.length > 2000 || venueRules.length > 3000 || address.length < 10 || address.length > 250 ||
     contactPhone.length > 30 || map.protocol !== "https:" || !mapsHosts.has(map.hostname) ||
     !/^\d{2}:\d{2}$/.test(openTime) || !/^\d{2}:\d{2}$/.test(closeTime) || openTime >= closeTime ||
     openWeekdays.length < 1 || openWeekdays.some((day) => !Number.isInteger(day) || day < 0 || day > 6)) {
     redirect(partnerError("Periksa data GOR."));
   }
   const { data, error } = await supabase.from("venues").update({
-    description, venue_rules: venueRules, address, contact_phone: contactPhone, maps_url: mapsUrl,
+    name, description, venue_rules: venueRules, address, contact_phone: contactPhone, maps_url: mapsUrl,
     open_time: openTime, close_time: closeTime, open_weekdays: openWeekdays,
   }).eq("id", id).eq("owner_id", user.id).select("id").maybeSingle();
   if (error?.message?.includes("existing booking")) redirect(partnerError("Jadwal buka baru berbenturan dengan booking aktif. Selesaikan booking tersebut dahulu."));
@@ -224,6 +292,20 @@ export async function updateProduct(formData) {
   revalidatePath("/partner");
   revalidatePath("/venues");
   redirect("/partner?message=Produk diperbarui.");
+}
+
+export async function hideProduct(formData) {
+  const { supabase, user } = await requireAccount();
+  const id = String(formData.get("id") ?? "");
+  if (!uuid.test(id)) redirect(partnerError("Produk tidak valid."));
+  const { data: product } = await supabase.from("venue_products").select("venue_id,venues!inner(owner_id)").eq("id", id).maybeSingle();
+  if (!product || product.venues?.owner_id !== user.id) redirect(partnerError("Produk tidak ditemukan."));
+  const { error } = await supabase.from("venue_products").update({ is_active: false }).eq("id", id);
+  if (error) redirect(partnerError("Produk belum dapat disembunyikan."));
+  revalidatePath("/partner");
+  revalidatePath("/venues");
+  revalidatePath(`/venues/${product.venue_id}`);
+  redirect("/partner?message=Produk disembunyikan dari katalog. Anda bisa mengaktifkannya lagi kapan saja.");
 }
 
 export async function uploadProductImage(formData) {
