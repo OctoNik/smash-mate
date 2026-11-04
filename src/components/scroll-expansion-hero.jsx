@@ -51,7 +51,6 @@ export default function ScrollExpansionHero() {
             <Link href="/login?next=%2Factivities" className="precision-button primary large">Cari Main Bareng</Link>
             <Link href="/login?next=%2Fvenues" className="precision-button secondary large">Cari Lapangan</Link>
           </div>
-          <p className="smash-hero-hint">Scroll untuk melihat lapangan lebih dekat</p>
         </div>
 
         <div className="smash-hero-media">
