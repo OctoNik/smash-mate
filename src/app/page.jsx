@@ -1,6 +1,6 @@
 import Link from "@/components/loading-link";
 import BrandLogo from "@/components/brand-logo";
-import BadmintonHeroMotion from "@/components/badminton-hero-motion";
+import ScrollExpansionHero from "@/components/scroll-expansion-hero";
 import UtilityLoop from "@/components/utility-loop";
 
 const playerSteps = [
@@ -33,18 +33,7 @@ export default function Home() {
     </header>
 
     <main>
-      <section className="precision-hero">
-        <div className="precision-shell grid items-center gap-10 py-14 lg:min-h-[650px] lg:grid-cols-[1.04fr_.96fr] lg:py-20">
-          <div>
-            <span className="precision-badge">🏸 Tempatnya pemain badminton</span>
-            <h1>Temukan mabar.<br /><span>Siapkan lapangan.</span></h1>
-            <p>Cari teman main, buka kegiatan, dan booking GOR dalam satu alur. Host dapat menyiapkan raket dan shuttlecock bersama booking lapangan.</p>
-            <div className="mt-8 flex flex-wrap gap-3"><Link href="/login?next=%2Factivities" className="precision-button primary large">Cari Main Bareng</Link><Link href="/login?next=%2Fvenues" className="precision-button secondary large">Cari Lapangan</Link></div>
-            <p className="mt-5 text-xs text-court-950/55">Baru di SmashMate? <Link href="/register" className="font-bold text-court-red underline">Buat akun gratis</Link>.</p>
-          </div>
-          <BadmintonHeroMotion />
-        </div>
-      </section>
+      <ScrollExpansionHero />
 
       <UtilityLoop />
 

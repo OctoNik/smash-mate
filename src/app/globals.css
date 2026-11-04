@@ -172,6 +172,24 @@ button[aria-busy="true"]{cursor:progress;opacity:.85}
 /* Activity, equipment, and feedback forms. */
 .activity-tag{display:inline-flex;align-items:center;border-radius:999px;background:rgb(80 117 147/.12);padding:.4rem .7rem;color:#022e4a;font-size:.67rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
 .bg-court-950 .activity-tag{background:rgb(255 255 255/.16);color:#fff}
+
+/* Landing hero: the photograph expands with ordinary page scrolling. */
+.smash-hero{--hero-progress:0;position:relative;height:180svh;background:#f8f4ee}
+.smash-hero-sticky{position:sticky;top:76px;height:calc(100svh - 76px);min-height:610px;overflow:hidden}
+.smash-hero-intro{position:relative;z-index:2;padding-top:clamp(2rem,5vh,4rem);text-align:center;opacity:clamp(0,calc(1 - var(--hero-progress)*2.3),1);transform:translateY(calc(var(--hero-progress)*-45px));pointer-events:auto}
+.smash-hero-intro h1{margin-top:1rem;font-family:var(--font-manrope),sans-serif;font-size:clamp(2.5rem,5.2vw,5rem);font-weight:800;letter-spacing:-.06em;line-height:1.05}
+.smash-hero-intro h1 span{color:#56061d}
+.smash-hero-intro>p:not(.smash-hero-hint){max-width:38rem;margin:1rem auto 0;color:rgb(2 46 74/.72);font-size:clamp(.9rem,1.3vw,1.05rem);line-height:1.7}
+.smash-hero-hint{margin-top:1.2rem;color:#507593;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.smash-hero-media{position:absolute;top:calc(70% - var(--hero-progress)*20%);left:50%;width:calc(72vw + var(--hero-progress)*28vw);height:calc(43% + var(--hero-progress)*57%);overflow:hidden;border-radius:calc(1.5rem*(1 - var(--hero-progress)));background:#022e4a;box-shadow:0 25px 80px rgb(2 46 74/.2);transform:translate(-50%,-50%)}
+.smash-hero-media img{object-position:center 54%}
+.smash-hero-media-shade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgb(2 22 36/.78));opacity:clamp(.2,calc(var(--hero-progress)*1.5),1)}
+.smash-hero-caption{position:absolute;right:5vw;bottom:clamp(2rem,8vh,6rem);left:5vw;display:flex;max-width:680px;flex-direction:column;align-items:flex-start;gap:1rem;color:white;opacity:clamp(0,calc((var(--hero-progress) - .55)*2.25),1);transform:translateY(calc((1 - var(--hero-progress))*35px));pointer-events:none}
+.smash-hero-caption span{font-size:.72rem;font-weight:900;letter-spacing:.17em}
+.smash-hero-caption strong{font-family:var(--font-manrope),sans-serif;font-size:clamp(1.7rem,4vw,3.5rem);line-height:1.1}
+.smash-hero-caption a{pointer-events:auto}
+@media(max-width:767px){.smash-hero{height:155svh}.smash-hero-sticky{top:70px;height:calc(100svh - 70px);min-height:520px}.smash-hero-intro{padding-top:2rem}.smash-hero-media{top:calc(73% - var(--hero-progress)*23%);width:calc(90vw + var(--hero-progress)*10vw);height:calc(39% + var(--hero-progress)*61%)}.smash-hero-caption{bottom:2rem}}
+@media(prefers-reduced-motion:reduce){.smash-hero{height:auto}.smash-hero-sticky{position:relative;top:auto;height:82svh;min-height:600px}.smash-hero-intro{opacity:1;transform:none}.smash-hero-media{top:72%;width:90vw;height:38%;border-radius:1.5rem}.smash-hero-caption{display:none}}
 .btn-outline-dark{border:1px solid rgb(2 46 74/.24);background:#fff;color:#022e4a}
 .btn-outline-dark:hover{border-color:#507593;background:#e2d8cb;color:#022e4a}
 textarea.profile-input{resize:vertical;line-height:1.5}
