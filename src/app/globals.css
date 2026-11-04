@@ -160,7 +160,7 @@ button[aria-busy="true"]{cursor:progress;opacity:.85}
 @media (max-width:639px){.account-menu-name{display:none}.account-nav{display:none}}
 @media (prefers-reduced-motion:reduce){.submit-spinner,.loading-shuttle,.loading-track span{animation:none}}
 
-/* Activity, equipment, and feedback forms. */
+/* Activity and equipment forms. */
 .activity-tag{display:inline-flex;align-items:center;border-radius:999px;background:rgb(80 117 147/.12);padding:.4rem .7rem;color:#022e4a;font-size:.67rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
 .bg-court-950 .activity-tag{background:rgb(255 255 255/.16);color:#fff}
 

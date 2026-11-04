@@ -6,12 +6,12 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 
 - Registrasi, konfirmasi email, login, logout, profil pemain, foto profil, dan penghapusan akun.
 - Pembuatan dan partisipasi dalam mabar, sesi latihan, dan event, termasuk rating antar peserta setelah bermain.
-- Profil coach sebagai fitur tambahan akun pemain, serta komunitas yang dapat mengadakan event.
+- Pemain dapat membuat mabar, sesi coaching, atau event. Komunitas memiliki owner dan admin untuk mengelola kegiatan serta galeri.
 - Direktori Mitra GOR dan booking lapangan oleh host, termasuk sewa raket per sesi dan pembelian shuttlecock per slop dalam satu booking. Mitra dapat menambahkan foto produk.
 - Panel Mitra GOR untuk jumlah dan harga lapangan, deskripsi, lokasi Google Maps, katalog, dan daftar booking atas nama pemain.
 - Panel operator internal untuk membuat akun Mitra GOR secara langsung. Lima akun Mitra awal sudah terhubung ke GOR masing-masing. Pendaftaran publik hanya membuat akun pemain.
 - Pemain memiliki halaman profil dan pengaturan gabungan. Mitra GOR dan operator hanya memiliki pengaturan akun; data GOR dikelola di panel Mitra.
-- Checkout simulasi tanpa perpindahan uang, feedback, serta indikator loading pada formulir dan navigasi.
+- Checkout simulasi tanpa perpindahan uang, serta indikator loading pada formulir dan navigasi.
 
 ## Tech stack
 
@@ -39,11 +39,11 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 2. Jalankan `npm ci`, lalu `npm run dev` (gunakan `npm.cmd` jika PowerShell membatasi skrip npm).
 3. Buka `http://localhost:3000`.
 4. Untuk proyek Supabase baru, terapkan seluruh file di [`supabase/migrations`](supabase/migrations) sesuai urutan nama. Semua migrasi sudah diterapkan pada proyek SmashMate saat ini.
-5. Deploy [`delete-account`](supabase/functions/delete-account/index.js) dan [`provision-partner`](supabase/functions/provision-partner/index.js) dengan verifikasi JWT aktif. Kunci admin hanya berada di lingkungan Edge Function, bukan di frontend. Fungsi lama `invite-partner` dinonaktifkan.
+5. Deploy [`delete-account`](supabase/functions/delete-account/index.js) dan [`provision-partner`](supabase/functions/provision-partner/index.js) dengan verifikasi JWT aktif. Kunci admin hanya berada di lingkungan Edge Function, bukan di frontend.
 
 ## Alur akun
 
-- **Pemain:** daftar, konfirmasi email, lalu gunakan dashboard. Coach adalah profil tambahan dalam akun pemain; paket premium belum dirancang.
+- **Pemain:** daftar, konfirmasi email, lalu gunakan dashboard. Sesi coaching dibuat sebagai jenis aktivitas oleh pemain; paket premium belum dirancang.
 - **Operator:** administrator Supabase menetapkan `app_metadata.smashmate_role = "operator"` pada akun internal. Akun operator proyek saat ini sudah ditetapkan. Masuk ulang agar token memuat peran baru, lalu buka `/operator`.
 - **Mitra GOR:** operator membuat akun dengan email yang belum terdaftar dan menerima kata sandi awal sekali. Operator memberikannya langsung kepada Mitra. Saat login pertama, Mitra wajib mengganti kata sandi di `/partner/password`, lalu melengkapi GOR di `/partner/setup`. Mitra tidak dapat mendaftar langsung. Lima GOR awal sudah terisi dan masing-masing dimiliki akun Mitra; setelah mengganti kata sandi, Mitra langsung masuk ke panelnya.
 
@@ -58,20 +58,20 @@ File [`supabase/seed/20261103_initial_venues.sql`](supabase/seed/20261103_initia
 Pemain dapat mencari GOR berdasarkan nama atau kota, harga maksimal, dan ketersediaan perlengkapan. Detail GOR menampilkan deskripsi, lokasi, harga awal, serta slot per lapangan dan tanggal. Host memilih satu slot, raket sewa, dan shuttlecock pada satu formulir booking yang menampilkan estimasi harga. Ketersediaan tetap diperiksa oleh database saat booking dikirim. Checkout simulasi menampilkan ringkasan penyewa, GOR, jadwal, perlengkapan, dan total tanpa metode pembayaran sungguhan. Setelah dikonfirmasi, halaman booking menautkan host langsung ke formulir pembuatan mabar, latihan, atau event dengan booking tersebut terpilih. Host juga dapat membuat kegiatan di lokasi sendiri tanpa booking SmashMate. Peserta hanya perlu bergabung ke aktivitas dan tidak membuat pesanan perlengkapan sendiri. Pembelian shuttlecock terpisah sudah dinonaktifkan.
 
 Halaman aktivitas memiliki tab **Jelajahi** dan **Aktivitas saya**, serta tombol **Buat aktivitas**. Kartu kegiatan dapat diklik dan menampilkan ringkasan peserta; halaman detail menampilkan host, jadwal, lokasi, level, dan nama peserta. Peserta bergabung setelah mengonfirmasi melalui dialog; hasilnya diperbarui di halaman tanpa berpindah ke daftar. **Aktivitas saya** menampilkan kegiatan yang dibuat maupun diikuti, termasuk riwayatnya.
-Navigasi pemain menonjolkan **Main Bareng** dan **Sewa Lapangan**. Landing page memperkenalkan dua alur tersebut dan fitur pendukung dalam bagian singkat. Login mengembalikan pemain ke alur yang dipilih dari landing page. Beranda merangkum dua alur utama dan jadwal terdekat; aktivitas, booking, profil, serta pengaturan akun dapat diakses dari menu profil. Coach, komunitas, rating, dan feedback tetap tersedia melalui tautan kontekstual.
+Navigasi pemain menonjolkan **Main Bareng** dan **Sewa Lapangan**. Landing page memperkenalkan dua alur tersebut. Login mengembalikan pemain ke alur yang dipilih dari landing page. Beranda merangkum jadwal dan tautan utama; aktivitas, booking, komunitas, rating, dan profil dapat diakses dari navigasi aplikasi.
 
-Data uji coba saat ini mencakup 10 akun pemain, 2 profil coach, 3 komunitas, 8 aktivitas (termasuk dua lomba), 39 partisipasi, dan 8 booking host. File [`supabase/seed/20261103_active_sample_data.sql`](supabase/seed/20261103_active_sample_data.sql) berisi profil dan kegiatan tersebut tanpa password; jalankan hanya sekali setelah akun pemainnya tersedia. Nama akun dan aktivitas adalah data contoh untuk prototipe. Tidak ada rating atau ulasan buatan.
+Data uji coba mencakup akun pemain, komunitas, aktivitas, peserta, dan booking host. File [`supabase/seed/20261103_active_sample_data.sql`](supabase/seed/20261103_active_sample_data.sql) adalah arsip seed awal yang dibuat sebelum skema komunitas dan booking diperbarui; jangan jalankan pada skema saat ini. Nama akun dan aktivitas adalah data contoh untuk prototipe. Tidak ada rating atau ulasan buatan.
 
 Tidak ada email undangan untuk Mitra. Akun yang dibuat operator langsung dapat dipakai dengan kata sandi awal. Konfirmasi email pemain umum tetap menggunakan pengaturan URL Supabase Auth; sebelum hosting, arahkan **Site URL** dan **Redirect URLs** ke domain aplikasi.
 
 ## Batas prototipe
 
 - Checkout mengonfirmasi booking host tanpa penagihan uang. Slot lapangan dan stok shuttlecock tetap dihitung di database.
-- Profil coach dibuat sendiri oleh pemain dan belum melalui verifikasi sertifikasi.
+- Sesi coaching dapat dibuat pemain tanpa verifikasi sertifikasi.
 - Kelima GOR serta seluruh harga dan stok awal adalah data contoh untuk tugas; belum ada ulasan buatan. GOR Mitra lain dapat ditambahkan oleh operator.
 - Sewa raket dan pembelian shuttlecock hanya tersedia sebagai tambahan booking lapangan oleh host.
 - Pencarian partner menggunakan daftar aktivitas; matchmaking otomatis, rekomendasi AI, payment gateway, dan monetisasi belum tersedia.
-- Rating tersedia setelah jadwal aktivitas dimulai. Moderasi rating belum tersedia.
+- Rating tersedia setelah jadwal aktivitas berakhir. Moderasi rating belum tersedia.
 - Jadwal ditampilkan dalam WIB.
 
 ## Validasi

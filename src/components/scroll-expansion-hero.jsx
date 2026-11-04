@@ -54,7 +54,7 @@ export default function ScrollExpansionHero() {
         </div>
 
         <div className="smash-hero-media">
-          <Image src="/images/badminton-hero-v2.png" alt="Empat pemain badminton bermain ganda bersama di lapangan indoor" fill priority sizes="100vw" className="object-cover object-center" />
+          <Image src="/images/hero.webp" alt="Pertandingan badminton ganda putri di lapangan indoor" fill priority sizes="100vw" className="object-cover object-center" />
           <div className="smash-hero-media-shade" />
           <div className="smash-hero-caption">
             <span>SMASHMATE · MAIN BARENG</span>
