@@ -18,18 +18,16 @@ export default async function ActivitiesPage({ searchParams }) {
       .gte("starts_at", new Date().toISOString()).order("starts_at").limit(30),
     supabase.from("communities").select("id,name,owner_id,community_members(user_id,role)").order("name").limit(50),
     supabase.from("communities").select("id,name").order("name").limit(100),
-    view === "mine" ? supabase.from("activity_participants").select("activity_id")
+    ["mine", "finished"].includes(view) ? supabase.from("activity_participants").select("activity_id")
       .eq("user_id", user.id).limit(100) : Promise.resolve({ data: [] }),
   ]);
   const activityFields = "id,host_id,host_name,kind,title,description,location,starts_at,duration_minutes,cancelled_at,capacity,level,booking_id,activity_participants(user_id,display_name)";
   let activityQuery = supabase.from("activities").select(activityFields);
-  if (view === "mine") {
+  if (view === "mine" || view === "finished") {
     const joinedIds = (memberships ?? []).map((membership) => membership.activity_id);
     activityQuery = activityQuery.or(`host_id.eq.${user.id}${joinedIds.length ? `,id.in.(${joinedIds.join(",")})` : ""}`)
       .order("starts_at", { ascending: false }).limit(100);
-  } else if (view === "finished") {
-    activityQuery = activityQuery.lt("starts_at", new Date().toISOString()).is("cancelled_at", null)
-      .order("starts_at", { ascending: false }).limit(50);
+    if (view === "finished") activityQuery = activityQuery.lt("starts_at", new Date().toISOString()).is("cancelled_at", null);
   } else {
     activityQuery = activityQuery.gte("starts_at", new Date().toISOString()).is("cancelled_at", null)
       .order("starts_at", { ascending: true }).limit(50);
@@ -69,11 +67,11 @@ export default async function ActivitiesPage({ searchParams }) {
         </div> : <section className="mt-8" aria-labelledby="activity-list-title">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div><h2 id="activity-list-title" className="font-display text-2xl font-extrabold">{view === "mine" ? "Kegiatan yang saya buat dan ikuti" : view === "finished" ? "Kegiatan yang sudah selesai" : "Aktivitas mendatang"}</h2>
-                <p className="mt-2 text-sm text-court-950/60">{view === "mine" ? "Jadwal mendatang dan riwayat aktivitas Anda tersimpan di sini." : "Pilih kegiatan, baca detailnya, lalu tentukan apakah ingin ikut."}</p></div>
+                <p className="mt-2 text-sm text-court-950/60">{view === "mine" ? "Jadwal mendatang dan riwayat aktivitas Anda tersimpan di sini." : view === "finished" ? "Riwayat kegiatan yang Anda ikuti atau selenggarakan." : "Pilih kegiatan, baca detailnya, lalu tentukan apakah ingin ikut."}</p></div>
               {view === "mine" && <Link href="/activities" className="btn btn-outline-dark">Cari kegiatan lain</Link>}
             </div>
             <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {!listError && visibleActivities.length === 0 && <div className="dashboard-card p-8 text-sm text-court-950/65">{view === "mine" ? "Anda belum membuat atau mengikuti aktivitas." : view === "finished" ? "Belum ada kegiatan yang selesai." : "Belum ada aktivitas mendatang. Anda bisa membuat yang pertama."}</div>}
+              {!listError && visibleActivities.length === 0 && <div className="dashboard-card p-8 text-sm text-court-950/65">{view === "mine" ? "Anda belum membuat atau mengikuti aktivitas." : view === "finished" ? "Belum ada kegiatan Anda yang selesai." : "Belum ada aktivitas mendatang. Anda bisa membuat yang pertama."}</div>}
               {visibleActivities.map((activity) => {
                 const participants = activity.activity_participants ?? [];
                 const joined = participants.some((participant) => participant.user_id === user.id);

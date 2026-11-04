@@ -171,6 +171,7 @@ button[aria-busy="true"]{cursor:progress;opacity:.85}
 
 /* Activity, equipment, and feedback forms. */
 .activity-tag{display:inline-flex;align-items:center;border-radius:999px;background:rgb(80 117 147/.12);padding:.4rem .7rem;color:#022e4a;font-size:.67rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+.bg-court-950 .activity-tag{background:rgb(255 255 255/.16);color:#fff}
 .btn-outline-dark{border:1px solid rgb(2 46 74/.24);background:#fff;color:#022e4a}
 .btn-outline-dark:hover{border-color:#507593;background:#e2d8cb;color:#022e4a}
 textarea.profile-input{resize:vertical;line-height:1.5}

@@ -72,7 +72,7 @@ export default async function ActivityDetailPage({ params, searchParams }) {
         <aside className="dashboard-card p-6 sm:p-7 lg:sticky lg:top-24">
           <p className="eyebrow">Status keikutsertaan</p>
           <h2 className="mt-2 font-display text-xl font-extrabold">{activity.cancelled_at ? "Kegiatan dibatalkan" : finished ? "Kegiatan selesai" : isHost ? "Anda host kegiatan ini" : joined ? "Anda sudah bergabung" : remaining === 0 ? "Slot sudah penuh" : upcoming ? "Masih ada tempat" : "Sedang berlangsung"}</h2>
-          <p className="mt-3 text-sm leading-6 text-court-950/65">{isHost ? "Jadwal dan peserta kegiatan ini dapat Anda pantau di sini." : joined ? "Kegiatan ini tersimpan di Aktivitas saya. Datang sesuai jadwal dan lokasi yang tercantum." : "Periksa jadwal, lokasi, dan daftar pemain sebelum bergabung."}</p>
+          <p className="mt-3 text-sm leading-6 text-court-950/65">{activity.cancelled_at ? "Kegiatan ini dibatalkan oleh host." : finished ? isHost || joined ? "Kegiatan ini tersimpan dalam riwayat aktivitas Anda." : "Kegiatan ini telah berakhir." : isHost ? "Jadwal dan peserta kegiatan ini dapat Anda pantau di sini." : joined ? "Kegiatan ini tersimpan di Aktivitas saya. Datang sesuai jadwal dan lokasi yang tercantum." : "Periksa jadwal, lokasi, dan daftar pemain sebelum bergabung."}</p>
           <div className="mt-6">
             {!isHost && upcoming && !activity.cancelled_at && (joined || remaining > 0) && <ActivityParticipation key={joined ? "joined" : "available"} activityId={activity.id} joined={joined} title={activity.title} />}
             {isHost && activity.booking_id && <Link href="/bookings" className="btn btn-outline-dark">Lihat booking host</Link>}
