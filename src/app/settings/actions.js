@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { requireAccount } from "@/lib/account";
 
-const errorUrl = (message) => `/settings?error=${encodeURIComponent(message)}`;
+const errorUrl = (message) => `/profile?account_error=${encodeURIComponent(message)}#delete-account`;
 
 export async function deleteAccount(formData) {
   const confirmation = String(formData.get("confirmation") ?? "").trim();
