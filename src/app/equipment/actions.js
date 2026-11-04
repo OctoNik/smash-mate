@@ -2,14 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 const kinds = new Set(["racket_rental", "shuttle_purchase"]);
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const errorUrl = (message) => `/equipment?error=${encodeURIComponent(message)}`;
 
 export async function createEquipmentRequest(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const kind = String(formData.get("kind") ?? "");
   const quantity = Number(formData.get("quantity"));
   const neededAt = String(formData.get("needed_at") ?? "");
@@ -30,7 +30,7 @@ export async function createEquipmentRequest(formData) {
 }
 
 export async function cancelEquipmentRequest(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuidPattern.test(id)) redirect(errorUrl("Permintaan tidak valid."));
   const { error } = await supabase.rpc("cancel_equipment_request", { p_request_id: id });

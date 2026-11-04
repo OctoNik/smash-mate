@@ -51,7 +51,9 @@ export default function AccountMenu({ name, email, avatarUrl, role }) {
           </>}
           {role === "partner" && <Link href="/partner" role="menuitem" onClick={() => setOpen(false)}>Kelola GOR</Link>}
           {role === "operator" && <Link href="/operator" role="menuitem" onClick={() => setOpen(false)}>Panel operator</Link>}
-          <Link href="/profile" role="menuitem" onClick={() => setOpen(false)}>Profil & pengaturan</Link>
+          {role === "partner" || role === "operator"
+            ? <Link href="/settings" role="menuitem" onClick={() => setOpen(false)}>Pengaturan akun</Link>
+            : <Link href="/profile" role="menuitem" onClick={() => setOpen(false)}>Profil & pengaturan</Link>}
           <form action={logout}><SubmitButton role="menuitem" pendingText="Sedang keluar...">Keluar dari akun</SubmitButton></form>
         </div>
       )}

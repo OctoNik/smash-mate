@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const errorUrl = (message, venueId) => venueId && uuid.test(venueId)
@@ -10,7 +10,7 @@ const errorUrl = (message, venueId) => venueId && uuid.test(venueId)
   : `/bookings?error=${encodeURIComponent(message)}`;
 
 export async function bookCourt(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePlayerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const courtId = String(formData.get("court_id") ?? "");
   const dateInput = String(formData.get("starts_at") ?? "");
@@ -45,7 +45,7 @@ export async function bookCourt(formData) {
 }
 
 async function runBookingAction(formData, functionName, successMessage) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuid.test(id)) redirect(errorUrl("Booking tidak valid."));
   const { error } = await supabase.rpc(functionName, { p_booking_id: id });

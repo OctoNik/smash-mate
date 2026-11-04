@@ -2,12 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function createCommunity(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const city = String(formData.get("city") ?? "").trim();
@@ -22,7 +22,7 @@ export async function createCommunity(formData) {
 }
 
 export async function joinCommunity(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuid.test(id)) redirect("/communities?error=Komunitas tidak valid.");
   const { error } = await supabase.from("community_members").insert({ community_id: id, user_id: user.id });
@@ -32,7 +32,7 @@ export async function joinCommunity(formData) {
 }
 
 export async function leaveCommunity(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuid.test(id)) redirect("/communities?error=Komunitas tidak valid.");
   const { data: community } = await supabase.from("communities").select("owner_id").eq("id", id).maybeSingle();

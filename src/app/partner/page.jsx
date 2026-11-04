@@ -30,8 +30,14 @@ export default async function PartnerPage({ searchParams }) {
       <p className="mt-3 text-sm text-court-950/65">Atur lapangan dan katalog, lalu pantau booking host beserta raket dan shuttlecock yang dipesan. Checkout pada prototipe ini adalah simulasi.</p>
       {error && <p role="alert" className="profile-message error">{error}</p>}
       {message && <p role="status" className="profile-message success">{message}</p>}
+      <nav aria-label="Bagian panel Mitra" className="mt-7 flex flex-wrap gap-2 text-sm font-bold">
+        <a href="#venue-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Informasi GOR</a>
+        <a href="#courts-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Lapangan</a>
+        <a href="#products-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Katalog</a>
+        <a href="#bookings-heading" className="rounded-xl bg-white px-4 py-2.5 text-court-950 hover:bg-court-cream">Booking pemain</a>
+      </nav>
 
-      <section className="dashboard-card mt-9 p-6 sm:p-8" aria-labelledby="venue-heading">
+      <section className="dashboard-card mt-9 scroll-mt-28 p-6 sm:p-8" aria-labelledby="venue-heading">
         <h2 id="venue-heading" className="text-xl font-extrabold">Informasi GOR</h2>
         <form action={updateVenue} className="mt-5 grid gap-4 sm:grid-cols-2">
           <input type="hidden" name="id" value={venue.id} />
@@ -45,7 +51,7 @@ export default async function PartnerPage({ searchParams }) {
         </form>
       </section>
 
-      <section className="mt-12" aria-labelledby="courts-heading">
+      <section className="mt-12 scroll-mt-28" aria-labelledby="courts-heading">
         <h2 id="courts-heading" className="text-xl font-extrabold">Lapangan ({courts?.length ?? 0})</h2>
         <p className="mt-2 text-sm text-court-950/60">Nonaktifkan lapangan yang sedang tidak bisa dipesan.</p>
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -66,7 +72,7 @@ export default async function PartnerPage({ searchParams }) {
         </div>
       </section>
 
-      <section className="mt-12" aria-labelledby="products-heading">
+      <section className="mt-12 scroll-mt-28" aria-labelledby="products-heading">
         <h2 id="products-heading" className="text-xl font-extrabold">Katalog perlengkapan</h2>
         <p className="mt-2 text-sm text-court-950/60">Harga sewa raket berlaku per sesi, dengan stok jumlah raket tersedia. Shuttlecock dijual per slop, dengan stok jumlah slop.</p>
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -106,8 +112,8 @@ export default async function PartnerPage({ searchParams }) {
         </div>
       </section>
 
-      <section className="mt-12" aria-label="Booking pemain">
-        <h2 className="text-xl font-extrabold">Booking lapangan & perlengkapan</h2>
+      <section className="mt-12 scroll-mt-28" aria-labelledby="bookings-heading">
+        <h2 id="bookings-heading" className="text-xl font-extrabold">Booking lapangan & perlengkapan</h2>
         <div className="mt-4 grid gap-4 lg:grid-cols-2">{(bookings ?? []).length === 0 && <p className="dashboard-card p-5 text-sm">Belum ada booking.</p>}{(bookings ?? []).map((booking) => <article className="dashboard-card p-5" key={booking.id}><div className="flex justify-between gap-2"><strong>{booking.courts?.name}</strong><span className="activity-tag">{status[booking.status]}</span></div><p className="mt-2 text-sm">Host: {booking.player_name}</p><p className="mt-1 text-xs text-court-950/60">{waktuWib(booking.starts_at)} · {rupiah(booking.total_amount)}</p><p className="mt-2 text-xs text-court-950/60">Raket sewa: {booking.racket_quantity} · Shuttlecock: {booking.shuttle_quantity} slop</p></article>)}</div>
       </section>
     </main>

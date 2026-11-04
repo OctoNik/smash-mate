@@ -1,13 +1,13 @@
 import Link from "next/link";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 import { createCommunity, joinCommunity, leaveCommunity } from "./actions";
 
 export const instant = false;
 
 export default async function CommunitiesPage({ searchParams }) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePlayerAccount();
   const { error, message } = await searchParams;
   const { data: communities, error: listError } = await supabase.from("communities")
     .select("id,owner_id,name,description,city,community_members(user_id)")

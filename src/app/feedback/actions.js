@@ -2,12 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 const categories = new Set(["bug", "idea", "other"]);
 
 export async function sendFeedback(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const category = String(formData.get("category") ?? "");
   const message = String(formData.get("message") ?? "").trim();
   if (!categories.has(category) || message.length < 10 || message.length > 1000) {

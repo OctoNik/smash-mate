@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 export async function saveCoachProfile(formData) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePlayerAccount();
   const bio = String(formData.get("bio") ?? "").trim();
   const city = String(formData.get("city") ?? "").trim();
   const active = formData.get("is_active") === "on";

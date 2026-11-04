@@ -1,12 +1,12 @@
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 import { submitRating } from "./actions";
 
 export const instant = false;
 
 export default async function RatingsPage({ searchParams }) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePlayerAccount();
   const { error, message } = await searchParams;
   const select = "id,host_id,host_name,title,starts_at,activity_participants(user_id,display_name)";
   const { data: hosted, error: hostedError } = await supabase.from("activities")

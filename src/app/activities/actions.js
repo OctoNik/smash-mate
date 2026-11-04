@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 const kinds = new Set(["match", "coaching", "event"]);
 const levels = new Set(["beginner", "intermediate", "professional", "all"]);
@@ -10,7 +10,7 @@ const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{1
 const errorUrl = (message) => `/activities?view=create&error=${encodeURIComponent(message)}`;
 
 export async function createActivity(formData) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePlayerAccount();
   const kind = String(formData.get("kind") ?? "");
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -74,7 +74,7 @@ export async function createActivity(formData) {
 }
 
 export async function joinActivity(_previousState, formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuidPattern.test(id)) return { error: "Aktivitas tidak valid.", success: false };
   const { error } = await supabase.rpc("join_activity", { p_activity_id: id });
@@ -85,7 +85,7 @@ export async function joinActivity(_previousState, formData) {
 }
 
 export async function leaveActivity(_previousState, formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuidPattern.test(id)) return { error: "Aktivitas tidak valid.", success: false };
   const { data, error } = await supabase.from("activity_participants").delete()
@@ -97,7 +97,7 @@ export async function leaveActivity(_previousState, formData) {
 }
 
 export async function deleteActivity(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuidPattern.test(id)) redirect("/activities?view=mine&error=Aktivitas%20tidak%20valid.");
   const { error } = await supabase.from("activities").delete().eq("id", id).eq("host_id", user.id);

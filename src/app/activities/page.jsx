@@ -1,6 +1,6 @@
 import Link from "@/components/loading-link";
 import ActivityCreateForm from "@/components/activity-create-form";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 export const instant = false;
 
@@ -8,7 +8,7 @@ const kindLabels = { match: "Mabar", coaching: "Latihan", event: "Event" };
 const levelLabels = { beginner: "Beginner", intermediate: "Intermediate", professional: "Professional", all: "Semua level" };
 
 export default async function ActivitiesPage({ searchParams }) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const { error, message, booking_id: requestedBookingId, view: requestedView } = await searchParams;
   const view = requestedView === "mine" ? "mine" : requestedView === "create" ? "create" : "explore";
   const [{ data: bookings }, { data: communities }, { data: memberships }] = await Promise.all([

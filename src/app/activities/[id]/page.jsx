@@ -2,7 +2,7 @@ import Link from "@/components/loading-link";
 import { notFound } from "next/navigation";
 import ActivityParticipation from "@/components/activity-participation";
 import SubmitButton from "@/components/submit-button";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 import { deleteActivity } from "../actions";
 
 export const instant = false;
@@ -15,7 +15,7 @@ const hasNotStarted = (startsAt) => new Date(startsAt).getTime() > Date.now();
 export default async function ActivityDetailPage({ params }) {
   const { id } = await params;
   if (!uuid.test(id)) notFound();
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const { data: activity, error } = await supabase.from("activities")
     .select("id,host_id,host_name,kind,title,description,location,starts_at,capacity,level,booking_id,activity_participants(user_id,display_name,joined_at)")
     .eq("id", id).maybeSingle();

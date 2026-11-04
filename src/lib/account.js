@@ -12,3 +12,10 @@ export async function requireAccount() {
     : user.email?.split("@")[0] ?? "Pemain";
   return { supabase, user, name };
 }
+
+export async function requirePlayerAccount() {
+  const account = await requireAccount();
+  if (account.user.app_metadata?.smashmate_role === "partner") redirect("/partner");
+  if (account.user.app_metadata?.smashmate_role === "operator") redirect("/operator");
+  return account;
+}

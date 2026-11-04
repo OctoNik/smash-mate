@@ -3,16 +3,16 @@
 import { redirect } from "next/navigation";
 import { requireAccount } from "@/lib/account";
 
-const errorUrl = (message) => `/profile?account_error=${encodeURIComponent(message)}#delete-account`;
-
 export async function deleteAccount(formData) {
+  const { supabase, user } = await requireAccount();
+  const settingsPath = ["partner", "operator"].includes(user.app_metadata?.smashmate_role) ? "/settings" : "/profile#delete-account";
+  const errorUrl = (message) => `${settingsPath.split("#")[0]}?account_error=${encodeURIComponent(message)}${settingsPath.includes("#") ? "#delete-account" : ""}`;
   const confirmation = String(formData.get("confirmation") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   if (confirmation !== "HAPUS" || !password || password.length > 256) {
     redirect(errorUrl("Ketik HAPUS dan masukkan kata sandi akun."));
   }
 
-  const { supabase } = await requireAccount();
   const { data, error } = await supabase.functions.invoke("delete-account", {
     body: { confirmation, password },
   });

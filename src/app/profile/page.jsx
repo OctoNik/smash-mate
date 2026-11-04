@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { requireAccount } from "@/lib/account";
 import Link from "@/components/loading-link";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
@@ -10,9 +10,8 @@ import { updateProfile, uploadAvatar } from "./actions";
 export const instant = false;
 
 export default async function ProfilePage({ searchParams }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login?error=Silakan masuk untuk membuka profil.");
+  const { supabase, user } = await requireAccount();
+  if (["partner", "operator"].includes(user.app_metadata?.smashmate_role)) redirect("/settings");
 
   const { message, error, account_error: accountError } = await searchParams;
   const fullName = typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name.trim()

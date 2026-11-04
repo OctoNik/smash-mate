@@ -2,12 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function submitRating(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePlayerAccount();
   const activityId = String(formData.get("activity_id") ?? "");
   const recipientId = String(formData.get("recipient_id") ?? "");
   const stars = Number(formData.get("stars"));

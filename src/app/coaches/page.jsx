@@ -1,13 +1,13 @@
 import Link from "next/link";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 import { saveCoachProfile } from "./actions";
 
 export const instant = false;
 
 export default async function CoachesPage({ searchParams }) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePlayerAccount();
   const { error, message } = await searchParams;
   const [{ data: coaches }, { data: mine }] = await Promise.all([
     supabase.from("coach_profiles").select("user_id,display_name,bio,city")

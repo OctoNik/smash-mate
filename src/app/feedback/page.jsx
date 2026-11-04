@@ -1,6 +1,6 @@
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
-import { requireAccount } from "@/lib/account";
+import { requirePlayerAccount } from "@/lib/account";
 import { sendFeedback } from "./actions";
 
 export const instant = false;
@@ -8,7 +8,7 @@ export const instant = false;
 const categories = { bug: "Laporan masalah", idea: "Ide fitur", other: "Lainnya" };
 
 export default async function FeedbackPage({ searchParams }) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePlayerAccount();
   const { error, message } = await searchParams;
   const { data: entries, error: listError } = await supabase
     .from("feedback")
