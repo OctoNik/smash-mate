@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AccountHeader from "@/components/account-header";
+import VenueSearchForm from "@/components/venue-search-form";
 import { requirePlayerAccount } from "@/lib/account";
 import { rupiah } from "@/lib/format";
 
@@ -34,12 +35,7 @@ export default async function VenuesPage({ searchParams }) {
         <p className="eyebrow">Mitra GOR SmashMate</p>
         <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Cari lapangan badminton</h1>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Lihat lapangan, jadwal, harga, dan perlengkapan yang tersedia dalam satu tempat.</p>
-        <form className="dashboard-card mt-7 grid gap-3 p-4 sm:grid-cols-[1fr_170px_170px_auto]" action="/venues">
-          <input name="q" defaultValue={search} maxLength={80} className="profile-input" placeholder="Cari nama GOR atau kota" aria-label="Cari GOR atau kota" />
-          <select name="max_price" defaultValue={String(maxPrice || "")} className="profile-input" aria-label="Harga maksimal per jam"><option value="">Semua harga</option><option value="100000">Maks. Rp100.000</option><option value="150000">Maks. Rp150.000</option><option value="200000">Maks. Rp200.000</option></select>
-          <select name="gear" defaultValue={gear} className="profile-input" aria-label="Perlengkapan tersedia"><option value="">Semua perlengkapan</option><option value="racket">Ada sewa raket</option><option value="shuttle">Ada shuttlecock</option></select>
-          <button className="btn btn-dark" type="submit">Terapkan</button>
-        </form>
+        <VenueSearchForm search={search} maxPrice={maxPrice} gear={gear} />
         {(search || maxPrice || gear) && <Link href="/venues" className="mt-3 inline-block text-xs font-bold text-court-700 hover:underline">Hapus filter</Link>}
         {error && <p role="alert" className="profile-message error">Daftar GOR belum dapat dimuat.</p>}
         <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
