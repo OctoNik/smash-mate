@@ -49,26 +49,111 @@ export async function updateVenue(formData) {
   const { supabase, user } = await requireAccount();
   const id = String(formData.get("id") ?? "");
   const description = String(formData.get("description") ?? "").trim();
+  const venueRules = String(formData.get("venue_rules") ?? "").trim();
   const address = String(formData.get("address") ?? "").trim();
   const contactPhone = String(formData.get("contact_phone") ?? "").trim();
   const mapsUrl = String(formData.get("maps_url") ?? "").trim();
   const openTime = String(formData.get("open_time") ?? "");
   const closeTime = String(formData.get("close_time") ?? "");
+  const openWeekdays = [...new Set(formData.getAll("open_weekdays").map(Number))].sort((a, b) => a - b);
   let map;
   try { map = new URL(mapsUrl); } catch { redirect(partnerError("Tautan Google Maps tidak valid.")); }
-  if (!uuid.test(id) || description.length > 2000 || address.length < 10 || address.length > 250 ||
+  if (!uuid.test(id) || description.length > 2000 || venueRules.length > 3000 || address.length < 10 || address.length > 250 ||
     contactPhone.length > 30 || map.protocol !== "https:" || !mapsHosts.has(map.hostname) ||
-    !/^\d{2}:\d{2}$/.test(openTime) || !/^\d{2}:\d{2}$/.test(closeTime) || openTime >= closeTime) {
+    !/^\d{2}:\d{2}$/.test(openTime) || !/^\d{2}:\d{2}$/.test(closeTime) || openTime >= closeTime ||
+    openWeekdays.length < 1 || openWeekdays.some((day) => !Number.isInteger(day) || day < 0 || day > 6)) {
     redirect(partnerError("Periksa data GOR."));
   }
   const { data, error } = await supabase.from("venues").update({
-    description, address, contact_phone: contactPhone, maps_url: mapsUrl,
-    open_time: openTime, close_time: closeTime,
+    description, venue_rules: venueRules, address, contact_phone: contactPhone, maps_url: mapsUrl,
+    open_time: openTime, close_time: closeTime, open_weekdays: openWeekdays,
   }).eq("id", id).eq("owner_id", user.id).select("id").maybeSingle();
+  if (error?.message?.includes("existing booking")) redirect(partnerError("Jadwal buka baru berbenturan dengan booking aktif. Selesaikan booking tersebut dahulu."));
   if (error || !data) redirect(partnerError("Profil GOR belum tersimpan."));
   revalidatePath("/partner");
   revalidatePath("/venues");
+  revalidatePath(`/venues/${id}`);
   redirect("/partner?message=Profil GOR diperbarui.");
+}
+
+export async function addVenueClosure(formData) {
+  const { supabase, user } = await requireAccount();
+  const venueId = String(formData.get("venue_id") ?? "");
+  const startsOn = String(formData.get("starts_on") ?? "");
+  const endsOn = String(formData.get("ends_on") ?? "");
+  const reason = String(formData.get("reason") ?? "").trim();
+  const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+  if (!uuid.test(venueId) || !dateFormat.test(startsOn) || !dateFormat.test(endsOn) ||
+    startsOn > endsOn || reason.length > 120) redirect(partnerError("Periksa tanggal dan alasan penutupan."));
+  const { data: venue } = await supabase.from("venues").select("id").eq("id", venueId).eq("owner_id", user.id).maybeSingle();
+  if (!venue) redirect(partnerError("GOR tidak ditemukan."));
+  const { error } = await supabase.from("venue_closures").insert({ venue_id: venueId, starts_on: startsOn, ends_on: endsOn, reason });
+  if (error) redirect(partnerError("Periode tutup belum tersimpan. Periksa apakah sudah ada booking aktif atau periode yang sama."));
+  revalidatePath("/partner");
+  revalidatePath(`/venues/${venueId}`);
+  redirect("/partner?message=Periode tutup berhasil ditambahkan.");
+}
+
+export async function removeVenueClosure(formData) {
+  const { supabase, user } = await requireAccount();
+  const id = String(formData.get("id") ?? "");
+  const venueId = String(formData.get("venue_id") ?? "");
+  if (!uuid.test(id) || !uuid.test(venueId)) redirect(partnerError("Periode tutup tidak valid."));
+  const { data: venue } = await supabase.from("venues").select("id").eq("id", venueId).eq("owner_id", user.id).maybeSingle();
+  if (!venue) redirect(partnerError("GOR tidak ditemukan."));
+  const { data, error } = await supabase.from("venue_closures").delete().eq("id", id).eq("venue_id", venueId).select("id").maybeSingle();
+  if (error || !data) redirect(partnerError("Periode tutup belum dapat dihapus."));
+  revalidatePath("/partner");
+  revalidatePath(`/venues/${venueId}`);
+  redirect("/partner?message=Periode tutup dihapus.");
+}
+
+export async function uploadVenuePhoto(formData) {
+  const { supabase, user } = await requireAccount();
+  const venueId = String(formData.get("venue_id") ?? "");
+  const file = formData.get("image");
+  if (!uuid.test(venueId) || !(file instanceof File) || file.size < 1 || file.size > 3 * 1024 * 1024 ||
+    !["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    redirect(partnerError("Gunakan foto JPG, PNG, atau WebP maksimal 3 MB."));
+  }
+  const { data: venue } = await supabase.from("venues").select("id").eq("id", venueId).eq("owner_id", user.id).maybeSingle();
+  if (!venue) redirect(partnerError("GOR tidak ditemukan."));
+  const { count } = await supabase.from("venue_photos").select("id", { count: "exact", head: true }).eq("venue_id", venueId);
+  if ((count ?? 0) >= 8) redirect(partnerError("Maksimal delapan foto GOR."));
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const validJpeg = file.type === "image/jpeg" && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  const validPng = file.type === "image/png" && bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  const validWebp = file.type === "image/webp" && bytes.toString("ascii", 0, 4) === "RIFF" && bytes.toString("ascii", 8, 12) === "WEBP";
+  if (!validJpeg && !validPng && !validWebp) redirect(partnerError("Isi foto tidak sesuai format."));
+  const extension = validJpeg ? "jpg" : validPng ? "png" : "webp";
+  const path = `${venueId}/venues/${crypto.randomUUID()}.${extension}`;
+  const { error: uploadError } = await supabase.storage.from("venue-products").upload(path, bytes, { contentType: file.type, cacheControl: "3600" });
+  if (uploadError) redirect(partnerError("Foto GOR belum dapat diunggah."));
+  const { error } = await supabase.from("venue_photos").insert({ venue_id: venueId, image_path: path });
+  if (error) {
+    await supabase.storage.from("venue-products").remove([path]);
+    redirect(partnerError("Foto GOR belum tersimpan. Maksimal delapan foto."));
+  }
+  revalidatePath("/partner");
+  revalidatePath("/venues");
+  revalidatePath(`/venues/${venueId}`);
+  redirect("/partner?message=Foto GOR ditambahkan.");
+}
+
+export async function removeVenuePhoto(formData) {
+  const { supabase, user } = await requireAccount();
+  const venueId = String(formData.get("venue_id") ?? "");
+  const photoId = String(formData.get("photo_id") ?? "");
+  if (!uuid.test(venueId) || !uuid.test(photoId)) redirect(partnerError("Foto GOR tidak valid."));
+  const { data: venue } = await supabase.from("venues").select("id").eq("id", venueId).eq("owner_id", user.id).maybeSingle();
+  if (!venue) redirect(partnerError("GOR tidak ditemukan."));
+  const { data: photo, error } = await supabase.from("venue_photos").delete().eq("venue_id", venueId).eq("id", photoId).select("image_path").maybeSingle();
+  if (error || !photo) redirect(partnerError("Foto GOR belum dapat dihapus."));
+  await supabase.storage.from("venue-products").remove([photo.image_path]);
+  revalidatePath("/partner");
+  revalidatePath("/venues");
+  revalidatePath(`/venues/${venueId}`);
+  redirect("/partner?message=Foto GOR dihapus.");
 }
 
 export async function addCourt(formData) {
