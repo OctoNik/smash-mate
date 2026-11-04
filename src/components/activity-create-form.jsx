@@ -44,6 +44,7 @@ export default function ActivityCreateForm({ bookings, communities, opponents = 
         <label className="profile-label">Nama lokasi<input name="location" type="text" className="profile-input" minLength={3} maxLength={160} required placeholder="Nama GOR dan kota" /></label>
         <label className="profile-label">Waktu mulai (WIB)<input name="starts_at" type="datetime-local" className="profile-input" required /></label>
       </div>}
+      {venueMode === "own" && <label className="profile-label mt-4">Durasi bermain (menit)<input name="duration_minutes" type="number" min="30" max="480" step="30" defaultValue="120" required className="profile-input" /></label>}
     </fieldset>
 
     <div className="grid gap-4 sm:grid-cols-2">

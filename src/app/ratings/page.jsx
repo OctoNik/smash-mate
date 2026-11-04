@@ -4,11 +4,12 @@ import { requirePlayerAccount } from "@/lib/account";
 import { submitRating } from "./actions";
 
 export const instant = false;
+const finished = (activity) => !activity.cancelled_at && new Date(activity.starts_at).getTime() + activity.duration_minutes * 60000 <= Date.now();
 
 export default async function RatingsPage({ searchParams }) {
   const { supabase, user, name } = await requirePlayerAccount();
   const { error, message } = await searchParams;
-  const select = "id,host_id,host_name,title,starts_at,activity_participants(user_id,display_name)";
+  const select = "id,host_id,host_name,title,starts_at,duration_minutes,cancelled_at,activity_participants(user_id,display_name)";
   const { data: hosted, error: hostedError } = await supabase.from("activities")
     .select(select).eq("host_id", user.id).lt("starts_at", new Date().toISOString())
     .order("starts_at", { ascending: false }).limit(20);
@@ -21,6 +22,7 @@ export default async function RatingsPage({ searchParams }) {
     : { data: [], error: null };
   const activities = [...(hosted ?? []), ...(attended ?? [])]
     .filter((activity, index, all) => all.findIndex((item) => item.id === activity.id) === index)
+    .filter(finished)
     .sort((a, b) => new Date(b.starts_at) - new Date(a.starts_at));
   const ids = activities.map((activity) => activity.id);
   const { data: ratings, error: ratingsError } = ids.length
@@ -35,7 +37,7 @@ export default async function RatingsPage({ searchParams }) {
       <main className="shell max-w-5xl py-10 sm:py-14">
         <p className="eyebrow">Komunitas SmashMate</p>
         <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Rating pemain</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Beri 1–5 bintang kepada pemain yang ikut aktivitas yang sama. Rating tersedia setelah jadwal aktivitas dimulai.</p>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Beri 1–5 bintang kepada pemain yang ikut aktivitas yang sama. Rating tersedia setelah waktu bermain berakhir.</p>
         {message && <p role="status" className="profile-message success">{message}</p>}
         {error && <p role="alert" className="profile-message error">{error}</p>}
         {listError && <p role="alert" className="profile-message error">Riwayat rating belum dapat dimuat. Coba lagi.</p>}
