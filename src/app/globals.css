@@ -77,6 +77,12 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .dashboard-shell .quick-card:hover .quick-card-icon{background:#56061d;color:#fff}
 .dashboard-shell .eyebrow{color:#56061d}
 .dashboard-shell .dashboard-card{border-color:rgb(2 46 74/.11)}
+.dashboard-shell .booking-court-selected{border-color:#56061d;background:#f8f0ee;box-shadow:0 0 0 2px rgb(86 6 29/.1)}
+.landing-path-card{min-height:18rem;border:1px solid rgb(2 46 74/.1);border-radius:1.15rem;box-shadow:0 14px 38px rgb(2 46 74/.05)}
+.landing-step{display:flex;align-items:flex-start;gap:1rem;border:1px solid rgb(2 46 74/.09);border-radius:.9rem;background:#fff;padding:1.15rem}
+.landing-step b{display:grid;flex:none;width:2.3rem;height:2.3rem;place-items:center;border-radius:.65rem;background:#e2d8cb;color:#56061d;font-size:.75rem}
+.landing-step strong,.landing-step small{display:block}.landing-step strong{font-size:.9rem}.landing-step small{margin-top:.35rem;color:rgb(2 46 74/.62);font-size:.76rem;line-height:1.5}
+.landing-extra-card{min-height:10rem;border:1px solid rgb(2 46 74/.1);border-radius:.9rem;background:#fff;padding:1.4rem}
 .dashboard-shell .dashboard-choice-primary{background:#022e4a;color:#fff}
 .dashboard-shell .dashboard-choice-primary:hover{background:#073b5e}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline-color:#507593}

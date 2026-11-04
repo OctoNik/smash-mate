@@ -2,10 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import AccountHeader from "@/components/account-header";
-import SubmitButton from "@/components/submit-button";
+import VenueBookingFlow from "@/components/venue-booking-flow";
 import { requireAccount } from "@/lib/account";
-import { rupiah, waktuWib } from "@/lib/format";
-import { bookCourt } from "../actions";
+import { rupiah } from "@/lib/format";
 
 export const instant = false;
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -40,30 +39,9 @@ export default async function VenueDetailPage({ params, searchParams }) {
         <div className="mt-5 flex flex-wrap gap-4 text-sm text-court-950/70"><span>{venue.address}</span><span>Buka {String(venue.open_time).slice(0, 5)}–{String(venue.close_time).slice(0, 5)} WIB</span>{venue.maps_url && <a href={venue.maps_url} target="_blank" rel="noopener noreferrer" className="font-bold text-court-700 hover:underline">Buka Google Maps</a>}</div>
         {error && <p role="alert" className="profile-message error">{error}</p>}
         <section className="mt-10" aria-labelledby="courts-title">
-          <h2 id="courts-title" className="font-display text-2xl font-extrabold">Pilih lapangan</h2>
-          <p className="mt-2 text-sm text-court-950/60">Host memesan lapangan dan perlengkapan untuk seluruh pemain. Peserta mabar cukup bergabung ke aktivitas. Waktu menggunakan WIB; pembayaran di sini adalah simulasi.</p>
-          <div className="mt-6 grid gap-5 lg:grid-cols-2">
-            {(courts ?? []).length === 0 && <p className="dashboard-card p-6 text-sm text-court-950/65">Belum ada lapangan yang dapat dipesan saat ini.</p>}
-            {(courts ?? []).map((court) => <article className="dashboard-card p-6" key={court.id}>
-              <div className="flex items-start justify-between gap-3"><h3 className="text-xl font-extrabold">{court.name}</h3><strong className="text-court-700">{rupiah(court.price_per_hour)} / jam</strong></div>
-              <div className="mt-4 rounded-xl bg-court-cream p-4 text-xs leading-6 text-court-950/70">
-                <strong>Jadwal terisi terdekat</strong>
-                {(bookings ?? []).filter((booking) => booking.court_id === court.id).length
-                  ? (bookings ?? []).filter((booking) => booking.court_id === court.id).slice(0, 5).map((booking) =>
-                    <p key={booking.starts_at}>{waktuWib(booking.starts_at)} – {new Date(booking.ends_at).toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit" })} WIB</p>)
-                  : <p>Belum ada jadwal terisi.</p>}
-              </div>
-              <form action={bookCourt} className="mt-5 space-y-3">
-                <input type="hidden" name="venue_id" value={venue.id} />
-                <input type="hidden" name="court_id" value={court.id} />
-                <label className="profile-label">Mulai (WIB)<input type="datetime-local" name="starts_at" required className="profile-input" /></label>
-                <label className="profile-label">Durasi<select name="duration" className="profile-input"><option value="60">1 jam</option><option value="120">2 jam</option></select></label>
-                {rentals.length > 0 && <div className="grid gap-2 sm:grid-cols-[1fr_110px]"><label className="profile-label">Sewa raket (opsional)<select name="racket_id" className="profile-input"><option value="">Tanpa raket</option>{rentals.map((product) => <option key={product.id} value={product.id}>{product.name} · {rupiah(product.price)} / sesi</option>)}</select></label><label className="profile-label">Jumlah<input type="number" name="racket_quantity" min="0" max="20" defaultValue="0" className="profile-input" /></label></div>}
-                {shuttles.length > 0 && <div className="grid gap-2 sm:grid-cols-[1fr_110px]"><label className="profile-label">Beli shuttlecock (opsional, per slop)<select name="shuttle_id" className="profile-input"><option value="">Tanpa shuttlecock</option>{shuttles.map((product) => <option key={product.id} value={product.id}>{product.name} · {rupiah(product.price)} / slop</option>)}</select></label><label className="profile-label">Jumlah slop<input type="number" name="shuttle_quantity" min="0" max="100" defaultValue="0" className="profile-input" /></label></div>}
-                <SubmitButton className="btn btn-dark w-full" pendingText="Memeriksa slot...">Pesan lapangan</SubmitButton>
-              </form>
-            </article>)}
-          </div>
+          <h2 id="courts-title" className="font-display text-2xl font-extrabold">Pilih lapangan dan jadwal</h2>
+          <p className="mt-2 text-sm text-court-950/60">Host memilih satu lapangan, lalu menambahkan raket dan shuttlecock jika diperlukan. Peserta mabar cukup bergabung ke aktivitas.</p>
+          <VenueBookingFlow venueId={venue.id} courts={courts ?? []} rentals={rentals} shuttles={shuttles} busySlots={bookings ?? []} />
         </section>
         <section className="mt-12" aria-labelledby="catalog-title">
           <h2 id="catalog-title" className="font-display text-2xl font-extrabold">Katalog perlengkapan</h2>

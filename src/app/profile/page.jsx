@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import Link from "@/components/loading-link";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
 import { getAvatarUrl } from "@/lib/avatar";
@@ -26,13 +27,14 @@ export default async function ProfilePage({ searchParams }) {
       <main className="shell max-w-5xl py-10 sm:py-14">
         <p className="eyebrow">Akun pemain</p>
         <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Profil saya</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Atur nama, level bermain, dan foto profil untuk aktivitas badminton Anda.</p>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Nama dan level Anda tampil saat membuat atau mengikuti kegiatan. Perbarui keduanya di sini.</p>
 
         <div className="mt-9 grid gap-5 lg:grid-cols-[.72fr_1.28fr]">
           <aside className="dashboard-card p-6">
             <div className="profile-avatar" aria-label={avatarUrl ? `Foto profil ${fullName}` : `Inisial ${fullName}`} style={avatarUrl ? { backgroundImage: `url('${avatarUrl}')`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}>{avatarUrl ? "" : fullName.charAt(0).toUpperCase()}</div>
             <h2 className="mt-5 text-xl font-extrabold">{fullName}</h2>
             <p className="mt-1 break-all text-sm text-court-950/60">{user.email}</p>
+            <span className="activity-tag mt-4">{level === "professional" ? "Professional" : level === "intermediate" ? "Intermediate" : "Beginner"}</span>
             <form action={uploadAvatar} className="mt-6 space-y-3 border-t border-court-950/10 pt-6">
               <label className="profile-label">Foto profil
                 <input name="avatar" type="file" accept="image/jpeg,image/png,image/webp" required className="profile-input file:mr-3 file:rounded-md file:border-0 file:bg-court-cream file:px-3 file:py-1 file:text-court-950" />
@@ -40,6 +42,7 @@ export default async function ProfilePage({ searchParams }) {
               <p className="text-xs leading-5 text-court-950/60">JPG, PNG, atau WebP. Maksimal 2 MB.</p>
               <SubmitButton pendingText="Mengunggah foto..." className="btn btn-outline-dark w-full">Unggah foto</SubmitButton>
             </form>
+            <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 border-t border-court-950/10 pt-5 text-xs font-bold text-court-700"><Link href="/activities?view=mine" className="hover:underline">Aktivitas saya</Link><Link href="/bookings" className="hover:underline">Booking saya</Link><Link href="/settings" className="hover:underline">Pengaturan akun</Link></div>
           </aside>
 
           <section className="dashboard-card p-6 sm:p-8" aria-labelledby="edit-profile-title">
@@ -57,9 +60,6 @@ export default async function ProfilePage({ searchParams }) {
                   <option value="intermediate">Intermediate</option>
                   <option value="professional">Professional</option>
                 </select>
-              </label>
-              <label className="profile-label">Email
-                <input type="email" value={user.email ?? ""} readOnly className="profile-input read-only" />
               </label>
               <SubmitButton pendingText="Menyimpan profil..." className="btn btn-dark">Simpan perubahan</SubmitButton>
             </form>

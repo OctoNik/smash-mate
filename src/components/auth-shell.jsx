@@ -15,12 +15,12 @@ export default function AuthShell({ children }) {
         <div className="relative z-10 max-w-xl">
           <div className="pill pill-dark">🏸 SmashMate account</div>
           <h1 className="mt-6 font-display text-5xl font-extrabold leading-[1.04] tracking-[-.05em] xl:text-6xl">Satu akun.<br /><span className="text-court-lime">Banyak cara bermain.</span></h1>
-          <p className="mt-5 max-w-lg leading-7 text-white/55">Mulai sebagai Player, temukan partner yang tepat, lalu kembangkan pengalaman badminton Anda.</p>
+          <p className="mt-5 max-w-lg leading-7 text-white/75">Mulai sebagai pemain, temukan partner yang tepat, lalu kembangkan pengalaman badminton Anda.</p>
           <div className="mt-10 grid grid-cols-3 gap-3">
             {features.map(([number, text]) => <div key={number} className="auth-feature"><span>{number}</span><p>{text}</p></div>)}
           </div>
         </div>
-        <p className="relative z-10 text-xs text-white/30">© 2026 SmashMate Indonesia</p>
+        <p className="relative z-10 text-xs text-white/60">© 2026 SmashMate Indonesia</p>
       </section>
 
       <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-10 sm:px-10">

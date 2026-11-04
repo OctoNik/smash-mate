@@ -29,7 +29,7 @@ export async function bookCourt(formData) {
     (shuttleQuantity > 0 && !uuid.test(shuttleId))) {
     redirect(errorUrl("Periksa jadwal, durasi, dan jumlah perlengkapan.", venueId));
   }
-  const { error } = await supabase.rpc("book_court", {
+  const { data: bookingId, error } = await supabase.rpc("book_court", {
     p_court_id: courtId,
     p_starts_at: startsAt.toISOString(),
     p_duration_minutes: duration,
@@ -38,10 +38,10 @@ export async function bookCourt(formData) {
     p_shuttle_product_id: shuttleQuantity ? shuttleId : null,
     p_shuttle_quantity: shuttleQuantity,
   });
-  if (error) redirect(errorUrl("Slot atau stok tidak tersedia. Pilih jadwal/perlengkapan lain.", venueId));
+  if (error || !uuid.test(bookingId ?? "")) redirect(errorUrl("Slot atau stok tidak tersedia. Pilih jadwal/perlengkapan lain.", venueId));
   revalidatePath("/bookings");
   revalidatePath(`/venues/${venueId}`);
-  redirect("/bookings?message=Booking dibuat. Selesaikan pembayaran simulasi.");
+  redirect(`/bookings?checkout=${bookingId}&message=Booking%20dibuat.%20Selesaikan%20checkout%20simulasi.`);
 }
 
 async function runBookingAction(formData, functionName, successMessage) {
@@ -53,7 +53,7 @@ async function runBookingAction(formData, functionName, successMessage) {
     ? "Booking belum dapat dibatalkan. Jika terkait aktivitas, hapus aktivitasnya terlebih dahulu."
     : "Booking belum dapat diproses."));
   revalidatePath("/bookings");
-  redirect(`/bookings?message=${encodeURIComponent(successMessage)}`);
+  redirect(`/bookings?checkout=${id}&message=${encodeURIComponent(successMessage)}`);
 }
 
 export async function payBooking(formData) {

@@ -11,21 +11,25 @@ function authMessage(path, type, message) {
 export async function login(formData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
+  const requestedNext = String(formData.get("next") ?? "");
+  const next = ["/activities", "/venues", "/dashboard"].includes(requestedNext) ? requestedNext : "/dashboard";
 
   if (!email || !password) {
-    redirect(authMessage("/login", "error", "Email dan kata sandi wajib diisi."));
+    redirect(`/login?next=${encodeURIComponent(next)}&error=${encodeURIComponent("Email dan kata sandi wajib diisi.")}`);
   }
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    redirect(authMessage("/login", "error", "Email atau kata sandi tidak sesuai."));
+    redirect(`/login?next=${encodeURIComponent(next)}&error=${encodeURIComponent("Email atau kata sandi tidak sesuai.")}`);
   }
 
   if (data.user?.app_metadata?.smashmate_role === "partner" &&
       data.user?.app_metadata?.password_setup_required === true) redirect("/partner/password");
-  redirect("/dashboard");
+  if (data.user?.app_metadata?.smashmate_role === "partner") redirect("/partner");
+  if (data.user?.app_metadata?.smashmate_role === "operator") redirect("/operator");
+  redirect(next);
 }
 
 export async function register(formData) {

@@ -1,7 +1,6 @@
 import Link from "@/components/loading-link";
-import SubmitButton from "@/components/submit-button";
+import ActivityCreateForm from "@/components/activity-create-form";
 import { requireAccount } from "@/lib/account";
-import { createActivity } from "./actions";
 
 export const instant = false;
 
@@ -20,7 +19,7 @@ export default async function ActivitiesPage({ searchParams }) {
     view === "mine" ? supabase.from("activity_participants").select("activity_id")
       .eq("user_id", user.id).limit(100) : Promise.resolve({ data: [] }),
   ]);
-  const activityFields = "id,host_id,host_name,kind,title,description,location,starts_at,capacity,level,booking_id,activity_participants(user_id)";
+  const activityFields = "id,host_id,host_name,kind,title,description,location,starts_at,capacity,level,booking_id,activity_participants(user_id,display_name)";
   let activityQuery = supabase.from("activities").select(activityFields);
   if (view === "mine") {
     const joinedIds = (memberships ?? []).map((membership) => membership.activity_id);
@@ -58,47 +57,8 @@ export default async function ActivitiesPage({ searchParams }) {
         {view === "create" ? <div className="mt-8 max-w-3xl">
           <section id="new" className="dashboard-card p-6 sm:p-8" aria-labelledby="create-activity-title">
             <h2 id="create-activity-title" className="text-xl font-extrabold">Buat aktivitas</h2>
-            <p className="mt-2 text-sm text-court-950/60">Isi jadwal dan kebutuhan pemain dengan jelas. Jika sudah booking lapangan, kaitkan booking Anda di bawah.</p>
-            <form action={createActivity} className="mt-6 space-y-4">
-              <label className="profile-label">Jenis aktivitas
-                <select name="kind" className="profile-input" required>
-                  <option value="match">Mabar / pertandingan</option>
-                  <option value="coaching">Sesi latihan</option>
-                  <option value="event">Event komunitas</option>
-                </select>
-              </label>
-              <label className="profile-label">Judul
-                <input name="title" type="text" className="profile-input" minLength={5} maxLength={100} required placeholder="Contoh: Mabar ganda Sabtu pagi" />
-              </label>
-              <label className="profile-label">Lokasi
-                <input name="location" type="text" className="profile-input" minLength={3} maxLength={160} placeholder="Nama GOR dan kota; otomatis jika memakai booking" />
-              </label>
-              {availableBookings.length > 0 && <label className="profile-label">Gunakan booking lapangan host (opsional)
-                <select name="booking_id" defaultValue={selectedBookingId} className="profile-input"><option value="">Tanpa booking</option>{availableBookings.map((booking) => <option value={booking.id} key={booking.id}>{booking.venues?.name} · {booking.courts?.name} · {new Date(booking.starts_at).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", dateStyle: "medium", timeStyle: "short" })} WIB</option>)}</select>
-                <span className="mt-1 block text-xs font-normal text-court-950/60">Jika dipilih, lokasi dan waktu mengikuti booking yang sudah dikonfirmasi.</span>
-              </label>}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="profile-label">Waktu mulai (WIB)
-                  <input name="starts_at" type="datetime-local" className="profile-input" />
-                </label>
-                <label className="profile-label">Total slot termasuk host
-                  <input name="capacity" type="number" min="2" max="100" defaultValue="4" className="profile-input" required />
-                </label>
-              </div>
-              <label className="profile-label">Level pemain
-                <select name="level" className="profile-input" required>
-                  <option value="all">Semua level</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="professional">Professional</option>
-                </select>
-              </label>
-              {(communities ?? []).length > 0 && <label className="profile-label">Komunitas penyelenggara (opsional)<select name="community_id" className="profile-input"><option value="">Pribadi</option>{communities.map((community) => <option key={community.id} value={community.id}>{community.name}</option>)}</select></label>}
-              <label className="profile-label">Keterangan
-                <textarea name="description" maxLength={1000} rows={4} className="profile-input" placeholder="Format permainan, kebutuhan pemain, atau informasi lain" />
-              </label>
-              <SubmitButton className="btn btn-dark w-full" pendingText="Menyimpan aktivitas...">Buat aktivitas</SubmitButton>
-            </form>
+            <p className="mt-2 text-sm text-court-950/60">Tentukan jenis kegiatan, lapangan, jadwal, dan siapa yang boleh ikut.</p>
+            <ActivityCreateForm bookings={availableBookings} communities={communities ?? []} selectedBookingId={selectedBookingId} />
           </section>
         </div> : <section className="mt-8" aria-labelledby="activity-list-title">
             <div className="flex flex-wrap items-end justify-between gap-3">
@@ -114,7 +74,7 @@ export default async function ActivitiesPage({ searchParams }) {
                 const host = activity.host_id === user.id;
                 const remaining = Math.max(activity.capacity - participants.length - 1, 0);
                 return (
-                  <article className="dashboard-card flex flex-col p-5 sm:p-6" key={activity.id}>
+                  <Link href={`/activities/${activity.id}`} className="dashboard-card flex flex-col p-5 sm:p-6 hover:border-court-700" key={activity.id}>
                     <div className="flex flex-wrap items-center justify-between gap-2"><span className="activity-tag">{kindLabels[activity.kind]}</span><span className="text-xs font-bold text-court-700">{view === "mine" ? host ? "Host" : joined ? "Bergabung" : "Aktivitas" : levelLabels[activity.level]}</span></div>
                     <h3 className="mt-4 text-lg font-extrabold">{activity.title}</h3>
                     <p className="mt-1 text-xs font-bold text-court-700">Host: {activity.host_name}</p>
@@ -124,10 +84,14 @@ export default async function ActivitiesPage({ searchParams }) {
                       <div><dt className="font-bold text-court-950">Jadwal</dt><dd>{new Date(activity.starts_at).toLocaleString("id-ID", { timeZone: "Asia/Jakarta", dateStyle: "medium", timeStyle: "short" })} WIB</dd></div>
                       <div><dt className="font-bold text-court-950">Pemain</dt><dd>{participants.length + 1} / {activity.capacity}{view === "explore" ? ` · ${remaining} slot tersedia` : ""}</dd></div>
                     </dl>
-                    <div className="mt-auto border-t border-court-950/10 pt-5">
-                      <Link href={`/activities/${activity.id}`} className="btn btn-dark w-full">{view === "mine" ? "Lihat kegiatan saya" : "Lihat detail & peserta"}</Link>
+                    <div className="mt-auto flex items-center justify-between gap-3 border-t border-court-950/10 pt-5">
+                      <div className="flex -space-x-2" aria-label={`${participants.length + 1} pemain termasuk host`}>
+                        <span className="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-court-950 text-xs font-bold text-white" title={activity.host_name}>{activity.host_name.charAt(0).toUpperCase()}</span>
+                        {participants.slice(0, 4).map((participant) => <span key={participant.user_id} className="grid h-8 w-8 place-items-center rounded-full border-2 border-white bg-court-800 text-xs font-bold text-white" title={participant.display_name}>{participant.display_name.charAt(0).toUpperCase()}</span>)}
+                      </div>
+                      <span className="text-xs font-extrabold text-court-700">Lihat detail</span>
                     </div>
-                  </article>
+                  </Link>
                 );
               })}
             </div>
