@@ -19,3 +19,10 @@ export async function requirePlayerAccount() {
   if (account.user.app_metadata?.smashmate_role === "operator") redirect("/operator");
   return account;
 }
+
+export async function requirePartnerAccount() {
+  const account = await requireAccount();
+  if (account.user.app_metadata?.smashmate_role === "operator") redirect("/operator");
+  if (account.user.app_metadata?.smashmate_role !== "partner") redirect("/dashboard");
+  return account;
+}

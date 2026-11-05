@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import AccountHeader from "@/components/account-header";
 import PartnerSetupForm from "@/components/partner-setup-form";
-import { requireAccount } from "@/lib/account";
+import { requirePartnerAccount } from "@/lib/account";
 
 export const instant = false;
 
 export default async function PartnerSetupPage({ searchParams }) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePartnerAccount();
   const { error } = await searchParams;
   const { data: venue } = await supabase.from("venues").select("id,name,status")
     .eq("owner_id", user.id).order("created_at").limit(1).maybeSingle();

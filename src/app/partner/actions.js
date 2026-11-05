@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { requireAccount } from "@/lib/account";
+import { requirePartnerAccount } from "@/lib/account";
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const partnerError = (message) => `/partner?error=${encodeURIComponent(message)}`;
@@ -11,7 +11,7 @@ const productKinds = new Set(["racket_rental", "shuttlecock_sale"]);
 const mapsHosts = new Set(["google.com", "www.google.com", "maps.google.com", "maps.app.goo.gl"]);
 
 export async function publishVenue(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePartnerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -46,7 +46,7 @@ export async function publishVenue(formData) {
 }
 
 export async function publishVenueComplete(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -113,7 +113,7 @@ export async function publishVenueComplete(formData) {
 }
 
 export async function updateVenue(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const id = String(formData.get("id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -145,7 +145,7 @@ export async function updateVenue(formData) {
 }
 
 export async function addVenueClosure(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const startsOn = String(formData.get("starts_on") ?? "");
   const endsOn = String(formData.get("ends_on") ?? "");
@@ -163,7 +163,7 @@ export async function addVenueClosure(formData) {
 }
 
 export async function removeVenueClosure(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const id = String(formData.get("id") ?? "");
   const venueId = String(formData.get("venue_id") ?? "");
   if (!uuid.test(id) || !uuid.test(venueId)) redirect(partnerError("Periode tutup tidak valid."));
@@ -177,7 +177,7 @@ export async function removeVenueClosure(formData) {
 }
 
 export async function uploadVenuePhoto(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const file = formData.get("image");
   if (!uuid.test(venueId) || !(file instanceof File) || file.size < 1 || file.size > 3 * 1024 * 1024 ||
@@ -209,7 +209,7 @@ export async function uploadVenuePhoto(formData) {
 }
 
 export async function removeVenuePhoto(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const photoId = String(formData.get("photo_id") ?? "");
   if (!uuid.test(venueId) || !uuid.test(photoId)) redirect(partnerError("Foto GOR tidak valid."));
@@ -225,7 +225,7 @@ export async function removeVenuePhoto(formData) {
 }
 
 export async function addCourt(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePartnerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
   const price = Number(formData.get("price"));
@@ -238,7 +238,7 @@ export async function addCourt(formData) {
 }
 
 export async function updateCourt(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePartnerAccount();
   const id = String(formData.get("id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
   const price = Number(formData.get("price"));
@@ -255,7 +255,7 @@ export async function updateCourt(formData) {
 }
 
 export async function addProduct(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePartnerAccount();
   const venueId = String(formData.get("venue_id") ?? "");
   const kind = String(formData.get("kind") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -275,7 +275,7 @@ export async function addProduct(formData) {
 }
 
 export async function updateProduct(formData) {
-  const { supabase } = await requireAccount();
+  const { supabase } = await requirePartnerAccount();
   const id = String(formData.get("id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -295,7 +295,7 @@ export async function updateProduct(formData) {
 }
 
 export async function hideProduct(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuid.test(id)) redirect(partnerError("Produk tidak valid."));
   const { data: product } = await supabase.from("venue_products").select("venue_id,venues!inner(owner_id)").eq("id", id).maybeSingle();
@@ -309,7 +309,7 @@ export async function hideProduct(formData) {
 }
 
 export async function uploadProductImage(formData) {
-  const { supabase, user } = await requireAccount();
+  const { supabase, user } = await requirePartnerAccount();
   const productId = String(formData.get("product_id") ?? "");
   const venueId = String(formData.get("venue_id") ?? "");
   const file = formData.get("image");

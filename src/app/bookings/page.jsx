@@ -43,7 +43,7 @@ export default async function BookingsPage({ searchParams }) {
       .eq("player_id", user.id).order("created_at", { ascending: false }).limit(30);
   const bookingIds = (bookings ?? []).map((booking) => booking.id);
   const { data: linkedActivities } = bookingIds.length
-    ? await supabase.from("activities").select("id,booking_id").in("booking_id", bookingIds)
+    ? await supabase.from("activities").select("id,booking_id").in("booking_id", bookingIds).is("cancelled_at", null)
     : { data: [] };
   const activitiesByBooking = new Map((linkedActivities ?? []).map((activity) => [activity.booking_id, activity.id]));
   const selectedBooking = (bookings ?? []).find((booking) => booking.id === checkout);

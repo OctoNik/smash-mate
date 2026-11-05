@@ -31,7 +31,7 @@ export async function createActivity(formData) {
   if (opponentId && (!uuidPattern.test(opponentId) || !communityId || opponentId === communityId || kind !== "event")) redirect(errorUrl("Komunitas lawan tidak valid."));
   if (bookingId) {
     const { data: existingActivity } = await supabase.from("activities")
-      .select("id").eq("booking_id", bookingId).limit(1).maybeSingle();
+      .select("id").eq("booking_id", bookingId).is("cancelled_at", null).limit(1).maybeSingle();
     if (existingActivity) redirect(errorUrl("Booking ini sudah digunakan untuk aktivitas lain."));
     const { data: booking } = await supabase.from("court_bookings")
       .select("starts_at,ends_at,status,venues(name,address),courts(name)")

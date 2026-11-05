@@ -36,7 +36,7 @@ export default async function ActivitiesPage({ searchParams }) {
   const visibleActivities = view === "finished" ? (activities ?? []).filter(activityDone) : activities ?? [];
   const bookingIds = (bookings ?? []).map((booking) => booking.id);
   const { data: linkedBookings } = bookingIds.length ? await supabase.from("activities")
-    .select("booking_id").in("booking_id", bookingIds) : { data: [] };
+    .select("booking_id").in("booking_id", bookingIds).is("cancelled_at", null) : { data: [] };
   const usedBookingIds = new Set((linkedBookings ?? []).map((activity) => activity.booking_id));
   const availableBookings = (bookings ?? []).filter((booking) => !usedBookingIds.has(booking.id));
   const selectedBookingId = typeof requestedBookingId === "string" &&

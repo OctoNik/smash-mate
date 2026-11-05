@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
-import { requireAccount } from "@/lib/account";
+import { requirePartnerAccount } from "@/lib/account";
 import { sampleEquipmentImage, sampleVenueImage } from "@/lib/venue-images";
 import { addCourt, addProduct, addVenueClosure, hideProduct, removeVenueClosure, removeVenuePhoto, updateCourt, updateProduct, updateVenue, uploadProductImage, uploadVenuePhoto } from "./actions";
 
@@ -11,7 +11,7 @@ const weekdays = [{ id: 1, label: "Senin" }, { id: 2, label: "Selasa" }, { id: 3
 const longDate = (value) => new Date(`${value}T12:00:00+07:00`).toLocaleDateString("id-ID", { timeZone: "Asia/Jakarta", day: "numeric", month: "long", year: "numeric" });
 
 export default async function PartnerPage({ searchParams }) {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePartnerAccount();
   const { error, message } = await searchParams;
   const { data: venue } = await supabase.from("venues")
     .select("id,name,description,venue_rules,open_weekdays,address,maps_url,contact_phone,status,open_time,close_time")

@@ -18,7 +18,7 @@ export async function submitRating(formData) {
   const { error } = await supabase.rpc("rate_activity_participant", {
     p_activity_id: activityId, p_recipient_id: recipientId, p_stars: stars,
   });
-  if (error) redirect("/ratings?error=Rating belum tersimpan. Pastikan Anda peserta dan aktivitas sudah dimulai.");
+  if (error) redirect("/ratings?error=Rating belum tersimpan. Pastikan Anda peserta, waktu bermain sudah berakhir, dan pemain belum pernah Anda nilai pada aktivitas ini.");
   revalidatePath("/ratings");
   revalidatePath("/profile");
   redirect("/ratings?message=Rating berhasil dikirim.");

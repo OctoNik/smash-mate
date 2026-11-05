@@ -44,7 +44,7 @@ async function runBookingAction(formData, functionName, successMessage) {
   if (!uuid.test(id)) redirect(errorUrl("Booking tidak valid."));
   const { error } = await supabase.rpc(functionName, { p_booking_id: id });
   if (error) redirect(errorUrl(functionName === "cancel_court_booking"
-    ? "Booking belum dapat dibatalkan. Jika terkait aktivitas, hapus aktivitasnya terlebih dahulu."
+    ? "Booking belum dapat dibatalkan. Batalkan aktivitas atau undangan sparring yang terkait terlebih dahulu."
     : "Booking belum dapat diproses."));
   revalidatePath("/bookings");
   redirect(`/bookings?checkout=${id}&message=${encodeURIComponent(successMessage)}`);

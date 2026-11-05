@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
 import AccountHeader from "@/components/account-header";
-import { requireAccount } from "@/lib/account";
+import { requirePartnerAccount } from "@/lib/account";
 import { rupiah, waktuWib } from "@/lib/format";
 
 export const instant = false;
 const labels = { pending_payment: "Menunggu checkout", confirmed: "Dikonfirmasi", cancelled: "Dibatalkan" };
 
 export default async function PartnerBookingsPage() {
-  const { supabase, user, name } = await requireAccount();
+  const { supabase, user, name } = await requirePartnerAccount();
   if (user.app_metadata?.smashmate_role !== "partner") redirect("/dashboard");
   const { data: venue } = await supabase.from("venues").select("id,name,status").eq("owner_id", user.id).order("created_at").limit(1).maybeSingle();
   if (!venue) redirect("/partner");
