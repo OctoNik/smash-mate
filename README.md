@@ -2,12 +2,29 @@
 
 SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurship**. Konsepnya menggabungkan pencarian partner, aktivitas bersama, booking lapangan Mitra GOR, sewa raket, dan pembelian shuttlecock dalam satu aplikasi. Alurnya mendemonstrasikan gagasan dalam Business Model Lean Canvas (BMLC).
 
+**Demo aplikasi:** [smash-mate.vercel.app](https://smash-mate.vercel.app)
+
+## Solusi dalam BMLC
+
+SmashMate membantu pemain menemukan teman bermain dengan jadwal dan level yang sesuai, sekaligus menyiapkan lapangan serta perlengkapan. Pemain dapat bergabung ke aktivitas yang tersedia, sedangkan host mengurus booking untuk kelompoknya. Mitra GOR mengelola tempat dan perlengkapan melalui panel khusus.
+
+| Kebutuhan pengguna | Implementasi prototipe |
+| --- | --- |
+| Mencari partner badminton | Daftar aktivitas dengan lokasi, jadwal, level, dan kuota peserta |
+| Mengatur kegiatan bersama | Pembuatan aktivitas, daftar peserta, komunitas, dan undangan sparring |
+| Memesan tempat serta perlengkapan | Booking lapangan dengan tambahan raket dan shuttlecock |
+| Mengetahui rincian biaya | Estimasi pesanan dan ringkasan checkout simulasi |
+| Menilai pengalaman bermain | Rating antar peserta setelah kegiatan selesai dan riwayat rating di profil |
+
+Integrasi tersebut menunjukkan solusi utama BMLC. Model pendapatan dan transaksi uang belum diimplementasikan.
+
 ## Fitur saat ini
 
 - Registrasi, konfirmasi email, login, logout, profil pemain, foto profil, dan penghapusan akun.
 - Profil pemain menampilkan rating yang diterima: rata-rata seluruh penilaian, jumlah rating, serta riwayat per aktivitas dengan nama pemberi dan paginasi.
 - Pembuatan dan partisipasi dalam mabar, sesi latihan, dan event, termasuk rating antar peserta setelah bermain.
 - Pemain dapat membuat mabar, sesi coaching, atau event. Komunitas memiliki owner dan admin untuk mengelola kegiatan serta galeri.
+- Komunitas dapat mengirim undangan sparring kepada komunitas lain; pengurus lawan dapat menerima atau menolaknya.
 - Direktori Mitra GOR dan booking lapangan oleh host, termasuk sewa raket per sesi dan pembelian shuttlecock per slop dalam satu booking. Mitra dapat menambahkan foto produk.
 - Panel Mitra GOR untuk jumlah dan harga lapangan, deskripsi, lokasi Google Maps, katalog, dan daftar booking atas nama pemain.
 - Panel operator internal untuk membuat akun Mitra GOR secara langsung. Lima akun Mitra awal sudah terhubung ke GOR masing-masing. Pendaftaran publik hanya membuat akun pemain.
@@ -28,7 +45,7 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 | Penyimpanan foto | Supabase Storage |
 | Kontrol akses database | Row Level Security (RLS) |
 | Integrasi Supabase | `@supabase/supabase-js` 2.118.0 dan `@supabase/ssr` 0.12.7 |
-| Target hosting | Vercel |
+| Hosting aplikasi | Vercel |
 | Version control | Git dan GitHub |
 | Package manager | npm |
 | Pemeriksaan kode | ESLint 9.39.5 dengan eslint-config-next 16.4.3 |
@@ -44,9 +61,29 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 
 ## Alur akun
 
+Terdapat **3 peran akun utama**. Host, pendiri komunitas, dan admin komunitas merupakan peran tambahan pemain dalam kegiatan atau komunitas, bukan jenis akun terpisah.
+
 - **Pemain:** daftar, konfirmasi email, lalu gunakan dashboard. Sesi coaching dibuat sebagai jenis aktivitas oleh pemain; paket premium belum dirancang.
 - **Operator:** administrator Supabase menetapkan `app_metadata.smashmate_role = "operator"` pada akun internal. Akun operator proyek saat ini sudah ditetapkan. Masuk ulang agar token memuat peran baru, lalu buka `/operator`.
 - **Mitra GOR:** operator membuat akun dengan email yang belum terdaftar dan menerima kata sandi awal sekali. Operator memberikannya langsung kepada Mitra. Saat login pertama, Mitra wajib mengganti kata sandi di `/partner/password`, lalu melengkapi GOR di `/partner/setup`. Mitra tidak dapat mendaftar langsung. Lima GOR awal sudah terisi dan masing-masing dimiliki akun Mitra; setelah mengganti kata sandi, Mitra langsung masuk ke panelnya.
+
+## Alur penggunaan utama
+
+1. **Cari kegiatan:** pemain masuk, membuka Main Bareng, lalu memilih aktivitas berdasarkan jadwal, lokasi, level, dan sisa tempat.
+2. **Bergabung:** pemain membuka detail, memeriksa host serta peserta, lalu mengonfirmasi bergabung. Kegiatan masuk ke Aktivitas saya; peserta dapat keluar sebelum kegiatan dimulai.
+3. **Menjadi host:** pemain membuat kegiatan di lokasi sendiri atau memesan lapangan terlebih dahulu. Booking terkonfirmasi dapat dipakai untuk satu aktivitas aktif dengan jadwal dan durasi yang sesuai.
+4. **Booking dan perlengkapan:** host memilih GOR, lapangan, jadwal, serta tambahan raket atau shuttlecock, kemudian mengonfirmasi checkout simulasi. Konflik waktu, harga, dan stok diperiksa di backend.
+5. **Setelah bermain:** host dan peserta dapat memberikan rating kepada pemain lain dalam aktivitas yang sama setelah jadwal berakhir. Penerima melihat rata-rata, jumlah, dan riwayat penilaian dirinya di profil.
+
+Untuk pembatalan booking yang terhubung ke kegiatan, host membatalkan kegiatan atau undangan sparring yang masih aktif terlebih dahulu. Riwayat kegiatan tetap disimpan.
+
+### Komunitas dan sparring
+
+Pemain dapat membuat atau bergabung ke komunitas. Pendiri dapat menunjuk admin, sementara anggota biasa tidak dapat mengangkat dirinya sendiri. Pengurus mengelola kegiatan dan galeri sesuai hak aksesnya. Undangan sparring menunggu keputusan pengurus komunitas lawan; penerimaan undangan membentuk aktivitas sparring bersama.
+
+### Operasional Mitra dan operator
+
+Mitra memperbarui informasi GOR, lapangan, harga, perlengkapan, foto, serta periode penutupan dan memantau booking GOR miliknya. Operator internal membuat akun Mitra baru. Panel dan akses data dibatasi sesuai peran serta kepemilikan.
 
 ## Data awal GOR
 
@@ -77,6 +114,7 @@ Tidak ada email undangan untuk Mitra. Akun yang dibuat operator langsung dapat d
 
 ## Validasi
 
+Skrip pemeriksaan tersedia di [`scripts`](scripts) dan [`supabase/tests`](supabase/tests). Skrip integrasi menerima akun uji melalui environment proses `QA_ACCOUNTS_JSON`; password dan token tidak disimpan di repository. Jalankan pengujian yang membuat data sementara hanya pada proyek demo.
 
 Versi dependensi dikunci di `package.json` dan `package-lock.json`; gunakan `npm ci` untuk instalasi yang konsisten dengan deployment. ESLint tetap pada 9.39.5 karena plugin bawaan `eslint-config-next` 16.4.3 belum mendukung ESLint 10.
 
