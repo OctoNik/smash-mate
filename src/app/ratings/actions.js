@@ -20,5 +20,6 @@ export async function submitRating(formData) {
   });
   if (error) redirect("/ratings?error=Rating belum tersimpan. Pastikan Anda peserta dan aktivitas sudah dimulai.");
   revalidatePath("/ratings");
+  revalidatePath("/profile");
   redirect("/ratings?message=Rating berhasil dikirim.");
 }

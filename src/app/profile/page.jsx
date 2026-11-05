@@ -3,6 +3,7 @@ import { requireAccount } from "@/lib/account";
 import Link from "@/components/loading-link";
 import AccountHeader from "@/components/account-header";
 import SubmitButton from "@/components/submit-button";
+import ProfileRatings from "@/components/profile-ratings";
 import { getAvatarUrl } from "@/lib/avatar";
 import { deleteAccount } from "@/app/settings/actions";
 import { updateProfile, uploadAvatar } from "./actions";
@@ -13,7 +14,7 @@ export default async function ProfilePage({ searchParams }) {
   const { supabase, user } = await requireAccount();
   if (["partner", "operator"].includes(user.app_metadata?.smashmate_role)) redirect("/settings");
 
-  const { message, error, account_error: accountError } = await searchParams;
+  const { message, error, account_error: accountError, rating_page: ratingPage } = await searchParams;
   const fullName = typeof user.user_metadata?.full_name === "string" && user.user_metadata.full_name.trim()
     ? user.user_metadata.full_name.trim()
     : user.email?.split("@")[0] ?? "Pemain";
@@ -44,7 +45,7 @@ export default async function ProfilePage({ searchParams }) {
               <p className="text-xs leading-5 text-court-950/60">JPG, PNG, atau WebP. Maksimal 2 MB.</p>
               <SubmitButton pendingText="Mengunggah foto..." className="btn btn-outline-dark w-full">Unggah foto</SubmitButton>
             </form>
-            <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 border-t border-court-950/10 pt-5 text-xs font-bold text-court-700"><Link href="/activities?view=mine" className="hover:underline">Aktivitas saya</Link><Link href="/bookings" className="hover:underline">Booking saya</Link><a href="#delete-account" className="hover:underline">Pengaturan akun</a></div>
+            <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 border-t border-court-950/10 pt-5 text-xs font-bold text-court-700"><Link href="/activities?view=mine" className="hover:underline">Aktivitas saya</Link><Link href="/bookings" className="hover:underline">Booking saya</Link><a href="#my-ratings" className="hover:underline">Rating saya</a><a href="#delete-account" className="hover:underline">Pengaturan akun</a></div>
           </aside>
 
           <section className="dashboard-card p-6 sm:p-8" aria-labelledby="edit-profile-title">
@@ -65,6 +66,7 @@ export default async function ProfilePage({ searchParams }) {
             </form>
           </section>
         </div>
+        <ProfileRatings supabase={supabase} userId={user.id} requestedPage={ratingPage} />
         <section id="delete-account" className="dashboard-card mt-5 scroll-mt-28 p-6 sm:p-8" aria-labelledby="delete-account-title">
           <h2 id="delete-account-title" className="text-xl font-extrabold">Hapus akun</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-court-950/65">Tindakan ini permanen. Aktivitas dan permintaan perlengkapan milik akun akan ikut dihapus.</p>

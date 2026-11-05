@@ -5,6 +5,7 @@ SmashMate adalah prototipe platform badminton untuk mata kuliah **Technopreneurs
 ## Fitur saat ini
 
 - Registrasi, konfirmasi email, login, logout, profil pemain, foto profil, dan penghapusan akun.
+- Profil pemain menampilkan rating yang diterima: rata-rata seluruh penilaian, jumlah rating, serta riwayat per aktivitas dengan nama pemberi dan paginasi.
 - Pembuatan dan partisipasi dalam mabar, sesi latihan, dan event, termasuk rating antar peserta setelah bermain.
 - Pemain dapat membuat mabar, sesi coaching, atau event. Komunitas memiliki owner dan admin untuk mengelola kegiatan serta galeri.
 - Direktori Mitra GOR dan booking lapangan oleh host, termasuk sewa raket per sesi dan pembelian shuttlecock per slop dalam satu booking. Mitra dapat menambahkan foto produk.
