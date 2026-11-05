@@ -77,7 +77,6 @@ Tidak ada email undangan untuk Mitra. Akun yang dibuat operator langsung dapat d
 
 ## Validasi
 
-Audit alur terbaru beserta perbaikan, hasil pengujian, dan batas verifikasinya tersedia di [laporan validasi 5 November 2026](docs/validation-2026-11-05.md). Tes database yang di-rollback tersedia di `supabase/tests/flow_validation.sql`; tes SDK dan halaman ada di `scripts/`. Kredensial uji hanya diberikan melalui environment proses, tidak disimpan di repository.
 
 Versi dependensi dikunci di `package.json` dan `package-lock.json`; gunakan `npm ci` untuk instalasi yang konsisten dengan deployment. ESLint tetap pada 9.39.5 karena plugin bawaan `eslint-config-next` 16.4.3 belum mendukung ESLint 10.
 
