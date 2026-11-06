@@ -39,13 +39,23 @@ export async function bookCourt(formData) {
 }
 
 async function runBookingAction(formData, functionName, successMessage) {
-  const { supabase } = await requirePlayerAccount();
+  const { supabase, user } = await requirePlayerAccount();
   const id = String(formData.get("id") ?? "");
   if (!uuid.test(id)) redirect(errorUrl("Booking tidak valid."));
   const { error } = await supabase.rpc(functionName, { p_booking_id: id });
-  if (error) redirect(errorUrl(functionName === "cancel_court_booking"
-    ? "Booking belum dapat dibatalkan. Batalkan aktivitas atau undangan sparring yang terkait terlebih dahulu."
-    : "Booking belum dapat diproses."));
+  if (error) {
+    if (functionName === "demo_pay_booking") {
+      const { data: booking } = await supabase.from("court_bookings")
+        .select("status,starts_at").eq("id", id).eq("player_id", user.id).maybeSingle();
+      if (booking?.status === "pending_payment" && new Date(booking.starts_at).getTime() <= Date.now()) {
+        redirect(errorUrl("Jadwal booking ini sudah lewat. Silakan pilih jadwal baru di halaman GOR."));
+      }
+      if (booking?.status === "confirmed") redirect(errorUrl("Booking ini sudah dikonfirmasi."));
+      if (booking?.status === "cancelled") redirect(errorUrl("Booking ini sudah dibatalkan."));
+      redirect(errorUrl("Booking tidak dapat dikonfirmasi. Periksa status booking dan coba lagi."));
+    }
+    redirect(errorUrl("Booking belum dapat dibatalkan. Batalkan aktivitas atau undangan sparring yang terkait terlebih dahulu."));
+  }
   revalidatePath("/bookings");
   redirect(`/bookings?checkout=${id}&message=${encodeURIComponent(successMessage)}`);
 }

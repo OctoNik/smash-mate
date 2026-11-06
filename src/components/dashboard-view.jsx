@@ -37,11 +37,11 @@ export default async function DashboardView() {
 
       <section className="mt-8 grid gap-4 md:grid-cols-2" aria-label="Mulai bermain">
         <Link href="/activities" className="dashboard-card dashboard-choice-primary flex min-h-52 flex-col justify-between p-7">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-court-lime">01 · Main Bareng</span>
+          <span className="text-sm font-bold text-court-lime">Main Bareng</span>
           <div><h2 className="font-display text-2xl font-extrabold">Temukan teman bermain</h2><p className="mt-2 max-w-sm text-sm leading-6 text-white/75">Jelajahi mabar, latihan, dan event; lihat pemainnya sebelum bergabung.</p></div>
         </Link>
         <Link href="/venues" className="dashboard-card flex min-h-52 flex-col justify-between p-7 hover:border-court-700">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-court-red">02 · Sewa Lapangan</span>
+          <span className="text-sm font-bold text-court-red">Sewa Lapangan</span>
           <div><h2 className="font-display text-2xl font-extrabold">Cari GOR dan perlengkapan</h2><p className="mt-2 max-w-sm text-sm leading-6 text-court-950/65">Booking lapangan; tambahkan raket sewa dan shuttlecock dalam satu pesanan host.</p></div>
         </Link>
       </section>

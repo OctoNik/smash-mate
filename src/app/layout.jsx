@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./design-refresh.css";
 
 export const metadata = {
   title: "SmashMate — Temukan Partner Badminton",
